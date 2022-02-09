@@ -16,15 +16,15 @@ public class Authorities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
-    @Column(name = "password", length = 500, nullable = false)
-    private String password;
+
+    @Column(name = "user_name", length = 500, nullable = false)
+    private String userName;
 
     @Column(name = "authority")
     private Role authority;    
 
     @Column(name="create_ts", nullable = false)
-    private Date createTs;
+    private Date createTs = new Date();
 
 
     /**
@@ -44,15 +44,15 @@ public class Authorities {
     /**
      * @return String return the password
      */
-    public String getPassword() {
-        return password;
+    public String getUserName() {
+        return userName;
     }
 
     /**
-     * @param password the password to set
+     * @param userName the userName to set
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**
