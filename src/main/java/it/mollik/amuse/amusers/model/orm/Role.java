@@ -1,5 +1,6 @@
 package it.mollik.amuse.amusers.model.orm;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,10 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import it.mollik.amuse.amusers.model.Role;
+import org.apache.commons.lang3.StringUtils;
 
-@Entity(name="authorities")
-public class Authorities {
+import it.mollik.amuse.amusers.model.ERole;
+
+@Entity(name="role")
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,8 @@ public class Authorities {
     private String userName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "authority")
-    private Role authority;    
+    @Column(name = "user_role")
+    private ERole userRole;    
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
@@ -35,6 +38,16 @@ public class Authorities {
     @Column(name="create_ts", nullable = false)
     private Date createTs = new Date();
 
+    public Role() {
+        this(StringUtils.EMPTY, ERole.USER, null);
+    }
+
+    public Role(String userName, ERole authority, User user) {
+        super();
+        this.userName = userName;
+        this.userRole = authority;
+        this.user = user;
+    } 
 
     /**
      * @return Integer return the id
@@ -65,17 +78,17 @@ public class Authorities {
     }
 
     /**
-     * @return Role return the authority
+     * @return Role return the role
      */
-    public Role getAuthority() {
-        return authority;
+    public ERole getUserRole() {
+        return userRole;
     }
 
     /**
-     * @param authority the authority to set
+     * @param role the authority to set
      */
-    public void setAuthority(Role authority) {
-        this.authority = authority;
+    public void setUserRole(ERole role) {
+        this.userRole = role;
     }
 
     /**

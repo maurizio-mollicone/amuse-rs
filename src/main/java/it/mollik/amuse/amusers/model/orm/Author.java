@@ -17,12 +17,8 @@ public class Author extends Person {
         inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<Book> books;
 
-    public Author() {
-        super();   
-    }
-
-    public Author(String authorName, Locale authorCountry) {
-        super(authorName, authorCountry);
+    public Author(String authorName) {
+        super(authorName);
     }
 
 

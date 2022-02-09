@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
-import it.mollik.amuse.amusers.model.EntityStatus;
+import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.repository.UserRepository;
-import it.mollik.amuse.amusers.service.UserService;
+import it.mollik.amuse.amusers.service.IUserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserService implements IUserService {
 
     
-    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setStatus(EntityStatus.UPDATE);
+        user.setStatus(EEntityStatus.UPDATE);
         Date now = new Date();
         user.setUpdateTs(now);
         User result = this.userRepository.save(user);
@@ -94,5 +94,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository.delete(user);
         logger.info("delete {}", user);
     }
+    
     
 }

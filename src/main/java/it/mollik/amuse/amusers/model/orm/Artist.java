@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import org.apache.commons.lang3.StringUtils;
 
-import it.mollik.amuse.amusers.model.EntityStatus;
+import it.mollik.amuse.amusers.model.EEntityStatus;
 
 @MappedSuperclass
 @JsonIdentityInfo(generator =  ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -45,17 +45,17 @@ public class Artist implements Serializable{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private EntityStatus status;
+    private EEntityStatus status;
 
     public Artist() {
-        this(StringUtils.EMPTY, Locale.ITALY, EntityStatus.INSERT);        
+        this(StringUtils.EMPTY, Locale.ITALY, EEntityStatus.INSERT);        
     }
 
     public Artist(String name, Locale country) {
-        this(name, country, EntityStatus.INSERT);
+        this(name, country, EEntityStatus.INSERT);
     }
 
-    public Artist(String name, Locale country, EntityStatus status) {
+    public Artist(String name, Locale country, EEntityStatus status) {
         this.name = name;
         this.country = country;
         this.status = status;
@@ -125,14 +125,14 @@ public class Artist implements Serializable{
     /**
      * @return EntityStatus return the status
      */
-    public EntityStatus getStatus() {
+    public EEntityStatus getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(EntityStatus status) {
+    public void setStatus(EEntityStatus status) {
         this.status = status;
     }
 

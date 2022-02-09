@@ -20,7 +20,7 @@ import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.model.request.AuthorRequest;
 import it.mollik.amuse.amusers.model.response.AuthorResponse;
-import it.mollik.amuse.amusers.service.AuthorService;
+import it.mollik.amuse.amusers.service.IAuthorService;
 
 @RestController
 public class AuthorController {
@@ -28,7 +28,7 @@ public class AuthorController {
     private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
 
     @Autowired
-    private AuthorService authorService;
+    private IAuthorService authorService;
 
     @GetMapping(path = "/author/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public AuthorResponse list(@RequestBody AuthorRequest request) throws EntityNotFoundException {
@@ -51,7 +51,7 @@ public class AuthorController {
     @PostMapping(path = "/author/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AuthorResponse create(@RequestBody AuthorRequest request) {
-        Author author = this.authorService.create(request.getAuthors().get(0).getName(), request.getAuthors().get(0).getCountry());
+        Author author = this.authorService.create(request.getAuthors().get(0).getName());
         List<Author> authors = new ArrayList<>();
         authors.add(author);
         AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK", authors);

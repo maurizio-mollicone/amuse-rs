@@ -15,15 +15,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
-import it.mollik.amuse.amusers.model.EntityStatus;
+import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.repository.AuthorRepository;
-import it.mollik.amuse.amusers.service.AuthorService;
+import it.mollik.amuse.amusers.service.IAuthorService;
 
 @Service
-public class AuthorServiceImpl implements AuthorService {
+public class AuthorService implements IAuthorService {
 
-    private Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(AuthorService.class);
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -61,8 +61,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author create(String authorName, Locale country) {
-        Author author = new Author(authorName, country);
+    public Author create(String authorName) {
+        Author author = new Author(authorName);
         Date now = new Date();
         author.setCreateTs(now);
         author.setUpdateTs(now);
@@ -73,7 +73,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author save(Author author) {
-        author.setStatus(EntityStatus.UPDATE);
+        author.setStatus(EEntityStatus.UPDATE);
         Date now = new Date();
         author.setUpdateTs(now);
         Author result = this.authorRepository.save(author);

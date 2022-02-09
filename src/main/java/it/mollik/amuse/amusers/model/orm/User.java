@@ -2,16 +2,13 @@ package it.mollik.amuse.amusers.model.orm;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import it.mollik.amuse.amusers.model.UserStatus;
+import org.apache.commons.lang3.StringUtils;
+
+import it.mollik.amuse.amusers.model.EUserStatus;
 
 @Entity(name = "user")
 public class User extends Person {
@@ -25,16 +22,32 @@ public class User extends Person {
     @Column(name = "password", length = 500, nullable = false)
     private String password;
 
+   
     // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     // @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     //     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @OneToMany(mappedBy="user")
-    private List<Authorities> authorities;
+    private List<Role> roles;
     
     @Column(name = "user_status")
-    private UserStatus userStatus;    
+    private EUserStatus userStatus;    
 
-    
+    public User() {
+        this(StringUtils.EMPTY);
+    }
+    public User(String userName) {
+        super(userName);
+        this.userName = userName;
+        this.userStatus = EUserStatus.ENABLED;
+    }
+
+    public User(String userName, String email, String password) {
+        this(userName);
+        this.email = email;
+        this.password = password;
+        this.userStatus = EUserStatus.ENABLED;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -71,25 +84,25 @@ public class User extends Person {
         this.password = password;
     }
 
-    public List<Authorities> getRoles() {
-        return authorities;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoles(List<Authorities> authorities) {
-        this.authorities = authorities;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     /**
      * @return UserStatus return the userStatus
      */
-    public UserStatus getUserStatus() {
+    public EUserStatus getUserStatus() {
         return userStatus;
     }
 
     /**
      * @param userStatus the userStatus to set
      */
-    public void setUserStatus(UserStatus userStatus) {
+    public void setUserStatus(EUserStatus userStatus) {
         this.userStatus = userStatus;
     }
 

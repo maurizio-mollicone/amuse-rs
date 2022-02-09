@@ -8,7 +8,7 @@ import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.orm.User;
 
 @Service
-public interface UserService {
+public interface IUserService {
 
     public User findById(Integer id) throws EntityNotFoundException;
 

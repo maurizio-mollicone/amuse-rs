@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
 
-import it.mollik.amuse.amusers.model.EntityStatus;
+import it.mollik.amuse.amusers.model.EEntityStatus;
 
 @MappedSuperclass
 public class Item implements Serializable {
@@ -40,7 +40,7 @@ public class Item implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private EntityStatus status;
+    private EEntityStatus status;
 
     public Integer getId() {
         return id;
@@ -107,14 +107,14 @@ public class Item implements Serializable {
     /**
      * @return ItemStatus return the status
      */
-    public EntityStatus getStatus() {
+    public EEntityStatus getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(EntityStatus status) {
+    public void setStatus(EEntityStatus status) {
         this.status = status;
     }
     

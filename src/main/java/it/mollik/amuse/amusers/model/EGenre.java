@@ -1,6 +1,6 @@
 package it.mollik.amuse.amusers.model;
 
-public enum BookGenre {
+public enum EGenre {
     
     THRILLER("Thriller"),
     NOIR("Noir"),
@@ -13,7 +13,7 @@ public enum BookGenre {
 
     public final String genre;
 
-    private BookGenre(String genre) {
+    private EGenre(String genre) {
         this.genre = genre;
     }
 

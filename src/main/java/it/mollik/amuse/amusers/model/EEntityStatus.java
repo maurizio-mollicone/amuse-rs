@@ -1,14 +1,15 @@
 package it.mollik.amuse.amusers.model;
 
-public enum Role {
+public enum EEntityStatus {
     
-    USER("USER"),
-    MANAGER("MANAGER"),
-    ADMIN("ADMIN");
+    INSERT("INSERT"),
+    UPDATE("UPDATE"),
+    SYNC("SYNC"),
+    DELETE("DELETE");
 
     private String value;
 
-    private Role(String value) {
+    private EEntityStatus(String value) {
         this.value = value;
     }
 

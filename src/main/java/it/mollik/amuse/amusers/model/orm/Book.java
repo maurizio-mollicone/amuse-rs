@@ -10,7 +10,7 @@ import javax.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import it.mollik.amuse.amusers.model.BookGenre;
+import it.mollik.amuse.amusers.model.EGenre;
 
 @Entity(name = "book")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -20,7 +20,7 @@ public class Book  extends Item {
     private String isbnCode;
 
     @Column(name="genre", nullable = false)
-    private BookGenre bookGenre;
+    private EGenre bookGenre;
 
     @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER)
     private List<Author> authors;
@@ -44,14 +44,14 @@ public class Book  extends Item {
     /**
      * @return BookGenre return the bookGenre
      */
-    public BookGenre getBookGenre() {
+    public EGenre getBookGenre() {
         return bookGenre;
     }
 
     /**
      * @param bookGenre the bookGenre to set
      */
-    public void setBookGenre(BookGenre bookGenre) {
+    public void setBookGenre(EGenre bookGenre) {
         this.bookGenre = bookGenre;
     }
 

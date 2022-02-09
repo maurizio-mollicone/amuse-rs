@@ -21,7 +21,7 @@ import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.UserRequest;
 import it.mollik.amuse.amusers.model.response.UserResponse;
-import it.mollik.amuse.amusers.service.UserService;
+import it.mollik.amuse.amusers.service.IUserService;
 
 @RestController
 public class UserController {
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @GetMapping(path = "/user/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserResponse list(@RequestBody UserRequest request) throws EntityNotFoundException {

@@ -1,6 +1,6 @@
 package it.mollik.amuse.amusers.model;
 
-public enum UserStatus {
+public enum EUserStatus {
     
     ENABLED(1),
     DISABLED(0),
@@ -8,7 +8,7 @@ public enum UserStatus {
 
     private int value;
 
-    private UserStatus(int value) {
+    private EUserStatus(int value) {
         this.value = value;
     }
 

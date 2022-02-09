@@ -1,15 +1,14 @@
 package it.mollik.amuse.amusers.model;
 
-public enum EntityStatus {
+public enum ERole {
     
-    INSERT("INSERT"),
-    UPDATE("UPDATE"),
-    SYNC("SYNC"),
-    DELETE("DELETE");
+    USER("USER"),
+    MANAGER("MANAGER"),
+    ADMIN("ADMIN");
 
     private String value;
 
-    private EntityStatus(String value) {
+    private ERole(String value) {
         this.value = value;
     }
 

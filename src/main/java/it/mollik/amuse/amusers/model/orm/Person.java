@@ -2,7 +2,6 @@ package it.mollik.amuse.amusers.model.orm;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Locale;
 import java.util.StringJoiner;
 
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import org.apache.commons.lang3.StringUtils;
 
-import it.mollik.amuse.amusers.model.EntityStatus;
+import it.mollik.amuse.amusers.model.EEntityStatus;
 
 @MappedSuperclass
 @JsonIdentityInfo(generator =  ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -31,12 +30,6 @@ public class Person implements Serializable{
     @Column(name = "name", length = 500, nullable = false)
     private String name;
 
-    @Column(name = "bio", length = 1000)
-    private String bio;
-
-    @Column(name = "country", nullable = false)
-    private Locale country;
-
     @Column(name="create_ts", nullable = false)
     private Date createTs;
 
@@ -45,20 +38,22 @@ public class Person implements Serializable{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private EntityStatus status;
+    private EEntityStatus status;
 
     public Person() {
-        this(StringUtils.EMPTY, Locale.ITALY, EntityStatus.INSERT);        
+        this(StringUtils.EMPTY);
+
+    }
+    public Person(String name) {
+        this(name, EEntityStatus.INSERT);
     }
 
-    public Person(String name, Locale country) {
-        this(name, country, EntityStatus.INSERT);
-    }
-
-    public Person(String name, Locale country, EntityStatus status) {
+    public Person(String name, EEntityStatus status) {
         this.name = name;
-        this.country = country;
         this.status = status;
+        Date now = new Date();
+        this.createTs = now;
+        this.updateTs = now;
     }
 
     public Integer getId() {
@@ -77,21 +72,6 @@ public class Person implements Serializable{
         this.name = name;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public Locale getCountry() {
-        return country;
-    }
-
-    public void setCountry(Locale country) {
-        this.country = country;
-    }
 
     
     /**
@@ -125,14 +105,14 @@ public class Person implements Serializable{
     /**
      * @return EntityStatus return the status
      */
-    public EntityStatus getStatus() {
+    public EEntityStatus getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(EntityStatus status) {
+    public void setStatus(EEntityStatus status) {
         this.status = status;
     }
 
