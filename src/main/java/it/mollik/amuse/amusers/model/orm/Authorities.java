@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import it.mollik.amuse.amusers.model.Role;
 
@@ -26,6 +28,10 @@ public class Authorities {
     @Column(name = "authority")
     private Role authority;    
 
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
+    
     @Column(name="create_ts", nullable = false)
     private Date createTs = new Date();
 
