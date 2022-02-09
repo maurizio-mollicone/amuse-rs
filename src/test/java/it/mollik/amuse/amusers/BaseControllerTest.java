@@ -15,14 +15,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import it.mollik.amuse.amusers.controller.BaseController;
 
-
-@WebMvcTest(BaseController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ActiveProfiles(value = "test")
 public class BaseControllerTest {
