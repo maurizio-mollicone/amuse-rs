@@ -21,10 +21,10 @@ import it.mollik.amuse.amusers.service.impl.AmuseUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		 securedEnabled = true
+		// securedEnabled = true
 		//,
 		// jsr250Enabled = true,
-		//prePostEnabled = true
+		prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     
@@ -58,11 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     @Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
-			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/test/**").permitAll()
-			.anyRequest().authenticated();
+		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+		.antMatchers("/api/test/**").permitAll()
+		.anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 }   

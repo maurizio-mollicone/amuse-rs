@@ -3,6 +3,7 @@ package it.mollik.amuse.amusers.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,22 +22,20 @@ public class BaseController {
 		return "Spring is here!";
 	}
 
-	
 	@GetMapping("/amuseuser")
-	//@PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
-	@Secured(value = {"USER", "MANAGER", "ADMIN"})
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
 	public String userAccess() {
 		return "User Content.";
 	}
+	
 	@GetMapping("/amusemanager")
-	//@PreAuthorize("hasRole('MANAGER')")
-	@Secured(value = {"MANAGER", "ADMIN"})
+	@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
 	public String moderatorAccess() {
 		return "Moderator Board.";
 	}
+	
 	@GetMapping("/amuseadmin")
-//	@PreAuthorize("hasRole('ADMIN')")
-	@Secured(value = {"ADMIN"})
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String adminAccess() {
 		return "Admin Board.";
 	}
