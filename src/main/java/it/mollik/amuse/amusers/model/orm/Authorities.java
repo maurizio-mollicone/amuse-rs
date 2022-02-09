@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +22,7 @@ public class Authorities {
     @Column(name = "user_name", length = 500, nullable = false)
     private String userName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "authority")
     private Role authority;    
 

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.StringJoiner;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,6 +38,7 @@ public class Item implements Serializable {
     @Column(name="update_ts", nullable = false)
     private Date updateTs;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EntityStatus status;
 
