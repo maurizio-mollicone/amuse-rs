@@ -1,0 +1,14 @@
+= JaWAPI.rs API 
+
+Base documentation of JaWAPI.rs API at http://localhost:8080:
+
+*request*
+include::../../../target/generated-snippets/home/http-request.adoc[]
+
+*response*
+include::../../../target/generated-snippets/home/http-response.adoc[]
+
+*Sample invocation*
+include::../../../target/generated-snippets/home/curl-request.adoc[]
+
+Easy peasy. Lemon squeezy.
