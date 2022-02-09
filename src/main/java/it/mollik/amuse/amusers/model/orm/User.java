@@ -3,6 +3,8 @@ package it.mollik.amuse.amusers.model.orm;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import it.mollik.amuse.amusers.model.UserStatus;
+
 @Entity(name = "user")
 public class User extends Person {
     
@@ -13,7 +15,7 @@ public class User extends Person {
     private String password;
 
     @Column(name = "user_status")
-    private int userStatus;    
+    private UserStatus userStatus;    
 
     /**
      * @return String return the email
@@ -44,16 +46,16 @@ public class User extends Person {
     }
 
     /**
-     * @return int return the userStatus
+     * @return UserStatus return the userStatus
      */
-    public int getUserStatus() {
+    public UserStatus getUserStatus() {
         return userStatus;
     }
 
     /**
      * @param userStatus the userStatus to set
      */
-    public void setUserStatus(int userStatus) {
+    public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
 
