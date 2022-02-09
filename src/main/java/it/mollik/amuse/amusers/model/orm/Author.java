@@ -1,7 +1,6 @@
 package it.mollik.amuse.amusers.model.orm;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

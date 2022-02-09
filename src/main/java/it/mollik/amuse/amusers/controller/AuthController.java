@@ -2,7 +2,6 @@ package it.mollik.amuse.amusers.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,10 +67,10 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUserName(signUpRequest.getUsername())) {
+		if (userRepository.existsByUserName(signUpRequest.getUsername()).booleanValue()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
 		}
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userRepository.existsByEmail(signUpRequest.getEmail()).booleanValue()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
 		}
 		// Create new user's account

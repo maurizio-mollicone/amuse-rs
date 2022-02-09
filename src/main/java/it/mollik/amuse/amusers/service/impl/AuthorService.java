@@ -3,7 +3,6 @@ package it.mollik.amuse.amusers.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
