@@ -2,45 +2,51 @@ package it.mollik.amuse.amusers.model.request;
 
 import java.util.Set;
 
-public class SignupRequest {
-   
-    private String username;
-  
+import javax.validation.constraints.NotEmpty;
+
+public class SignupRequest extends GenericRequest {
+
+    @NotEmpty(message = "Please provide a userName")
+    private String userName;
+
+    @NotEmpty(message = "Please provide an email")
     private String email;
-  
+
+    @NotEmpty(message = "Please provide a role")
     private Set<String> role;
-  
+
+    @NotEmpty(message = "Please provide a password")
     private String password;
-  
-    public String getUsername() {
-      return username;
+
+    public String getUserName() {
+        return userName;
     }
-  
-    public void setUsername(String username) {
-      this.username = username;
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
-  
+
     public String getEmail() {
-      return email;
+        return email;
     }
-  
+
     public void setEmail(String email) {
-      this.email = email;
+        this.email = email;
     }
-  
+
     public String getPassword() {
-      return password;
+        return password;
     }
-  
+
     public void setPassword(String password) {
-      this.password = password;
+        this.password = password;
     }
-  
+
     public Set<String> getRole() {
-      return this.role;
+        return this.role;
     }
-  
+
     public void setRole(Set<String> role) {
-      this.role = role;
+        this.role = role;
     }
-  }
+}

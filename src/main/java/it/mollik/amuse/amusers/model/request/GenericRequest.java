@@ -3,10 +3,13 @@ package it.mollik.amuse.amusers.model.request;
 import java.io.Serializable;
 import java.util.StringJoiner;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class GenericRequest implements Serializable {
     
+    @NotEmpty
     private RequestKey requestKey;
 
     private int pageOffset;

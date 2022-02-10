@@ -12,7 +12,8 @@ public class RequestKey implements Serializable{
     private UUID correlationId;
     private UUID requestId;
     private Date timestamp;
-    private String language;
+    private String country;
+    private String userName;
     private String ipAddress;
     private String jsessionId;
 
@@ -20,12 +21,21 @@ public class RequestKey implements Serializable{
         this("en", "0.0.0.0", StringUtils.EMPTY);
     }
 
-    public RequestKey(String language, String ipAddress, String jsessionId) {
+    public RequestKey(String country, String ipAddress, String jsessionId) {
+        this("anonymous", country, ipAddress, jsessionId);
+        this.correlationId = UUID.randomUUID();
+        this.requestId = UUID.randomUUID();
+        this.timestamp = new Date();
+        
+    }
+
+    public RequestKey(String userName, String country, String ipAddress, String jsessionId) {
         super();
         this.correlationId = UUID.randomUUID();
         this.requestId = UUID.randomUUID();
         this.timestamp = new Date();
-        this.language = language;
+        this.userName = userName;
+        this.country = country;
         this.ipAddress = ipAddress;
         this.jsessionId = jsessionId;
     }
@@ -48,11 +58,11 @@ public class RequestKey implements Serializable{
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
-    public String getLanguage() {
-        return language;
+    public String getCountry() {
+        return country;
     }
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setCountry(String country) {
+        this.country = country;
     }
     public String getIpAddress() {
         return ipAddress;
@@ -73,8 +83,23 @@ public class RequestKey implements Serializable{
         return new StringJoiner(StringUtils.EMPTY).add(this.getClass().getName()).add(" [ correlationId: ").add(getCorrelationId().toString())
             .add(", requestId: ").add(getRequestId().toString())
             .add(", timestamp: ").add(Long.toString(getTimestamp().getTime()))
-            .add(", language: ").add(getLanguage())
+            .add(", country: ").add(getCountry())
             .add("]").toString();
 
     }
+
+    /**
+     * @return String return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 }

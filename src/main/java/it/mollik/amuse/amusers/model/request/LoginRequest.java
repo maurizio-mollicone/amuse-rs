@@ -1,17 +1,21 @@
 package it.mollik.amuse.amusers.model.request;
 
-public class LoginRequest {
-    
-    private String username;
+import javax.validation.constraints.NotEmpty;
 
+public class LoginRequest extends GenericRequest {
+    
+    @NotEmpty(message = "Please provide a username")
+    private String userName;
+    
+    @NotEmpty(message = "Please provide a password")
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String username) {
+        this.userName = username;
     }
 
     public String getPassword() {
