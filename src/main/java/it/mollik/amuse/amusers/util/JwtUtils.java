@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,26 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import it.mollik.amuse.amusers.model.AmuseUserDetails;
+import it.mollik.amuse.amusers.repository.RoleRepository;
+import it.mollik.amuse.amusers.repository.UserRepository;
 
 @Component
 public class JwtUtils {
+
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+	
 	@Value("${amuse.security.jwtSecret}")
 	private String jwtSecret;
+	
 	@Value("${amuse.security.jwtExpirationMs}")
 	private int jwtExpirationMs;
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired 
+	private RoleRepository roleRepository;
+
 	public String generateJwtToken(Authentication authentication) {
 		AmuseUserDetails userPrincipal = (AmuseUserDetails) authentication.getPrincipal();
 		return Jwts.builder()
@@ -32,9 +45,21 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
+	
+	public String createJwtTestToken(String userName) {
+
+		return Jwts.builder()
+				.setSubject(userName)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
+
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
+	
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
