@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.apache.commons.lang3.StringUtils;
+
 @Entity(name = "author")
 public class Author extends Person {
     
@@ -15,6 +17,10 @@ public class Author extends Person {
     @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<Book> books;
+
+    public Author(){
+        this(StringUtils.EMPTY);
+    }
 
     public Author(String authorName) {
         super(authorName);
