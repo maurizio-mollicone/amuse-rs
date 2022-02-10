@@ -6,19 +6,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import it.mollik.amuse.amusers.model.request.GenericRequest;
+
 @Component
-public class HttpUtils {
+public class HttpUtils<T> {
     
     @Autowired
 	private JwtUtils jwtUtils;
 
-    public HttpEntity<String> buildHeaders(String userName) {
-		String token = jwtUtils.createJwtTestToken(userName);
-        HttpHeaders headers = new HttpHeaders();
+    public HttpEntity<GenericRequest> buildRequest(String userName, GenericRequest body) {
+		
+		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-		headers.set("Authorization", bearerAuthorization(token));
-		return new HttpEntity<String>(headers);
+		if (userName != null && !userName.isEmpty())		{
+			String token = jwtUtils.createJwtTestToken(userName);
+			headers.set("Authorization", bearerAuthorization(token));
+		}
+		return new HttpEntity<>(body, headers);
 	}
     
 	private String bearerAuthorization(String token) {

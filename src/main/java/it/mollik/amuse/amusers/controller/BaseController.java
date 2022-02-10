@@ -1,6 +1,5 @@
 package it.mollik.amuse.amusers.controller;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -14,7 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import it.mollik.amuse.amusers.model.request.RequestKey;
+import it.mollik.amuse.amusers.model.response.GenericResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -24,27 +27,35 @@ public class BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @GetMapping("/heartbeat")
-	public String heartbeat() {
+	public @ResponseBody GenericResponse heartbeat() {
 		LOG.info("aMuse yourself!");
-		return "aMuse yourself!";
+		return new GenericResponse(new RequestKey("testuser"), 0, "aMuse yourself!");
+		
+	}
+
+
+	private GenericResponse checkPath(Authentication authentication) {
+		String msg = (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
+		LOG.info(msg);
+		return new GenericResponse(new RequestKey(authentication.getName()), 0, msg);
 	}
 
 	@GetMapping("/amuseuser")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public String userAccess(Authentication authentication) {
-		return (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
+	public @ResponseBody GenericResponse userAccess(Authentication authentication) {
+		return checkPath(authentication);
 	}
 
 	@GetMapping("/amusemanager")
 	@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public String managerAccess(Authentication authentication) {
-		return (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
+	public GenericResponse managerAccess(Authentication authentication) {
+		return checkPath(authentication);
 	}
 	
 	@GetMapping("/amuseadmin")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminAccess(Authentication authentication) {
-		return (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
+	public GenericResponse adminAccess(Authentication authentication) {
+		return checkPath(authentication);
 	}
 
 	private List<String> getUserRoles(Authentication authentication) {

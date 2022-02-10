@@ -9,37 +9,35 @@ import org.apache.commons.lang3.StringUtils;
 
 public class RequestKey implements Serializable{
     
+    /**
+     *
+     */
+    private static final String DEFAULT_IP_ADDRESS = "0.0.0.0";
+    /**
+     *
+     */
     private UUID correlationId;
     private UUID requestId;
     private Date timestamp;
     private String country;
     private String userName;
     private String ipAddress;
-    private String jsessionId;
 
-    public RequestKey() {
-        this("en", "0.0.0.0", StringUtils.EMPTY);
+    public RequestKey(String userName) {
+        this(UUID.randomUUID(), UUID.randomUUID(), new Date(), "en", userName, DEFAULT_IP_ADDRESS);
     }
 
-    public RequestKey(String country, String ipAddress, String jsessionId) {
-        this("anonymous", country, ipAddress, jsessionId);
-        this.correlationId = UUID.randomUUID();
-        this.requestId = UUID.randomUUID();
-        this.timestamp = new Date();
-        
-    }
+    
 
-    public RequestKey(String userName, String country, String ipAddress, String jsessionId) {
-        super();
-        this.correlationId = UUID.randomUUID();
-        this.requestId = UUID.randomUUID();
-        this.timestamp = new Date();
-        this.userName = userName;
+    public RequestKey(UUID correlationId, UUID requestId, Date timestamp, String country, String userName,
+            String ipAddress) {
+        this.correlationId = correlationId;
+        this.requestId = requestId;
+        this.timestamp = timestamp;
         this.country = country;
+        this.userName = userName;
         this.ipAddress = ipAddress;
-        this.jsessionId = jsessionId;
     }
-
     public UUID getCorrelationId() {
         return correlationId;
     }
@@ -69,12 +67,6 @@ public class RequestKey implements Serializable{
     }
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-    }
-    public String getJsessionId() {
-        return jsessionId;
-    }
-    public void setJsessionId(String jsessionId) {
-        this.jsessionId = jsessionId;
     }
     
     @Override

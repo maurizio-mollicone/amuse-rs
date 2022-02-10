@@ -14,11 +14,14 @@ public class GenericResponse extends GenericRequest {
     private String statusMessage;
 
     public GenericResponse() {
-        super(new RequestKey());
+        super(new RequestKey("testuser"));
         this.statusCode = 0;
         this.statusMessage = "OK";
     }
 
+    public GenericResponse(String userName) {
+        this (new RequestKey(userName), 0, "OK");
+    }
 
     public GenericResponse(RequestKey requestKey, Integer statusCode, String statusMessage) {
         super(requestKey);

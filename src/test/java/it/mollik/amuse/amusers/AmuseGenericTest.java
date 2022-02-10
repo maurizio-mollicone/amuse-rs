@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import it.mollik.amuse.amusers.model.request.GenericRequest;
+import it.mollik.amuse.amusers.model.response.GenericResponse;
 import it.mollik.amuse.amusers.util.HttpUtils;
 
 
@@ -36,21 +39,24 @@ public class AmuseGenericTest {
 	private TestRestTemplate testRestTemplate;
 
 	@Autowired
-	private HttpUtils httpUtils;
+	private HttpUtils<GenericRequest> httpUtils;
 
     @Test
 	public void amuseYourself() throws Exception {
-		String body = this.testRestTemplate.getForObject("/api/test/heartbeat", String.class);
-		assertThat(body).isEqualTo("aMuse yourself!");
+		ResponseEntity<GenericResponse> res = this.testRestTemplate.exchange("/api/test/heartbeat", HttpMethod.GET, httpUtils.buildRequest(null, null), GenericResponse.class);
+        //getForObject("/api/test/heartbeat", GenericResponse.class);
+		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
+
 	}
 
 
 	@Test
     public void jwtAuthorization() throws Exception {
         
-        ResponseEntity<String> res = this.testRestTemplate.exchange("/api/test/amuseuser", HttpMethod.GET, httpUtils.buildHeaders(user01), String.class);
+        ResponseEntity<GenericResponse> res = this.testRestTemplate.exchange("/api/test/amuseuser", HttpMethod.GET, httpUtils.buildRequest(user01, null), GenericResponse.class);
 		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(res.getBody()).startsWith("user01");
+		assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
     }
 
     /**

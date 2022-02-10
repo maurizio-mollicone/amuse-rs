@@ -26,7 +26,9 @@ import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
+import it.mollik.amuse.amusers.model.request.RequestKey;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
+import it.mollik.amuse.amusers.model.response.GenericResponse;
 import it.mollik.amuse.amusers.model.response.JwtResponse;
 import it.mollik.amuse.amusers.model.response.MessageResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
@@ -68,12 +70,12 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<GenericResponse> signup(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUserName(signUpRequest.getUserName()).booleanValue()) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+			return ResponseEntity.badRequest().body(new GenericResponse(new RequestKey(signUpRequest.getUserName()), 1, "Username is already taken!"));
 		}
 		if (userRepository.existsByEmail(signUpRequest.getEmail()).booleanValue()) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+			return ResponseEntity.badRequest().body(new GenericResponse(new RequestKey(signUpRequest.getUserName()), 2, "Email is already in use!"));
 		}
 		// Create new user's account
 		User user = new User(signUpRequest.getUserName(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
@@ -103,6 +105,9 @@ public class AuthController {
         for (Role currentRole : roles) {
             roleRepository.save(currentRole);
         }
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
+		GenericResponse genericResponse = new GenericResponse(new RequestKey(user.getName()), 0, "User registered successfully!");
+
+		return ResponseEntity.ok(genericResponse);
 	}
 }

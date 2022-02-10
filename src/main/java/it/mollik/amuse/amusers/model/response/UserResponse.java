@@ -14,15 +14,14 @@ public class UserResponse extends GenericResponse {
         this.users = users;
     }
     public UserResponse(RequestKey requestKey, Integer statusCode, String statusMessage) {
-        super(requestKey, statusCode, statusMessage);
-        this.users = new ArrayList<>();
+        this(requestKey, statusCode, statusMessage, new ArrayList<>());
     }
-    public UserResponse(List<User> users) {
-        this(new RequestKey(), 0, "OK", users);
+    public UserResponse(RequestKey requestKey, List<User> users) {
+        this(requestKey, 0, "OK", users);
     }
 
     public UserResponse() {
-        this(new ArrayList<>());
+        this(new RequestKey("testuser"), new ArrayList<>());
     }
 
     public List<User> getUsers() {
