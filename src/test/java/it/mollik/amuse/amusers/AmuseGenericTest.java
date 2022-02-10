@@ -126,14 +126,14 @@ public class AmuseGenericTest {
     /**
      * @return HttpUtils return the jwtUtils
      */
-    public HttpUtils getJwtUtils() {
+    public HttpUtils getHttpUtils() {
         return httpUtils;
     }
 
     /**
      * @param httpUtils the httpUtils to set
      */
-    public void HttpUtils(HttpUtils httpUtils) {
+    public void setHttpUtils(HttpUtils httpUtils) {
         this.httpUtils = httpUtils;
     }
 

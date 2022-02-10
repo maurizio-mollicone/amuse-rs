@@ -37,14 +37,14 @@ public class BaseController {
 
 	@GetMapping("/amusemanager")
 	@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public String managerAccess() {
-		return "Manager Board.";
+	public String managerAccess(Authentication authentication) {
+		return (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
 	}
 	
 	@GetMapping("/amuseadmin")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminAccess() {
-		return "Admin Board.";
+	public String adminAccess(Authentication authentication) {
+		return (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
 	}
 
 	private List<String> getUserRoles(Authentication authentication) {
