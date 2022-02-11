@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.model.request;
+package it.mollik.amuse.amusers.model;
 
 import java.io.Serializable;
 import java.util.StringJoiner;

@@ -14,10 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
-import it.mollik.amuse.amusers.model.request.RequestKey;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
-import it.mollik.amuse.amusers.model.response.GenericResponse;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.model.response.JwtResponse;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -26,14 +26,14 @@ public class AmuseAuthTest extends AmuseGenericTest{
     
     @Test
 	public void anonymousAccess() throws Exception {
-		GenericResponse genericResponse = getWebTestClient()
+		AmuseResponse genericResponse = getWebTestClient()
             .get()
             .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getResponseBody();
         
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
@@ -103,7 +103,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		roles.add("user");
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
-        GenericResponse genericResponse = getWebTestClient()
+        AmuseResponse genericResponse = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
             //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
@@ -112,7 +112,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getResponseBody();
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
@@ -138,7 +138,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isBadRequest()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getStatus();
         assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
@@ -163,7 +163,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isBadRequest()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getStatus();
         assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}

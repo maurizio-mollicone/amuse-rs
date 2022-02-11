@@ -4,7 +4,9 @@ import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
-public class SignupRequest extends GenericRequest {
+import it.mollik.amuse.amusers.model.AmuseEntity;
+
+public class SignupRequest extends AmuseEntity {
 
     @NotEmpty(message = "Please provide a userName")
     private String userName;

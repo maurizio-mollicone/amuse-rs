@@ -12,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import it.mollik.amuse.amusers.model.request.GenericRequest;
-import it.mollik.amuse.amusers.model.response.GenericResponse;
+import it.mollik.amuse.amusers.model.request.AmuseRequest;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.util.HttpUtils;
 
 
@@ -38,18 +38,18 @@ public class AmuseGenericTest {
 	private WebTestClient webTestClient;
 
     @Autowired
-	private HttpUtils<GenericRequest> httpUtils;
+	private HttpUtils<AmuseRequest> httpUtils;
 
     @Test
 	public void amuseYourself() throws Exception {
-        GenericResponse genericResponse = webTestClient
+        AmuseResponse genericResponse = webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getResponseBody();
         
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
@@ -58,14 +58,14 @@ public class AmuseGenericTest {
 
 	@Test
     public void jwtAuthorization() throws Exception {
-        GenericResponse genericResponse = webTestClient
+        AmuseResponse genericResponse = webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(GenericResponse.class)
+            .expectBody(AmuseResponse.class)
             .returnResult().getResponseBody();
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
     }
@@ -130,14 +130,14 @@ public class AmuseGenericTest {
     /**
      * @return HttpUtils return the jwtUtils
      */
-    public HttpUtils<GenericRequest> getHttpUtils() {
+    public HttpUtils<AmuseRequest> getHttpUtils() {
         return httpUtils;
     }
 
     /**
      * @param httpUtils the httpUtils to set
      */
-    public void setHttpUtils(HttpUtils<GenericRequest> httpUtils) {
+    public void setHttpUtils(HttpUtils<AmuseRequest> httpUtils) {
         this.httpUtils = httpUtils;
     }
 

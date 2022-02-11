@@ -2,7 +2,9 @@ package it.mollik.amuse.amusers.model.response;
 
 import java.util.List;
 
-public class JwtResponse extends GenericResponse {
+import it.mollik.amuse.amusers.model.AmuseEntity;
+
+public class JwtResponse extends AmuseEntity {
     
     private String token;
 
@@ -67,4 +69,5 @@ public class JwtResponse extends GenericResponse {
     public List<String> getRoles() {
         return roles;
     }
+
 }

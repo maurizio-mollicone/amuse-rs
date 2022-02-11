@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import it.mollik.amuse.amusers.model.orm.Author;
 
-public class AuthorRequest extends GenericRequest {
+public class AuthorRequest extends AmuseRequest {
     
     private List<Author> authors;
 

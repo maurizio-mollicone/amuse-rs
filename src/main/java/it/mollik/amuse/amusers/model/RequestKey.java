@@ -1,13 +1,12 @@
-package it.mollik.amuse.amusers.model.request;
+package it.mollik.amuse.amusers.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class RequestKey implements Serializable{
+public class RequestKey extends AmuseEntity {
     
     /**
      *

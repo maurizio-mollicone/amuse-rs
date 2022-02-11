@@ -6,10 +6,10 @@ import java.util.StringJoiner;
 
 import org.apache.commons.lang3.StringUtils;
 
+import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.orm.Author;
-import it.mollik.amuse.amusers.model.request.RequestKey;
 
-public class AuthorResponse extends GenericResponse {
+public class AuthorResponse extends AmuseResponse {
 
     private List<Author> authors;
 

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.mollik.amuse.amusers.model.request.RequestKey;
-import it.mollik.amuse.amusers.model.response.GenericResponse;
+import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,33 +32,33 @@ public class BaseController {
 	AuthenticationManager authenticationManager;
 	
 	@GetMapping("/heartbeat")
-	public @ResponseBody GenericResponse heartbeat() {
+	public @ResponseBody AmuseResponse heartbeat() {
 		LOG.info("aMuse yourself!");
-		return new GenericResponse(new RequestKey("testuser"), 0, "aMuse yourself!");
+		return new AmuseResponse(new RequestKey("testuser"), 0, "aMuse yourself!");
 		
 	}
 
-	private GenericResponse checkPath(Authentication authentication) {
+	private AmuseResponse checkPath(Authentication authentication) {
 		String msg = (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
 		LOG.info(msg);
-		return new GenericResponse(new RequestKey(authentication.getName()), 0, msg);
+		return new AmuseResponse(new RequestKey(authentication.getName()), 0, msg);
 	}
 
 	@GetMapping("/amuseuser")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public @ResponseBody GenericResponse userAccess(Authentication authentication) {
+	public @ResponseBody AmuseResponse userAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 
 	@GetMapping("/amusemanager")
 	@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public GenericResponse managerAccess(Authentication authentication) {
+	public AmuseResponse managerAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 	
 	@GetMapping("/amuseadmin")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public GenericResponse adminAccess(Authentication authentication) {
+	public AmuseResponse adminAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 

@@ -14,10 +14,11 @@ import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
 
+import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
 
 @MappedSuperclass
-public class Item implements Serializable {
+public class Item extends AmuseEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

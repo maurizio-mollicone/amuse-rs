@@ -17,11 +17,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import org.apache.commons.lang3.StringUtils;
 
+import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
 
 @MappedSuperclass
 @JsonIdentityInfo(generator =  ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Person implements Serializable{
+public class Person extends AmuseEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

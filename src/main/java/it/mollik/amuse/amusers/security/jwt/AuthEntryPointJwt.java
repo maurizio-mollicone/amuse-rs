@@ -1,8 +1,8 @@
 package it.mollik.amuse.amusers.security.jwt;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import it.mollik.amuse.amusers.model.request.RequestKey;
+import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.model.response.JwtResponse;
 
 @Component
@@ -33,17 +34,10 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		// final Map<String, Object> body = new HashMap<>();
-		// body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-		// body.put("error", "Unauthorized");
-		// body.put("message", authException.getMessage());
-		// body.put("path", request.getServletPath());
-		JwtResponse res = new JwtResponse("", 0L, "", "", null);
-		res.setRequestKey(new RequestKey("testuser"));
-		res.setStatusCode(1);
-		res.setStatusMessage("Unauthorized");
+		
+		AmuseResponse<JwtResponse> amuseResponse = new AmuseResponse<>(new RequestKey("testuser"), 1, "Unauthorized", Stream.of(new JwtResponse("", 0L, "", "", null)).collect(Collectors.toList()));
+		logger.error("Unauthorized {}", amuseResponse);
 		final ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(response.getOutputStream(), res);
-		//response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+		mapper.writeValue(response.getOutputStream(), amuseResponse);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -28,12 +29,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.model.AmuseUserDetails;
 import it.mollik.amuse.amusers.model.ERole;
+import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
+import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
-import it.mollik.amuse.amusers.model.request.RequestKey;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
-import it.mollik.amuse.amusers.model.response.GenericResponse;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.model.response.JwtResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
@@ -62,9 +64,9 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
-	public JwtResponse signin(@Valid @RequestBody LoginRequest loginRequest) {
+	public AmuseResponse<JwtResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
@@ -72,13 +74,23 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-			JwtResponse response = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
-		logger.info("User {} authenticated {}", loginRequest.getUserName(), response);
+		AmuseResponse<JwtResponse> response = new AmuseResponse<>(
+			new RequestKey(loginRequest.getData().get(0).getName()), 
+			0, 
+			"OK",
+			Stream.of(
+				new JwtResponse(
+					jwt, 
+					userDetails.getId(), 
+					userDetails.getUsername(), 
+					userDetails.getEmail(), 
+					roles)).collect(Collectors.toList()));
+		logger.info("User {} authenticated {}", loginRequest.getData().get(0).getUserName(), response);
 		return response;
 	}
 
 	@PostMapping("/signup")
-	public GenericResponse signup(@Valid @RequestBody SignupRequest signUpRequest) {
+	public AmuseResponse<User> signup(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUserName(signUpRequest.getUserName()).booleanValue()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getUserName() + "already taken");
 		}
@@ -114,8 +126,9 @@ public class AuthController {
             roleRepository.save(currentRole);
         }
 
-		GenericResponse genericResponse = new GenericResponse(new RequestKey(user.getName()), 0, "User registered successfully!");
-		logger.info("User {} registrated {}", signUpRequest.getUserName(), genericResponse);
-		return genericResponse;
+		AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(user.getName()), 0, "User registered successfully!");
+		response.setData(Stream.of(user).collect(Collectors.toList()));
+		logger.info("User {} registrated {}", signUpRequest.getUserName(), response);
+		return response;
 	}
 }

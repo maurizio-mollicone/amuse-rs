@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import it.mollik.amuse.amusers.model.request.GenericRequest;
+import it.mollik.amuse.amusers.model.request.AmuseRequest;
 
 @Component
 public class HttpUtils<T> {
@@ -15,7 +15,7 @@ public class HttpUtils<T> {
     @Autowired
 	private JwtUtils jwtUtils;
 
-    public HttpEntity<GenericRequest> buildRequest(String userName, GenericRequest body) {
+    public HttpEntity<AmuseRequest> buildRequest(String userName, AmuseRequest body) {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
