@@ -18,6 +18,10 @@ public interface IUserService {
 
     public List<User> findByEmail(String email) throws EntityNotFoundException;
 
+    public Boolean existsByUserName(String username);
+
+	public Boolean existsByEmail(String email);
+    
     public List<User> list() throws EntityNotFoundException;
 
     public User create(User user);

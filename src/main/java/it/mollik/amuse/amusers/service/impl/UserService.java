@@ -60,6 +60,18 @@ public class UserService implements IUserService {
         return users;    
     }
 
+    public Boolean existsByUserName(String username) {
+        Boolean userExists = this.userRepository.existsByUserName(username);
+        logger.info("user {} exists {}", username, userExists.booleanValue());
+        return userExists;
+    }
+
+	public Boolean existsByEmail(String email) {
+        Boolean emailExists = this.userRepository.existsByEmail(email);
+        logger.info("email {} exists {}", email, emailExists.booleanValue());
+        return emailExists;
+    }
+
     @Override
     public List<User> list() throws EntityNotFoundException {
         List<User> users = new ArrayList<>();
