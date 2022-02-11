@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import it.mollik.amuse.amusers.model.response.UserResponse;
+import it.mollik.amuse.amusers.model.orm.User;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
@@ -19,7 +21,7 @@ public class AmuseUserTest extends AmuseGenericTest {
     
     @Test
 	public void listUsers() throws Exception {
-    UserResponse userResponse = getWebTestClient()
+        AmuseResponse<User> response = getWebTestClient()
             .get()
             .uri(uriBuilder -> uriBuilder.path("/amuse/v1/users/list").queryParam("name", getUser01()).build())
             .accept(MediaType.APPLICATION_JSON)
@@ -27,16 +29,16 @@ public class AmuseUserTest extends AmuseGenericTest {
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(UserResponse.class)
+            .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){})
             .returnResult().getResponseBody();
         
-        assertThat(userResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
     @Value("${amuse.security.user03:user03}")
     private String user03;
     @Test
 	public void viewUser03() throws Exception {
-    UserResponse userResponse = getWebTestClient()
+        AmuseResponse<User> response = getWebTestClient()
             .get()
             .uri("/amuse/v1/users/detail/6")
             .accept(MediaType.APPLICATION_JSON)
@@ -44,11 +46,11 @@ public class AmuseUserTest extends AmuseGenericTest {
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(UserResponse.class)
+            .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){})
             .returnResult().getResponseBody();
         
-        assertThat(userResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
-        assertThat(userResponse.getUsers().get(0).getName()).isEqualTo(user03);
+        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
+        assertThat(response.getData().get(0).getName()).isEqualTo(user03);
 
 	}
 }

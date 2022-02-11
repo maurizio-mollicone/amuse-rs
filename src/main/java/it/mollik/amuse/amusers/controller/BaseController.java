@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
@@ -26,39 +27,39 @@ import it.mollik.amuse.amusers.model.response.AmuseResponse;
 @RequestMapping("/amuse/v1/test")
 public class BaseController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
 	@GetMapping("/heartbeat")
-	public @ResponseBody AmuseResponse heartbeat() {
-		LOG.info("aMuse yourself!");
-		return new AmuseResponse(new RequestKey("testuser"), 0, "aMuse yourself!");
+	public @ResponseBody AmuseResponse<AmuseEntity> heartbeat() {
+		logger.info("aMuse yourself!");
+		return new AmuseResponse<>(new RequestKey("testuser"), 0, "aMuse yourself!");
 		
 	}
 
-	private AmuseResponse checkPath(Authentication authentication) {
+	private AmuseResponse<AmuseEntity> checkPath(Authentication authentication) {
 		String msg = (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
-		LOG.info(msg);
-		return new AmuseResponse(new RequestKey(authentication.getName()), 0, msg);
+		logger.info(msg);
+		return new AmuseResponse<>(new RequestKey(authentication.getName()), 0, msg);
 	}
 
 	@GetMapping("/amuseuser")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public @ResponseBody AmuseResponse userAccess(Authentication authentication) {
+	public @ResponseBody AmuseResponse<AmuseEntity> userAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 
 	@GetMapping("/amusemanager")
 	@PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-	public AmuseResponse managerAccess(Authentication authentication) {
+	public AmuseResponse<AmuseEntity> managerAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 	
 	@GetMapping("/amuseadmin")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public AmuseResponse adminAccess(Authentication authentication) {
+	public AmuseResponse<AmuseEntity> adminAccess(Authentication authentication) {
 		return checkPath(authentication);
 	}
 

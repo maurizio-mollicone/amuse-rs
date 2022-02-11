@@ -101,7 +101,7 @@ public class AuthController {
 		User user = new User(signUpRequest.getUserName(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
         user.setCreateTs(new Date());
         user.setUpdateTs(new Date());
-		Set<String> strRoles = signUpRequest.getRole();
+		List<String> strRoles = signUpRequest.getRole();
 		List<Role> roles = new ArrayList<>();
 		if (strRoles == null) {
             roles.add(new Role(user.getUserName(), ERole.USER, user));
