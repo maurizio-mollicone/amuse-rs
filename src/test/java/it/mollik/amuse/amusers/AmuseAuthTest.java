@@ -28,7 +28,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	public void anonymousAccess() throws Exception {
 		GenericResponse genericResponse = getWebTestClient()
             .get()
-            .uri("/api/test/heartbeat")
+            .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -44,7 +44,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	public void accessDenied() throws Exception {
         getWebTestClient()
             .get()
-            .uri("/api/test/amuseuser")
+            .uri("/api/v1/test/amuseuser")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -105,7 +105,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setPassword("1234");
         GenericResponse genericResponse = getWebTestClient()
             .post()
-            .uri("/api/auth/signup")
+            .uri("/amuse/v1/auth/signup")
             //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(signupRequest)
             .accept(MediaType.APPLICATION_JSON)
@@ -129,9 +129,9 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
 
-		GenericResponse genericResponse = getWebTestClient()
+		HttpStatus status = getWebTestClient()
             .post()
-            .uri("/api/auth/signup")
+            .uri("/amuse/v1/auth/signup")
             //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(signupRequest)
             .accept(MediaType.APPLICATION_JSON)
@@ -139,8 +139,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .expectStatus()
             .isBadRequest()
             .expectBody(GenericResponse.class)
-            .returnResult().getResponseBody();
-        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(2));
+            .returnResult().getStatus();
+        assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
@@ -154,9 +154,9 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		roles.add("user");
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
-        GenericResponse genericResponse = getWebTestClient()
+        HttpStatus status = getWebTestClient()
             .post()
-            .uri("/api/auth/signup")
+            .uri("/amuse/v1/auth/signup")
             //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(signupRequest)
             .accept(MediaType.APPLICATION_JSON)
@@ -164,8 +164,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .expectStatus()
             .isBadRequest()
             .expectBody(GenericResponse.class)
-            .returnResult().getResponseBody();
-        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(1));
+            .returnResult().getStatus();
+        assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 
@@ -179,7 +179,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		loginRequest.setPassword("1234");
         JwtResponse jwtResponse = getWebTestClient()
             .post()
-            .uri("/api/auth/signin")
+            .uri("/amuse/v1/auth/signin")
             .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(loginRequest)
             .accept(MediaType.APPLICATION_JSON)
@@ -206,7 +206,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 
         getWebTestClient()
             .post()
-            .uri("/api/auth/signin")
+            .uri("/amuse/v1/auth/signin")
             .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(loginRequest)
             .accept(MediaType.APPLICATION_JSON)

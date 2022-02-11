@@ -44,7 +44,7 @@ public class AmuseGenericTest {
 	public void amuseYourself() throws Exception {
         GenericResponse genericResponse = webTestClient
             .get()
-            .uri("/api/test/heartbeat")
+            .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -60,7 +60,7 @@ public class AmuseGenericTest {
     public void jwtAuthorization() throws Exception {
         GenericResponse genericResponse = webTestClient
             .get()
-            .uri("/api/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
+            .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()

@@ -15,6 +15,10 @@ public class Page implements Serializable {
     @NotNull
     private int size;
 
+    private int totalItems;
+
+    private int totalPages;
+
     public Page(int index, int size) {
         this.index = index;
         this.size = size;
@@ -48,8 +52,38 @@ public class Page implements Serializable {
         this.size = size;
     }
 
+    /**
+     * @return int return the totalItems
+     */
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    /**
+     * @param totalItems the totalItems to set
+     */
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    /**
+     * @return int return the totalPages
+     */
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    /**
+     * @param totalPages the totalPages to set
+     */
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
     @Override
     public String toString() {
-        return new StringJoiner(StringUtils.EMPTY).add(this.getClass().getName()).add(" [index]: [").add(Integer.toString(index)).add(", ").add(" [index]: ").add(Integer.toString(index)).toString();
+        return "Page [index=" + index + ", size=" + size + ", totalItems=" + totalItems + ", totalPages=" + totalPages
+                + "]";
     }
+
 }

@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/v3/api-docs/**",
 			"/swagger-ui/**",
 			// other public endpoints of your API may be appended to this array
-			"/api/test/**",
+			"/amuse/v1/test/**",
 	};
 	
 	@Autowired
@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+				.authorizeRequests().antMatchers("/amuse/v1/auth/**").permitAll()
 				.antMatchers(AUTH_WHITELIST).permitAll()
 				// .antMatchers("/api/test/**").permitAll()
 				.anyRequest().authenticated();

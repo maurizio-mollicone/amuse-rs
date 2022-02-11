@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,18 +23,20 @@ import it.mollik.amuse.amusers.model.response.GenericResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/amuse/v1/test")
 public class BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
-    @GetMapping("/heartbeat")
+	@Autowired
+	AuthenticationManager authenticationManager;
+	
+	@GetMapping("/heartbeat")
 	public @ResponseBody GenericResponse heartbeat() {
 		LOG.info("aMuse yourself!");
 		return new GenericResponse(new RequestKey("testuser"), 0, "aMuse yourself!");
 		
 	}
-
 
 	private GenericResponse checkPath(Authentication authentication) {
 		String msg = (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
@@ -63,5 +67,15 @@ public class BaseController {
 		List<String> role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 			.collect(Collectors.toList());
 		return role;
+	}
+
+	
+    public AuthenticationManager getAuthenticationManager() {
+		return authenticationManager;
+	}
+
+
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
 	}
 }
