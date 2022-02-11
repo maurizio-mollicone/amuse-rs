@@ -3,6 +3,9 @@ package it.mollik.amuse.amusers.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +39,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping(path = "/user/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserResponse list(@RequestBody UserRequest request) throws EntityNotFoundException {
         logger.info("/user/list");
         List<User> authors = this.userService.list();
@@ -45,7 +48,7 @@ public class UserController {
         return response;
     }
 
-    @PutMapping(path = "/user/find", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/find", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserResponse findByName(@RequestBody UserRequest request) throws EntityNotFoundException {
         logger.info("/user/find {}" , request);
         List<User> authors = this.userService.findByName(request.getUsers().get(0).getName());
@@ -54,25 +57,22 @@ public class UserController {
         return response;
     }
 
-    @PostMapping(path = "/user/signup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserResponse signup(@RequestBody UserRequest request) {
-        User author = this.userService.create(request.getUsers().get(0));
-        List<User> authors = new ArrayList<>();
-        authors.add(author);
+        List<User> authors = Stream.of(this.userService.create(request.getUsers().get(0))).collect(Collectors.toList());
         UserResponse response = new UserResponse(request.getRequestKey(), 0, "OK", authors);
-        logger.info("/user/created {}", author);
+        logger.info("/user/created {}", response);
         return response;
     }
 
     @PostMapping(path = "/user/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserResponse save(@RequestBody UserRequest request, @PathVariable Integer id) {
-        User author = this.userService.save(request.getUsers().get(0));
-        List<User> authors = new ArrayList<>();
-        authors.add(author);
+        
+        List<User> authors = Stream.of(this.userService.save(request.getUsers().get(0))).collect(Collectors.toList());
         UserResponse response = new UserResponse(request.getRequestKey(), 0, "OK", authors);
-        logger.info("/user/created {}", author);
+        logger.info("/user/created {}", response);
         return response;
     }
 
