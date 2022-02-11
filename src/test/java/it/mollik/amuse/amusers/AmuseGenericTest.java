@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestTemplate;
 
 import it.mollik.amuse.amusers.model.request.GenericRequest;
 import it.mollik.amuse.amusers.model.response.GenericResponse;
@@ -37,7 +38,7 @@ public class AmuseGenericTest {
     
 	@Autowired
 	private TestRestTemplate testRestTemplate;
-
+	
 	@Autowired
 	private HttpUtils<GenericRequest> httpUtils;
 

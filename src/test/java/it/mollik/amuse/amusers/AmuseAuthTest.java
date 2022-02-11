@@ -9,14 +9,17 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestTemplate;
 
 import it.mollik.amuse.amusers.model.ERole;
+import it.mollik.amuse.amusers.model.request.LoginRequest;
 import it.mollik.amuse.amusers.model.request.RequestKey;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.GenericResponse;
@@ -110,7 +113,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
 
-		ResponseEntity<JwtResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), JwtResponse.class);
+		ResponseEntity<GenericResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), GenericResponse.class);
 		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(((JwtResponse) res.getBody()).getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
@@ -127,7 +130,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
 
-		ResponseEntity<JwtResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), JwtResponse.class);
+		ResponseEntity<GenericResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), GenericResponse.class);
 		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(2));
 	}
@@ -144,8 +147,39 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setRole(roles);
 		signupRequest.setPassword("1234");
 
-		ResponseEntity<JwtResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), JwtResponse.class);
+		ResponseEntity<GenericResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), GenericResponse.class);
 		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(1));
 	}
+
+
+	@Test
+	public void loginOk() throws Exception {
+
+		LoginRequest loginRequest = new LoginRequest();
+
+		loginRequest.setRequestKey(new RequestKey("user01"));
+		loginRequest.setUserName("user01");
+		loginRequest.setPassword("1234");
+		
+		ResponseEntity<JwtResponse> res = this.getTestRestTemplate().exchange("/api/auth/signin", HttpMethod.POST, getHttpUtils().buildRequest(null, loginRequest), JwtResponse.class);
+		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
+	}
+
+	// @Autowired
+    // private RestTemplate restTemplate;
+
+	// @Test
+	// public void loginKo() throws Exception {
+
+	// 	LoginRequest loginRequest = new LoginRequest();
+
+	// 	loginRequest.setRequestKey(new RequestKey("user01"));
+	// 	loginRequest.setUserName("user01");
+	// 	loginRequest.setPassword("1235");
+	// 	ResponseEntity<JwtResponse> res = this.restTemplate.exchange("/api/auth/signin", HttpMethod.POST, getHttpUtils().buildRequest(null, loginRequest), JwtResponse.class);
+	// 	assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+	// 	assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
+	// }
 }
