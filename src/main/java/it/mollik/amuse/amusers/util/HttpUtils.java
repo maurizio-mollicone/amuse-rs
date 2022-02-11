@@ -1,5 +1,6 @@
 package it.mollik.amuse.amusers.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,4 +31,11 @@ public class HttpUtils<T> {
 		return "Bearer " + token;
 	}
 
+    public String getAuthorizazionHeaderValue(String userName) throws Exception {
+        if (userName != null && !userName.isEmpty())		{
+			return "Bearer " + jwtUtils.createJwtTestToken(userName);
+		} else {
+            throw new Exception("JWT Token null");
+        }
+    }
 }

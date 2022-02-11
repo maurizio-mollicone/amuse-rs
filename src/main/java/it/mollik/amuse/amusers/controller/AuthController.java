@@ -30,7 +30,6 @@ import it.mollik.amuse.amusers.model.request.RequestKey;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.GenericResponse;
 import it.mollik.amuse.amusers.model.response.JwtResponse;
-import it.mollik.amuse.amusers.model.response.MessageResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
 import it.mollik.amuse.amusers.util.JwtUtils;

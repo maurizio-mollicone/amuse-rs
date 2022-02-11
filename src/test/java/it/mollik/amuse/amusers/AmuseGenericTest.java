@@ -2,26 +2,24 @@ package it.mollik.amuse.amusers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import it.mollik.amuse.amusers.model.request.GenericRequest;
 import it.mollik.amuse.amusers.model.response.GenericResponse;
 import it.mollik.amuse.amusers.util.HttpUtils;
 
 
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
+@ExtendWith(SpringExtension.class)
 public class AmuseGenericTest {
 	
     @Value("${amuse.security.admin:admin}")
@@ -36,28 +34,40 @@ public class AmuseGenericTest {
 	@Value("${amuse.security.defaultpassword:1234}")
 	private String defaultPassword;
     
-	@Autowired
-	private TestRestTemplate testRestTemplate;
-	
-	@Autowired
+    @Autowired
+	private WebTestClient webTestClient;
+
+    @Autowired
 	private HttpUtils<GenericRequest> httpUtils;
 
     @Test
 	public void amuseYourself() throws Exception {
-		ResponseEntity<GenericResponse> res = this.testRestTemplate.exchange("/api/test/heartbeat", HttpMethod.GET, httpUtils.buildRequest(null, null), GenericResponse.class);
-        //getForObject("/api/test/heartbeat", GenericResponse.class);
-		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
-
+        GenericResponse genericResponse = webTestClient
+            .get()
+            .uri("/api/test/heartbeat")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(GenericResponse.class)
+            .returnResult().getResponseBody();
+        
+        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
 
 
 	@Test
     public void jwtAuthorization() throws Exception {
-        
-        ResponseEntity<GenericResponse> res = this.testRestTemplate.exchange("/api/test/amuseuser", HttpMethod.GET, httpUtils.buildRequest(user01, null), GenericResponse.class);
-		assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(res.getBody().getStatusCode()).isEqualTo(Integer.valueOf(0));
+        GenericResponse genericResponse = webTestClient
+            .get()
+            .uri("/api/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(GenericResponse.class)
+            .returnResult().getResponseBody();
+        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
     }
 
     /**
@@ -116,19 +126,6 @@ public class AmuseGenericTest {
         this.defaultPassword = defaultPassword;
     }
 
-    /**
-     * @return TestRestTemplate return the testRestTemplate
-     */
-    public TestRestTemplate getTestRestTemplate() {
-        return testRestTemplate;
-    }
-
-    /**
-     * @param testRestTemplate the testRestTemplate to set
-     */
-    public void setTestRestTemplate(TestRestTemplate testRestTemplate) {
-        this.testRestTemplate = testRestTemplate;
-    }
 
     /**
      * @return HttpUtils return the jwtUtils
@@ -140,8 +137,18 @@ public class AmuseGenericTest {
     /**
      * @param httpUtils the httpUtils to set
      */
-    public void setHttpUtils(HttpUtils httpUtils) {
+    public void setHttpUtils(HttpUtils<GenericRequest> httpUtils) {
         this.httpUtils = httpUtils;
+    }
+
+    
+	public WebTestClient getWebTestClient() {
+        return webTestClient;
+    }
+
+
+    public void setWebTestClient(WebTestClient webTestClient) {
+        this.webTestClient = webTestClient;
     }
 
 }
