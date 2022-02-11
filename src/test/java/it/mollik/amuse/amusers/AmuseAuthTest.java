@@ -92,22 +92,30 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	// 	assertThat(res.getBody().getStatusMessage()).startsWith(getAdmin());
 	// }
 
-	// @Test
-	// public void signUp() throws Exception {
+	@Test
+	public void signUp() throws Exception {
 
-	// 	SignupRequest signupRequest = new SignupRequest();
-	// 	signupRequest.setRequestKey(new RequestKey("testuser"));
-	// 	signupRequest.setEmail("testuser@localhost");
-	// 	signupRequest.setUserName("testuser");
-	// 	Set<String> roles = new HashSet<>();
-	// 	roles.add("user");
-	// 	signupRequest.setRole(roles);
-	// 	signupRequest.setPassword("1234");
-
-	// 	ResponseEntity<GenericResponse> res = this.getTestRestTemplate().exchange("/api/auth/signup", HttpMethod.POST, getHttpUtils().buildRequest(null, signupRequest), GenericResponse.class);
-	// 	assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-	// 	assertThat(((JwtResponse) res.getBody()).getStatusCode()).isEqualTo(Integer.valueOf(0));
-	// }
+		SignupRequest signupRequest = new SignupRequest();
+		signupRequest.setRequestKey(new RequestKey("testuser"));
+		signupRequest.setEmail("testuser@localhost");
+		signupRequest.setUserName("testuser");
+		Set<String> roles = new HashSet<>();
+		roles.add("user");
+		signupRequest.setRole(roles);
+		signupRequest.setPassword("1234");
+        GenericResponse genericResponse = getWebTestClient()
+            .post()
+            .uri("/api/auth/signup")
+            //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
+            .bodyValue(signupRequest)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(GenericResponse.class)
+            .returnResult().getResponseBody();
+        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+	}
 
 	@Test
 	public void emailAlreadyUsed() throws Exception {
@@ -130,7 +138,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isBadRequest()
-            .expectBody(JwtResponse.class)
+            .expectBody(GenericResponse.class)
             .returnResult().getResponseBody();
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(2));
 	}
@@ -155,7 +163,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isBadRequest()
-            .expectBody(JwtResponse.class)
+            .expectBody(GenericResponse.class)
             .returnResult().getResponseBody();
         assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(1));
 	}

@@ -130,7 +130,7 @@ public class AmuseGenericTest {
     /**
      * @return HttpUtils return the jwtUtils
      */
-    public HttpUtils getHttpUtils() {
+    public HttpUtils<GenericRequest> getHttpUtils() {
         return httpUtils;
     }
 
