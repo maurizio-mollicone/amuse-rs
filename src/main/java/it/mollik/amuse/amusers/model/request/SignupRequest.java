@@ -5,7 +5,18 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignupRequest extends AmuseEntity {
 
     @NotEmpty(message = "Please provide a userName")
@@ -20,35 +31,4 @@ public class SignupRequest extends AmuseEntity {
     @NotEmpty(message = "Please provide a password")
     private String password;
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<String> getRole() {
-        return this.role;
-    }
-
-    public void setRole(List<String> role) {
-        this.role = role;
-    }
 }

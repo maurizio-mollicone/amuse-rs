@@ -18,13 +18,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import it.mollik.amuse.amusers.service.impl.AmuseUserDetailsService;
+import it.mollik.amuse.amusers.service.impl.JwtTokenService;
 import it.mollik.amuse.amusers.util.JwtUtils;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private JwtUtils jwtUtils;
-	
+	private JwtTokenService jwtTokenService;
+
 	@Autowired
 	private AmuseUserDetailsService amuseUserDetailsService;
 	
@@ -35,13 +36,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
-			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-				String username = jwtUtils.getUserNameFromJwtToken(jwt);
+			if (jwt != null && jwtTokenService.validateToken(jwt)) {
+				String username = jwtTokenService.getUsernameFromToken(jwt);
 				UserDetails userDetails = amuseUserDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				userDetails.getAuthorities().stream().forEach(u -> logger.info("role {}", u.getAuthority()));
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+			} else if (jwt != null && !jwtTokenService.validateToken(jwt)) {
+				logger.warn("Token invalid for user {}", jwtTokenService.getUsernameFromToken(jwt));
 			}
 		} catch (Exception e) {
 			logger.error("Cannot set user authentication:", e);

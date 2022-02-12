@@ -38,7 +38,7 @@ public class AuthorController {
     public AuthorResponse list(@RequestBody AuthorRequest request) throws EntityNotFoundException {
         logger.info("/authors");
         List<Author> authors = this.authorService.list();
-        AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK", authors);
+        AuthorResponse response = new AuthorResponse(request.getKey(), 0, "OK", authors);
         response.setAuthors(authors);
         return response;
     }
@@ -47,7 +47,7 @@ public class AuthorController {
     public AuthorResponse findByName(@RequestBody AuthorRequest request) throws EntityNotFoundException {
         logger.info("/author/find {}" , request);
         List<Author> authors = this.authorService.findByName(request.getAuthors().get(0).getName());
-        AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK", authors);
+        AuthorResponse response = new AuthorResponse(request.getKey(), 0, "OK", authors);
         logger.info("/author/find OK {} elemts" , authors.size());
         return response;
     }
@@ -58,7 +58,7 @@ public class AuthorController {
         Author author = this.authorService.create(request.getAuthors().get(0).getName());
         List<Author> authors = new ArrayList<>();
         authors.add(author);
-        AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK", authors);
+        AuthorResponse response = new AuthorResponse(request.getKey(), 0, "OK", authors);
         logger.info("/author/created {}", author);
         return response;
     }
@@ -69,7 +69,7 @@ public class AuthorController {
         Author author = this.authorService.save(request.getAuthors().get(0));
         List<Author> authors = new ArrayList<>();
         authors.add(author);
-        AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK", authors);
+        AuthorResponse response = new AuthorResponse(request.getKey(), authors);
         logger.info("/author/created {}", author);
         return response;
     }
@@ -78,7 +78,7 @@ public class AuthorController {
     @ResponseBody
     public AuthorResponse delete(@PathVariable Integer artistId, @RequestBody AuthorRequest request) throws EntityNotFoundException {
         this.authorService.delete(artistId);
-        AuthorResponse response = new AuthorResponse(request.getRequestKey(), 0, "OK");
+        AuthorResponse response = new AuthorResponse(request.getKey());
         logger.info("/author/delete {}", artistId);
         return response;
     }

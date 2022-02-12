@@ -4,25 +4,21 @@ import java.util.List;
 
 import it.mollik.amuse.amusers.model.AmuseModel;
 import it.mollik.amuse.amusers.model.IAmuseEntity;
-import it.mollik.amuse.amusers.model.RequestKey;
-import it.mollik.amuse.amusers.model.SearchParams;
+import it.mollik.amuse.amusers.model.Key;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
 public class AmuseRequest<T extends IAmuseEntity> extends AmuseModel<T> {
     
-    public AmuseRequest() {
-        super();
-    }
-
-    public AmuseRequest(RequestKey requestKey) {
-        super(requestKey);
-    }
-
-    public AmuseRequest(RequestKey requestKey, List<T> data) {
-        super(requestKey, data);
-    }
-
-    public AmuseRequest(RequestKey requestKey, SearchParams page, List<T> data) {
-        super(requestKey, page, data);
+    public AmuseRequest(Key key, List<T> data) {
+        super(key, null, data);
     }
 }
 

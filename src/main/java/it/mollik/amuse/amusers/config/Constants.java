@@ -2,6 +2,11 @@ package it.mollik.amuse.amusers.config;
 
 public final class Constants {
     
+    public static final String DEFAULT_IP_ADDRESS = "0.0.0.0";
+
+    public static final String JWT_BLACKLIST_CACHE_KEY = "jwtBlacklist";
+    public static final String USERS_CACHE_KEY = "users";
+
     private Constants() {}
 
     public class Status {

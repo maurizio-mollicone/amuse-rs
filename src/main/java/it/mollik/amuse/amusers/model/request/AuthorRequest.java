@@ -32,7 +32,7 @@ public class AuthorRequest extends AmuseRequest {
     
     @Override
     public String toString() {
-        return new StringJoiner(StringUtils.EMPTY).add(this.getClass().getName()).add(" [ ").add(this.getRequestKey().toString())
+        return new StringJoiner(StringUtils.EMPTY).add(this.getClass().getName()).add(" [ ").add(this.getKey().toString())
         .add(", authors ").add(this.getAuthors().toString())
         .add("]").toString();
     }

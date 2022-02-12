@@ -1,6 +1,6 @@
-package it.mollik.amuse.amusers.model.request;
+package it.mollik.amuse.amusers.model.response;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import lombok.AllArgsConstructor;
@@ -15,12 +15,19 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest extends AmuseEntity {
+public class SigninResponse extends AmuseEntity {
     
-    @NotEmpty(message = "Please provide a username")
+    private String token;
+
+    private String type = "Bearer";
+
+    private Long id;
+
     private String userName;
 
-    @NotEmpty(message = "Please provide a password")
-    private String password;
+    private String email;
+
+    private List<String> roles;
+
 
 }

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -29,16 +30,20 @@ import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.model.AmuseUserDetails;
 import it.mollik.amuse.amusers.model.ERole;
-import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
+import it.mollik.amuse.amusers.model.request.SignoutRequest;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.model.response.LoginResponse;
+import it.mollik.amuse.amusers.model.response.SigninResponse;
+import it.mollik.amuse.amusers.model.response.SignoutResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
+import it.mollik.amuse.amusers.service.impl.JwtTokenService;
+import it.mollik.amuse.amusers.util.HttpUtils;
 import it.mollik.amuse.amusers.util.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -63,34 +68,58 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	JwtTokenService jwtTokenService;
+
 	@PostMapping("/signin")
-	public AmuseResponse<LoginResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
+	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
 		logger.info("/amuse/v1/auth/signin {}", loginRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/authUser/signin request : {}", loginRequest);
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
+		String jwt = jwtTokenService.generateToken(authentication);
 		
 		AmuseUserDetails userDetails = (AmuseUserDetails) authentication.getPrincipal();		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		AmuseResponse<LoginResponse> response = new AmuseResponse<>(
-			new RequestKey(loginRequest.getData().get(0).getUserName()), 
-			0, 
-			"OK",
+		AmuseResponse<SigninResponse> response = new AmuseResponse<>(
+			new Key(loginRequest.getData().get(0).getUserName()), 
 			Stream.of(
-				new LoginResponse(
+				new SigninResponse(
 					jwt, 
+					"Bearer",
 					userDetails.getId(), 
 					userDetails.getUsername(), 
 					userDetails.getEmail(), 
 					roles)).collect(Collectors.toList()));
 		logger.info("User {} authenticated", loginRequest.getData().get(0).getUserName());
-		logger.debug("toJson: {}", response);
+		logger.debug("POST /amuse/v1/auth/signin response {}", response);
 		return response;
 	}
+	@PostMapping("/signout")
+	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
+		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
+		logger.debug("POST /amuse/v1/authUser/signout request : {}", signoutRequest);
+		String token = httpUtils.parseJwt(request);
+		if (token != null) {
+			if (!jwtTokenService.isInvalid(token).booleanValue()) {
+				jwtTokenService.invalidateToken(token);
+			} else {
+				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token invalid");
+			}
+		} else {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User " + signoutRequest.getData().get(0).getUserName() + " unauthorized");
+		}
+		
+		AmuseResponse<SignoutResponse> response = new AmuseResponse<>(signoutRequest.getKey(), Stream.of(new SignoutResponse(token, signoutRequest.getData().get(0).getUserName())).collect(Collectors.toList()));
+		logger.info("User {} signed out", signoutRequest.getData().get(0).getUserName());
+		logger.debug("POST /amuse/v1/auth/signout response {}", response);
+		return null;
+	}
+
+	private HttpUtils httpUtils;
 
 	@PostMapping("/signup")
 	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {
@@ -132,8 +161,7 @@ public class AuthController {
             roleRepository.save(currentRole);
         }
 
-		AmuseResponse<User> response = new AmuseResponse<>(signUpRequest.getRequestKey(), 0, "User registered successfully!");
-		response.setData(Stream.of(user).collect(Collectors.toList()));
+		AmuseResponse<User> response = new AmuseResponse<>(signUpRequest.getKey(), 0, "User registered successfully!", Stream.of(user).collect(Collectors.toList()));
 		logger.info("User {} registered", signUpRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/auth/signup response {}", response);
 

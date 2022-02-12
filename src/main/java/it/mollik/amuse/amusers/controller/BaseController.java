@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
-import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,14 +35,14 @@ public class BaseController {
 	@GetMapping("/heartbeat")
 	public @ResponseBody AmuseResponse<AmuseEntity> heartbeat() {
 		logger.info("aMuse yourself!");
-		return new AmuseResponse<>(new RequestKey("testuser"), 0, "aMuse yourself!");
+		return new AmuseResponse<>(new Key("testuser"), 0, "aMuse yourself!", null);
 		
 	}
 
 	private AmuseResponse<AmuseEntity> checkPath(Authentication authentication) {
 		String msg = (new StringJoiner(";")).add(authentication.getName()).add(getUserRoles(authentication).toString()).toString();
 		logger.info(msg);
-		return new AmuseResponse<>(new RequestKey(authentication.getName()), 0, msg);
+		return new AmuseResponse<>(new Key(authentication.getName()), 0, msg, null);
 	}
 
 	@GetMapping("/amuseuser")

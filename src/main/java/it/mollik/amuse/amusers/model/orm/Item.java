@@ -12,7 +12,16 @@ import javax.persistence.MappedSuperclass;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 public class Item extends AmuseEntity {
     
@@ -39,80 +48,5 @@ public class Item extends AmuseEntity {
     @Column(name = "status", nullable = false)
     private EEntityStatus status;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer itemId) {
-        this.id = itemId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getYear() {
-        return year;
-    }
-
-    public void setYear(Date year) {
-        this.year = year;
-    }
-
-    
-    /**
-     * @return Date return the createTs
-     */
-    public Date getCreateTs() {
-        return createTs;
-    }
-
-    /**
-     * @param createTs the createTs to set
-     */
-    public void setCreateTs(Date createTs) {
-        this.createTs = createTs;
-    }
-
-    /**
-     * @return Date return the updateTs
-     */
-    public Date getUpdateTs() {
-        return updateTs;
-    }
-
-    /**
-     * @param updateTs the updateTs to set
-     */
-    public void setUpdateTs(Date updateTs) {
-        this.updateTs = updateTs;
-    }
-
-
-    /**
-     * @return ItemStatus return the status
-     */
-    public EEntityStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status the status to set
-     */
-    public void setStatus(EEntityStatus status) {
-        this.status = status;
-    }
 
 }

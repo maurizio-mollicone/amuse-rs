@@ -11,7 +11,17 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import it.mollik.amuse.amusers.model.EGenre;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "book")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Book  extends Item {
@@ -26,47 +36,5 @@ public class Book  extends Item {
     private List<Author> authors;
 
 
-
-    /**
-     * @return String return the isbnCode
-     */
-    public String getIsbnCode() {
-        return isbnCode;
-    }
-
-    /**
-     * @param isbnCode the isbnCode to set
-     */
-    public void setIsbnCode(String isbnCode) {
-        this.isbnCode = isbnCode;
-    }
-
-    /**
-     * @return BookGenre return the bookGenre
-     */
-    public EGenre getBookGenre() {
-        return bookGenre;
-    }
-
-    /**
-     * @param bookGenre the bookGenre to set
-     */
-    public void setBookGenre(EGenre bookGenre) {
-        this.bookGenre = bookGenre;
-    }
-
-    /**
-     * @return List<Author> return the authors
-     */
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    /**
-     * @param authors the authors to set
-     */
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
-    }
 
 }

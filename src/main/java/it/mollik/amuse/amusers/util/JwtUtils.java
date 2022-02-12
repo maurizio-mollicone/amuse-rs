@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -16,8 +15,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import it.mollik.amuse.amusers.model.AmuseUserDetails;
-import it.mollik.amuse.amusers.repository.RoleRepository;
-import it.mollik.amuse.amusers.repository.UserRepository;
 
 @Component
 public class JwtUtils {
@@ -30,11 +27,6 @@ public class JwtUtils {
 	@Value("${amuse.security.jwtExpirationMs}")
 	private int jwtExpirationMs;
 	
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired 
-	private RoleRepository roleRepository;
 
 	public String generateJwtToken(Authentication authentication) {
 		AmuseUserDetails userPrincipal = (AmuseUserDetails) authentication.getPrincipal();

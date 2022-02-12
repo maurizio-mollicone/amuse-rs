@@ -1,6 +1,7 @@
-package it.mollik.amuse.amusers.model.request;
+package it.mollik.amuse.amusers.model.orm;
 
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import lombok.AllArgsConstructor;
@@ -9,18 +10,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest extends AmuseEntity {
+public class UserToken extends AmuseEntity {
     
-    @NotEmpty(message = "Please provide a username")
+    @Id
+    private String token;
+
     private String userName;
-
-    @NotEmpty(message = "Please provide a password")
-    private String password;
-
+    
+    private String userAgent;
+    
+    private String ipAddress;
+    
 }

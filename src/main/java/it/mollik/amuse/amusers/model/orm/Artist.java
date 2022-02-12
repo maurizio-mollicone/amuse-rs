@@ -15,10 +15,18 @@ import javax.persistence.MappedSuperclass;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import org.apache.commons.lang3.StringUtils;
-
 import it.mollik.amuse.amusers.model.EEntityStatus;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 @JsonIdentityInfo(generator =  ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Artist implements Serializable{
@@ -45,95 +53,5 @@ public class Artist implements Serializable{
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EEntityStatus status;
-
-    public Artist() {
-        this(StringUtils.EMPTY, Locale.ITALY, EEntityStatus.INSERT);        
-    }
-
-    public Artist(String name, Locale country) {
-        this(name, country, EEntityStatus.INSERT);
-    }
-
-    public Artist(String name, Locale country, EEntityStatus status) {
-        this.name = name;
-        this.country = country;
-        this.status = status;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public Locale getCountry() {
-        return country;
-    }
-
-    public void setCountry(Locale country) {
-        this.country = country;
-    }
-
-    
-    /**
-     * @return Date return the createTs
-     */
-    public Date getCreateTs() {
-        return createTs;
-    }
-
-    /**
-     * @param createTs the createTs to set
-     */
-    public void setCreateTs(Date createTs) {
-        this.createTs = createTs;
-    }
-
-    /**
-     * @return Date return the updateTs
-     */
-    public Date getUpdateTs() {
-        return updateTs;
-    }
-
-    /**
-     * @param updateTs the updateTs to set
-     */
-    public void setUpdateTs(Date updateTs) {
-        this.updateTs = updateTs;
-    }
-    
-    /**
-     * @return EntityStatus return the status
-     */
-    public EEntityStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status the status to set
-     */
-    public void setStatus(EEntityStatus status) {
-        this.status = status;
-    }
-
 
 }

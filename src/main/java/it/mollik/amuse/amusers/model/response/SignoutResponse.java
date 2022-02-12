@@ -1,6 +1,4 @@
-package it.mollik.amuse.amusers.model.request;
-
-import javax.validation.constraints.NotEmpty;
+package it.mollik.amuse.amusers.model.response;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import lombok.AllArgsConstructor;
@@ -15,12 +13,10 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest extends AmuseEntity {
+public class SignoutResponse extends AmuseEntity {
     
-    @NotEmpty(message = "Please provide a username")
-    private String userName;
+    private String token;
 
-    @NotEmpty(message = "Please provide a password")
-    private String password;
+    private String type = "Bearer";
 
 }

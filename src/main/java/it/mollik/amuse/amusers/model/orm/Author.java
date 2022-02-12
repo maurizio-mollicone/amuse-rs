@@ -8,8 +8,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@ToString(callSuper = false)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "author")
 public class Author extends Person {
     
@@ -18,27 +27,9 @@ public class Author extends Person {
         inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<Book> books;
 
-    public Author(){
-        this(StringUtils.EMPTY);
-    }
-
     public Author(String authorName) {
-        super(authorName);
-    }
-
-
-    /**
-     * @return List<Book> return the books
-     */
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    /**
-     * @param books the books to set
-     */
-    public void setBooks(List<Book> books) {
-        this.books = books;
+        super();
+        this.setName(authorName);
     }
 
 }
