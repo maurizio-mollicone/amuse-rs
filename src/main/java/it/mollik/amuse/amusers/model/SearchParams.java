@@ -1,13 +1,10 @@
 package it.mollik.amuse.amusers.model;
 
 import java.io.Serializable;
-import java.util.StringJoiner;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
-
-public class Page implements Serializable {
+public class SearchParams extends AmuseEntity {
     
     @NotNull
     private int index;
@@ -15,11 +12,13 @@ public class Page implements Serializable {
     @NotNull
     private int size;
 
-    private int totalItems;
+    private int currentSize;
+
+    private long totalItems;
 
     private int totalPages;
 
-    public Page(int index, int size) {
+    public SearchParams(int index, int size) {
         this.index = index;
         this.size = size;
     }
@@ -55,14 +54,14 @@ public class Page implements Serializable {
     /**
      * @return int return the totalItems
      */
-    public int getTotalItems() {
+    public long getTotalItems() {
         return totalItems;
     }
 
     /**
      * @param totalItems the totalItems to set
      */
-    public void setTotalItems(int totalItems) {
+    public void setTotalItems(long totalItems) {
         this.totalItems = totalItems;
     }
 
@@ -80,10 +79,27 @@ public class Page implements Serializable {
         this.totalPages = totalPages;
     }
 
+    
+    /**
+     * @return int return the currentSize
+     */
+    public int getCurrentSize() {
+        return currentSize;
+    }
+
+    /**
+     * @param currentSize the currentSize to set
+     */
+    public void setCurrentSize(int currentSize) {
+        this.currentSize = currentSize;
+    }
+
     @Override
     public String toString() {
-        return "Page [index=" + index + ", size=" + size + ", totalItems=" + totalItems + ", totalPages=" + totalPages
+        return "Page [index=" + index + ", size=" + size + ", currentSize=" + currentSize + ", totalItems=" + totalItems + ", totalPages=" + totalPages
                 + "]";
     }
+
+
 
 }

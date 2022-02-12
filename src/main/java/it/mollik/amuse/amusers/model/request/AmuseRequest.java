@@ -2,14 +2,14 @@ package it.mollik.amuse.amusers.model.request;
 
 import java.util.List;
 
-import it.mollik.amuse.amusers.model.Page;
+import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.RequestKey;
 
 public class AmuseRequest<T> {
     
     private RequestKey requestKey;
 
-    private Page page;
+    private SearchParams searchParams;
 
     private List<T> data;
     
@@ -26,9 +26,9 @@ public class AmuseRequest<T> {
         this.data = data;
     }
 
-    public AmuseRequest(RequestKey requestKey, Page page, List<T> data) {
+    public AmuseRequest(RequestKey requestKey, SearchParams page, List<T> data) {
         this(requestKey, data);
-        this.page = page;
+        this.searchParams = page;
     }
 
     public RequestKey getRequestKey() {
@@ -41,17 +41,17 @@ public class AmuseRequest<T> {
 
     
     /**
-     * @return Page return the page
+     * @return SearchParams return the searchParams
      */
-    public Page getPage() {
-        return page;
+    public SearchParams getSearchParams() {
+        return searchParams;
     }
 
     /**
-     * @param page the page to set
+     * @param searchParams the searchParams to set
      */
-    public void setPage(Page page) {
-        this.page = page;
+    public void setSearchParams(SearchParams searchParams) {
+        this.searchParams = searchParams;
     }
 
     
@@ -71,7 +71,7 @@ public class AmuseRequest<T> {
 
     @Override
     public String toString() {
-        return "AmuseRequest [requestKey=" + requestKey + "page=" + page + ", data=" + data + "]";
+        return "AmuseRequest [requestKey=" + requestKey + "page=" + searchParams + ", data=" + data + "]";
     }
 
 

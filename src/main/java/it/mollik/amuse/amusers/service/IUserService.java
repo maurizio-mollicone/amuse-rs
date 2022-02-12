@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
@@ -22,7 +23,7 @@ public interface IUserService {
 
 	public Boolean existsByEmail(String email);
     
-    public List<User> list() throws EntityNotFoundException;
+    public Page<User> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException;
 
     public User create(User user);
 

@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,11 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
+import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.service.IUserService;
+import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -44,6 +49,9 @@ public class UserController {
     private static final String OK = "OK";
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @Autowired
+    private AmuseUtils amuseUtils;
+
     @GetMapping("/principal")
     public Principal retrievePrincipal(Principal principal) {
         return principal;
@@ -54,12 +62,14 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> list(Authentication authentication, @RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize) throws EntityNotFoundException {
+    public AmuseResponse<User> list(Authentication authentication, @RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
         logger.info("/users/list");
-        
-        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, this.userService.list());
-        logger.info("/users/list {} {} {}");
 
+        Page<User> usersPage = this.userService.list(pageIndex, pageSize, sortBy);
+        SearchParams searchParams = amuseUtils.fromSpringPage(usersPage);
+
+        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, searchParams, usersPage.stream().collect(Collectors.toList()));
+        logger.info("/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentSize(), searchParams.getSize(), searchParams.getTotalItems(), searchParams.getIndex(), searchParams.getTotalPages());
         return response;
     }
 
@@ -83,18 +93,18 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/name/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> find(Authentication authentication, @RequestParam @NotNull String name, int pageIndex, int pageSize) throws EntityNotFoundException {
-        logger.info("/users/name/search name: {}, pageIndex: {}, pageSize {}" , name, pageIndex, pageSize);
+    public AmuseResponse<User> find(Authentication authentication, @RequestParam @NotNull String name) throws EntityNotFoundException {
+        logger.info("/users/name/search name: {}" , name);
         AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, this.userService.findByName(name));
-        logger.info("/users/find OK {} elements" , response.getData().size());
+        logger.info("/users/find OK {}" , response);
         return response;
     }
 
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/email/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> findByEmail(Authentication authentication, @RequestParam @NotNull String email, int pageIndex, int pageSize) throws EntityNotFoundException {
-        logger.info("/users/email/search email: {}, pageIndex: {}, pageSize {}" , email, pageIndex, pageSize);
+    public AmuseResponse<User> findByEmail(Authentication authentication, @RequestParam @NotNull String email) throws EntityNotFoundException {
+        logger.info("/users/email/search email: {}" , email);
         AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, this.userService.findByEmail(email));
         logger.info("/users/email/search {} elements" , response.getData().size());
         return response;

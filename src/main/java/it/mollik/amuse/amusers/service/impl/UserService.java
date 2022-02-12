@@ -7,7 +7,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.EEntityStatus;
@@ -73,11 +77,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> list() throws EntityNotFoundException {
-        List<User> users = new ArrayList<>();
-        this.userRepository.findAll().forEach(users::add);
-
-        return users; 
+    public Page<User> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
+        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
+        Page<User> usersPage = this.userRepository.findAll(page);
+        //.forEach(users::add);
+        logger.info("retrieved {}/{} users of {}, page {}/{}, pageSize ", usersPage.getNumberOfElements(), usersPage.getSize(), usersPage.getTotalElements(), usersPage.getNumber(), usersPage.getTotalPages());
+        return usersPage; 
     }
 
     @Override

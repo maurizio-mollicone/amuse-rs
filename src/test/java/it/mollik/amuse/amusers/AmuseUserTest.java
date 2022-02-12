@@ -23,7 +23,10 @@ public class AmuseUserTest extends AmuseGenericTest {
 	public void listUsers() throws Exception {
         AmuseResponse<User> response = getWebTestClient()
             .get()
-            .uri(uriBuilder -> uriBuilder.path("/amuse/v1/users/list").queryParam("name", getUser01()).build())
+            .uri(uriBuilder -> uriBuilder.path("/amuse/v1/users/list")
+                .queryParam("pageIndex", 0)
+                .queryParam("pageSize", 10)
+                .build())
             .accept(MediaType.APPLICATION_JSON)
             .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01()))
             .exchange()

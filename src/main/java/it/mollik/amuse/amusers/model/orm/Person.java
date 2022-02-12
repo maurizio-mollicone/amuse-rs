@@ -117,10 +117,5 @@ public class Person extends AmuseEntity {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        String artistId = getId() != null ? this.getId().toString() : StringUtils.EMPTY;
-        return new StringJoiner(StringUtils.EMPTY).add("Artist: [").add("artistId: ").add(artistId).add(", name: ").add(this.getName()).add("]").toString();
-    }
 
 }

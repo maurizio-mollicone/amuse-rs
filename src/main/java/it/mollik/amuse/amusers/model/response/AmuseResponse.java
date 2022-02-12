@@ -2,14 +2,14 @@ package it.mollik.amuse.amusers.model.response;
 
 import java.util.List;
 
-import it.mollik.amuse.amusers.model.Page;
+import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.RequestKey;
 
 public class AmuseResponse<T> {
     
     private RequestKey requestKey;
 
-    private Page page;
+    private SearchParams searchParams;
     
     private Integer statusCode;
 
@@ -39,9 +39,9 @@ public class AmuseResponse<T> {
         this.data = data;
     }
 
-    public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, Page page, List<T> data) {
+    public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, SearchParams page, List<T> data) {
         this(requestKey, statusCode, statusMessage, data);
-        this.page = page;
+        this.searchParams = page;
     }
     
     public RequestKey getRequestKey() {
@@ -52,19 +52,18 @@ public class AmuseResponse<T> {
         this.requestKey = requestKey;
     }
 
-    
     /**
-     * @return Page return the page
+     * @return SearchParams return the searchParams
      */
-    public Page getPage() {
-        return page;
+    public SearchParams getSearchParams() {
+        return searchParams;
     }
 
     /**
-     * @param page the page to set
+     * @param searchParams the searchParams to set
      */
-    public void setPage(Page page) {
-        this.page = page;
+    public void setSearchParams(SearchParams searchParams) {
+        this.searchParams = searchParams;
     }
 
     /**
@@ -112,6 +111,6 @@ public class AmuseResponse<T> {
 
     @Override
     public String toString() {
-        return "AmuseResponse [requestKey=" + requestKey + ", page=" + page + ", statusCode=" + statusCode.intValue() + ", statusMessage=" + statusMessage + ", data=" + data + "]";
+        return "AmuseResponse [requestKey=" + requestKey + ", page=" + searchParams + ", statusCode=" + statusCode.intValue() + ", statusMessage=" + statusMessage + ", data=" + data + "]";
     }
 }
