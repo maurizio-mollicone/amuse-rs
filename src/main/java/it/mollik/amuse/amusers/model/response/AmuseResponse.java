@@ -1,71 +1,48 @@
 package it.mollik.amuse.amusers.model.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import it.mollik.amuse.amusers.model.SearchParams;
+import it.mollik.amuse.amusers.model.AmuseModel;
+import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.SearchParams;
 
-public class AmuseResponse<T> {
+public class AmuseResponse<T extends IAmuseEntity>  extends AmuseModel<T> {
     
-    private RequestKey requestKey;
-
-    private SearchParams searchParams;
-    
-    private Integer statusCode;
+    private int statusCode;
 
     private String statusMessage;
 
-    private List<T> data;
-
     
     public AmuseResponse() {
-        this.requestKey = new RequestKey("testuser");
+        super(new RequestKey("testuser"));
         this.statusCode = 0;
         this.statusMessage = "OK";
     }
 
     public AmuseResponse(String userName) {
-        this (new RequestKey(userName), 0, "OK");
+        this(new RequestKey(userName), 0, "OK");
     }
 
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage) {
-        this.requestKey = requestKey;
+        super(requestKey, new ArrayList<T>());
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
     }
 
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, List<T> data) {
-        this(requestKey, statusCode, statusMessage);
-        this.data = data;
+        super(requestKey, data);
+        this.statusCode = statusCode;
+        this.statusMessage = statusMessage;
     }
 
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, SearchParams page, List<T> data) {
-        this(requestKey, statusCode, statusMessage, data);
-        this.searchParams = page;
+        super(requestKey, page, data);
+        this.statusCode = statusCode;
+        this.statusMessage = statusMessage;
     }
     
-    public RequestKey getRequestKey() {
-        return requestKey;
-    }
-
-    public void setRequestKey(RequestKey requestKey) {
-        this.requestKey = requestKey;
-    }
-
-    /**
-     * @return SearchParams return the searchParams
-     */
-    public SearchParams getSearchParams() {
-        return searchParams;
-    }
-
-    /**
-     * @param searchParams the searchParams to set
-     */
-    public void setSearchParams(SearchParams searchParams) {
-        this.searchParams = searchParams;
-    }
-
     /**
      * @return Integer return the statusCode
      */
@@ -95,22 +72,4 @@ public class AmuseResponse<T> {
     }
 
     
-    /**
-     * @return List<IAmuseEntity> return the data
-     */
-    public List<T> getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(List<T> data) {
-        this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "AmuseResponse [requestKey=" + requestKey + ", page=" + searchParams + ", statusCode=" + statusCode.intValue() + ", statusMessage=" + statusMessage + ", data=" + data + "]";
-    }
 }

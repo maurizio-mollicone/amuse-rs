@@ -22,10 +22,6 @@ public class User extends Person {
     @Column(name = "password", length = 500, nullable = false)
     private String password;
 
-   
-    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    //     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @OneToMany(mappedBy="user")
     private List<Role> roles;
     

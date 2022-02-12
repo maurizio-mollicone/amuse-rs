@@ -2,7 +2,6 @@ package it.mollik.amuse.amusers.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
-import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.orm.User;
@@ -69,7 +67,7 @@ public class UserController {
         SearchParams searchParams = amuseUtils.fromSpringPage(usersPage);
 
         AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, searchParams, usersPage.stream().collect(Collectors.toList()));
-        logger.info("/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentSize(), searchParams.getSize(), searchParams.getTotalItems(), searchParams.getIndex(), searchParams.getTotalPages());
+        logger.info("/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
     }
 

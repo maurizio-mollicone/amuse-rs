@@ -1,8 +1,6 @@
 package it.mollik.amuse.amusers.model.orm;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.StringJoiner;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -11,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import org.apache.commons.lang3.StringUtils;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
@@ -117,12 +113,6 @@ public class Item extends AmuseEntity {
      */
     public void setStatus(EEntityStatus status) {
         this.status = status;
-    }
-    
-    @Override
-    public String toString() {        
-        String itemId = this.getId() != null ? this.getId().toString() : StringUtils.EMPTY;
-        return new StringJoiner(StringUtils.EMPTY).add("Item [").add("itemId: ").add(itemId).add(", title: ").add(this.getTitle()).add("]").toString();
     }
 
 }

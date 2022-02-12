@@ -1,11 +1,6 @@
 package it.mollik.amuse.amusers.model;
 
-import java.io.Serializable;
-
-public interface IAmuseEntity extends Serializable {
+public interface IAmuseEntity extends IAmuseObject {
     
-    public String getName();
-
-    public String toJSONString();
 
 }

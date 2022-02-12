@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import it.mollik.amuse.amusers.model.RequestKey;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.model.response.JwtResponse;
+import it.mollik.amuse.amusers.model.response.LoginResponse;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
@@ -35,7 +35,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		
-		AmuseResponse<JwtResponse> amuseResponse = new AmuseResponse<>(new RequestKey("testuser"), 1, "Unauthorized", Stream.of(new JwtResponse("", 0L, "", "", null)).collect(Collectors.toList()));
+		AmuseResponse<LoginResponse> amuseResponse = new AmuseResponse<>(new RequestKey("testuser"), 1, "Unauthorized", Stream.of(new LoginResponse("", 0L, "", "", null)).collect(Collectors.toList()));
 		logger.error("Unauthorized {}", amuseResponse);
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(response.getOutputStream(), amuseResponse);

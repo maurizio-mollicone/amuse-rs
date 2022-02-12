@@ -1,58 +1,72 @@
 package it.mollik.amuse.amusers.model;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
-public class SearchParams extends AmuseEntity {
+public class SearchParams extends AmuseObject {
     
-    @NotNull
-    private int index;
+    @NotNull(message = "index must be valorized")
+    private int currentPageIndex=0;
 
     @NotNull
-    private int size;
+    private int pageSize=10;
 
-    private int currentSize;
+    private int currentPageSize;
 
     private long totalItems;
 
     private int totalPages;
 
     public SearchParams(int index, int size) {
-        this.index = index;
-        this.size = size;
+        this.currentPageIndex = index;
+        this.pageSize = size;
     }
 
+
+
     /**
-     * @return int return the index
+     * @return int return the currentPageIndex
      */
-    public int getIndex() {
-        return index;
+    public int getCurrentPageIndex() {
+        return currentPageIndex;
     }
 
     /**
-     * @param index the index to set
+     * @param currentPageIndex the currentPageIndex to set
      */
-    public void setIndex(int index) {
-        this.index = index;
+    public void setCurrentPageIndex(int currentPageIndex) {
+        this.currentPageIndex = currentPageIndex;
     }
 
     /**
-     * @return int return the size
+     * @return int return the pageSize
      */
-    public int getSize() {
-        return size;
+    public int getPageSize() {
+        return pageSize;
     }
 
     /**
-     * @param size the size to set
+     * @param pageSize the pageSize to set
      */
-    public void setSize(int size) {
-        this.size = size;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     /**
-     * @return int return the totalItems
+     * @return int return the currentPageSize
+     */
+    public int getCurrentPageSize() {
+        return currentPageSize;
+    }
+
+    /**
+     * @param currentPageSize the currentPageSize to set
+     */
+    public void setCurrentPageSize(int currentPageSize) {
+        this.currentPageSize = currentPageSize;
+    }
+
+    /**
+     * @return long return the totalItems
      */
     public long getTotalItems() {
         return totalItems;
@@ -78,28 +92,5 @@ public class SearchParams extends AmuseEntity {
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-
-    
-    /**
-     * @return int return the currentSize
-     */
-    public int getCurrentSize() {
-        return currentSize;
-    }
-
-    /**
-     * @param currentSize the currentSize to set
-     */
-    public void setCurrentSize(int currentSize) {
-        this.currentSize = currentSize;
-    }
-
-    @Override
-    public String toString() {
-        return "Page [index=" + index + ", size=" + size + ", currentSize=" + currentSize + ", totalItems=" + totalItems + ", totalPages=" + totalPages
-                + "]";
-    }
-
-
 
 }

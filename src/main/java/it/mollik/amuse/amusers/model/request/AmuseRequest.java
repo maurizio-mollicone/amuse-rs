@@ -2,78 +2,28 @@ package it.mollik.amuse.amusers.model.request;
 
 import java.util.List;
 
-import it.mollik.amuse.amusers.model.SearchParams;
+import it.mollik.amuse.amusers.model.AmuseModel;
+import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
+import it.mollik.amuse.amusers.model.SearchParams;
 
-public class AmuseRequest<T> {
-    
-    private RequestKey requestKey;
-
-    private SearchParams searchParams;
-
-    private List<T> data;
+public class AmuseRequest<T extends IAmuseEntity> extends AmuseModel<T> {
     
     public AmuseRequest() {
-        this.requestKey = new RequestKey("testuser");
+        super();
     }
 
     public AmuseRequest(RequestKey requestKey) {
-        this.requestKey = requestKey;
+        super(requestKey);
     }
 
     public AmuseRequest(RequestKey requestKey, List<T> data) {
-        this(requestKey);
-        this.data = data;
+        super(requestKey, data);
     }
 
     public AmuseRequest(RequestKey requestKey, SearchParams page, List<T> data) {
-        this(requestKey, data);
-        this.searchParams = page;
+        super(requestKey, page, data);
     }
-
-    public RequestKey getRequestKey() {
-        return requestKey;
-    }
-
-    public void setRequestKey(RequestKey requestKey) {
-        this.requestKey = requestKey;
-    }
-
-    
-    /**
-     * @return SearchParams return the searchParams
-     */
-    public SearchParams getSearchParams() {
-        return searchParams;
-    }
-
-    /**
-     * @param searchParams the searchParams to set
-     */
-    public void setSearchParams(SearchParams searchParams) {
-        this.searchParams = searchParams;
-    }
-
-    
-    /**
-     * @return List<IAmuseEntity> return the data
-     */
-    public List<T> getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(List<T> data) {
-        this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "AmuseRequest [requestKey=" + requestKey + "page=" + searchParams + ", data=" + data + "]";
-    }
-
-
-
 }
+
+

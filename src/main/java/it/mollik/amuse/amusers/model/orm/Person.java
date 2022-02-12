@@ -1,8 +1,6 @@
 package it.mollik.amuse.amusers.model.orm;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.StringJoiner;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -73,8 +71,6 @@ public class Person extends AmuseEntity {
         this.name = name;
     }
 
-
-    
     /**
      * @return Date return the createTs
      */

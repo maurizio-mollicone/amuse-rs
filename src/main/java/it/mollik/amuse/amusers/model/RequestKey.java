@@ -1,12 +1,9 @@
 package it.mollik.amuse.amusers.model;
 
 import java.util.Date;
-import java.util.StringJoiner;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
-public class RequestKey extends AmuseEntity {
+public class RequestKey extends AmuseObject {
     
     /**
      *
@@ -25,8 +22,6 @@ public class RequestKey extends AmuseEntity {
     public RequestKey(String userName) {
         this(UUID.randomUUID(), UUID.randomUUID(), new Date(), "en", userName, DEFAULT_IP_ADDRESS);
     }
-
-    
 
     public RequestKey(UUID correlationId, UUID requestId, Date timestamp, String country, String userName,
             String ipAddress) {
@@ -68,17 +63,6 @@ public class RequestKey extends AmuseEntity {
         this.ipAddress = ipAddress;
     }
     
-    @Override
-    public String toString() {
-        
-        return new StringJoiner(StringUtils.EMPTY).add(this.getClass().getName()).add(" [ correlationId: ").add(getCorrelationId().toString())
-            .add(", requestId: ").add(getRequestId().toString())
-            .add(", timestamp: ").add(Long.toString(getTimestamp().getTime()))
-            .add(", country: ").add(getCountry())
-            .add("]").toString();
-
-    }
-
     /**
      * @return String return the userName
      */

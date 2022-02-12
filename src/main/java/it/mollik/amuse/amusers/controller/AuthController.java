@@ -36,7 +36,7 @@ import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.model.response.JwtResponse;
+import it.mollik.amuse.amusers.model.response.LoginResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
 import it.mollik.amuse.amusers.util.JwtUtils;
@@ -64,9 +64,9 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
-	public AmuseResponse<JwtResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
+	public AmuseResponse<LoginResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getName(), loginRequest.getData().get(0).getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
@@ -74,34 +74,35 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		AmuseResponse<JwtResponse> response = new AmuseResponse<>(
-			new RequestKey(loginRequest.getData().get(0).getName()), 
+		AmuseResponse<LoginResponse> response = new AmuseResponse<>(
+			new RequestKey(loginRequest.getData().get(0).getUserName()), 
 			0, 
 			"OK",
 			Stream.of(
-				new JwtResponse(
+				new LoginResponse(
 					jwt, 
 					userDetails.getId(), 
 					userDetails.getUsername(), 
 					userDetails.getEmail(), 
 					roles)).collect(Collectors.toList()));
 		logger.info("User {} authenticated {}", loginRequest.getData().get(0).getUserName(), response);
+		logger.debug("toJson: {}", response.toJSONString());
 		return response;
 	}
 
 	@PostMapping("/signup")
-	public AmuseResponse<User> signup(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUserName(signUpRequest.getUserName()).booleanValue()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getUserName() + "already taken");
+	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {
+		if (userRepository.existsByUserName(signUpRequest.getData().get(0).getUserName()).booleanValue()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getData().get(0).getUserName() + "already taken");
 		}
-		if (userRepository.existsByEmail(signUpRequest.getEmail()).booleanValue()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email" + signUpRequest.getEmail() + "already taken");
+		if (userRepository.existsByEmail(signUpRequest.getData().get(0).getEmail()).booleanValue()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email" + signUpRequest.getData().get(0).getEmail() + "already taken");
 		}
 		// Create new user's account
-		User user = new User(signUpRequest.getUserName(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getData().get(0).getUserName(), signUpRequest.getData().get(0).getEmail(), encoder.encode(signUpRequest.getData().get(0).getPassword()));
         user.setCreateTs(new Date());
         user.setUpdateTs(new Date());
-		List<String> strRoles = signUpRequest.getRole();
+		List<String> strRoles = signUpRequest.getData().get(0).getRole();
 		List<Role> roles = new ArrayList<>();
 		if (strRoles == null) {
             roles.add(new Role(user.getUserName(), ERole.USER, user));
@@ -126,9 +127,11 @@ public class AuthController {
             roleRepository.save(currentRole);
         }
 
-		AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(user.getName()), 0, "User registered successfully!");
+		AmuseResponse<User> response = new AmuseResponse<>(signUpRequest.getRequestKey(), 0, "User registered successfully!");
 		response.setData(Stream.of(user).collect(Collectors.toList()));
-		logger.info("User {} registrated {}", signUpRequest.getUserName(), response);
+		logger.info("User {} registrated {}", signUpRequest.getData().get(0).getUserName(), response);
+		logger.debug("toJson: {}", response.toJSONString());
+
 		return response;
 	}
 }

@@ -20,7 +20,7 @@ import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.model.response.JwtResponse;
+import it.mollik.amuse.amusers.model.response.LoginResponse;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
@@ -178,7 +178,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new RequestKey("user01"), new SearchParams(1,10), Stream.of(loginRequest).collect(Collectors.toList()));
 
-        AmuseResponse<JwtResponse> jwtResponse = getWebTestClient()
+        AmuseResponse<LoginResponse> jwtResponse = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signin")
             .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
@@ -187,7 +187,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<JwtResponse>>(){})
+            .expectBody(new ParameterizedTypeReference<AmuseResponse<LoginResponse>>(){})
             .returnResult().getResponseBody();
         
         assertThat(jwtResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));

@@ -3,7 +3,6 @@ package it.mollik.amuse.amusers.model.orm;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
-import java.util.StringJoiner;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -136,10 +135,5 @@ public class Artist implements Serializable{
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        String artistId = getId() != null ? this.getId().toString() : StringUtils.EMPTY;
-        return new StringJoiner(StringUtils.EMPTY).add("Artist: [").add("artistId: ").add(artistId).add(", name: ").add(this.getName()).add("]").toString();
-    }
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 
-public class JwtResponse extends AmuseEntity {
+public class LoginResponse extends AmuseEntity {
     
     private String token;
 
@@ -18,7 +18,7 @@ public class JwtResponse extends AmuseEntity {
 
     private List<String> roles;
 
-    public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+    public LoginResponse(String accessToken, Long id, String username, String email, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;

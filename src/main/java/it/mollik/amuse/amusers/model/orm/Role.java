@@ -1,6 +1,5 @@
 package it.mollik.amuse.amusers.model.orm;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,10 +14,11 @@ import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.StringUtils;
 
+import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.ERole;
 
 @Entity(name="role")
-public class Role implements Serializable {
+public class Role extends AmuseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
