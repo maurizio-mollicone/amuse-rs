@@ -19,6 +19,9 @@ import it.mollik.amuse.amusers.model.response.AmuseResponse;
 @ExtendWith(SpringExtension.class)
 public class AmuseUserTest extends AmuseGenericTest {
     
+    @Value("${amuse.security.user03:user03}")
+    private String user03;
+
     @Test
 	public void listUsers() throws Exception {
         AmuseResponse<User> response = getWebTestClient()
@@ -37,8 +40,8 @@ public class AmuseUserTest extends AmuseGenericTest {
         
         assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
-    @Value("${amuse.security.user03:user03}")
-    private String user03;
+
+    
     @Test
 	public void viewUser03() throws Exception {
         AmuseResponse<User> response = getWebTestClient()

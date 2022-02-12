@@ -65,6 +65,8 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public AmuseResponse<LoginResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
+		logger.info("/amuse/v1/auth/signin {}", loginRequest.getData().get(0).getUserName());
+		logger.debug("POST /amuse/v1/authUser/signin request : {}", loginRequest);
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -85,13 +87,16 @@ public class AuthController {
 					userDetails.getUsername(), 
 					userDetails.getEmail(), 
 					roles)).collect(Collectors.toList()));
-		logger.info("User {} authenticated {}", loginRequest.getData().get(0).getUserName(), response);
-		logger.debug("toJson: {}", response.toJSONString());
+		logger.info("User {} authenticated", loginRequest.getData().get(0).getUserName());
+		logger.debug("toJson: {}", response);
 		return response;
 	}
 
 	@PostMapping("/signup")
 	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {
+		
+		logger.info("/amuse/v1/auth/signup");
+		logger.debug("POST /amuse/v1/auth/signup request : {}", signUpRequest);
 		if (userRepository.existsByUserName(signUpRequest.getData().get(0).getUserName()).booleanValue()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getData().get(0).getUserName() + "already taken");
 		}
@@ -129,8 +134,8 @@ public class AuthController {
 
 		AmuseResponse<User> response = new AmuseResponse<>(signUpRequest.getRequestKey(), 0, "User registered successfully!");
 		response.setData(Stream.of(user).collect(Collectors.toList()));
-		logger.info("User {} registrated {}", signUpRequest.getData().get(0).getUserName(), response);
-		logger.debug("toJson: {}", response.toJSONString());
+		logger.info("User {} registered", signUpRequest.getData().get(0).getUserName());
+		logger.debug("POST /amuse/v1/auth/signup response {}", response);
 
 		return response;
 	}

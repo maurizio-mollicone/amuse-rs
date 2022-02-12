@@ -7,12 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import it.mollik.amuse.amusers.model.request.AmuseRequest;
+import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.util.HttpUtils;
 
@@ -38,36 +39,36 @@ public class AmuseGenericTest {
 	private WebTestClient webTestClient;
 
     @Autowired
-	private HttpUtils<AmuseRequest> httpUtils;
+	private HttpUtils httpUtils;
 
     @Test
 	public void amuseYourself() throws Exception {
-        AmuseResponse genericResponse = webTestClient
+        AmuseResponse<AmuseEntity> response = webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(AmuseResponse.class)
+            .expectBody(new ParameterizedTypeReference<AmuseResponse<AmuseEntity>>(){})
             .returnResult().getResponseBody();
         
-        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
 
 
 	@Test
     public void jwtAuthorization() throws Exception {
-        AmuseResponse genericResponse = webTestClient
+        AmuseResponse<AmuseEntity>  response = webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(AmuseResponse.class)
+            .expectBody(new ParameterizedTypeReference<AmuseResponse<AmuseEntity>>(){})
             .returnResult().getResponseBody();
-        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
     }
 
     /**
@@ -130,14 +131,14 @@ public class AmuseGenericTest {
     /**
      * @return HttpUtils return the jwtUtils
      */
-    public HttpUtils<AmuseRequest> getHttpUtils() {
+    public HttpUtils getHttpUtils() {
         return httpUtils;
     }
 
     /**
      * @param httpUtils the httpUtils to set
      */
-    public void setHttpUtils(HttpUtils<AmuseRequest> httpUtils) {
+    public void setHttpUtils(HttpUtils httpUtils) {
         this.httpUtils = httpUtils;
     }
 

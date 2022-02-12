@@ -103,8 +103,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
 		signupRequest.setPassword("1234");
 
-		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), new SearchParams(1,10), 
-			Stream.of(signupRequest).collect(Collectors.toList()));
+		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
         AmuseResponse<User> response = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
@@ -129,7 +128,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setUserName("user05");
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
 		signupRequest.setPassword("1234");
-		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), new SearchParams(1,10), Stream.of(signupRequest).collect(Collectors.toList()));
+		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 		HttpStatus status = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
@@ -152,7 +151,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setUserName("user01");
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
 		signupRequest.setPassword("1234");
-		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), new SearchParams(1,10), Stream.of(signupRequest).collect(Collectors.toList()));
+		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new RequestKey("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         HttpStatus status = getWebTestClient()
             .post()
@@ -176,7 +175,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		loginRequest.setUserName("user01");
 		loginRequest.setPassword("1234");
 
-		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new RequestKey("user01"), new SearchParams(1,10), Stream.of(loginRequest).collect(Collectors.toList()));
+		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new RequestKey("user01"), Stream.of(loginRequest).collect(Collectors.toList()));
 
         AmuseResponse<LoginResponse> jwtResponse = getWebTestClient()
             .post()
@@ -203,7 +202,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 
 		loginRequest.setUserName("user01");
 		loginRequest.setPassword("1235");
-		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new RequestKey("user01"), new SearchParams(1,10), Stream.of(loginRequest).collect(Collectors.toList()));
+		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new RequestKey("user01"), Stream.of(loginRequest).collect(Collectors.toList()));
 
         getWebTestClient()
             .post()

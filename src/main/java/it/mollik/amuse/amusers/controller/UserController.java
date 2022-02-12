@@ -66,7 +66,7 @@ public class UserController {
         Page<User> usersPage = this.userService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(usersPage);
 
-        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, searchParams, usersPage.stream().collect(Collectors.toList()));
+        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), searchParams, usersPage.stream().collect(Collectors.toList()));
         logger.info("/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
     }
@@ -83,7 +83,7 @@ public class UserController {
             logger.error("User not found. Cause: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + "not found");
         }
-        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(user.getName()), 0, OK, Stream.of(user).collect(Collectors.toList()));
+        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(user.getName()), Stream.of(user).collect(Collectors.toList()));
         logger.info("/users/detail/{} {}" , id, response);
         return response;
     }
@@ -93,7 +93,7 @@ public class UserController {
     @GetMapping(path = "/name/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> find(Authentication authentication, @RequestParam @NotNull String name) throws EntityNotFoundException {
         logger.info("/users/name/search name: {}" , name);
-        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, this.userService.findByName(name));
+        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), this.userService.findByName(name));
         logger.info("/users/find OK {}" , response);
         return response;
     }
@@ -103,7 +103,7 @@ public class UserController {
     @GetMapping(path = "/email/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> findByEmail(Authentication authentication, @RequestParam @NotNull String email) throws EntityNotFoundException {
         logger.info("/users/email/search email: {}" , email);
-        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), 0, OK, this.userService.findByEmail(email));
+        AmuseResponse<User> response = new AmuseResponse<>(new RequestKey(authentication.getName()), this.userService.findByEmail(email));
         logger.info("/users/email/search {} elements" , response.getData().size());
         return response;
     }
@@ -114,7 +114,7 @@ public class UserController {
     @ResponseBody
     public AmuseResponse<User> create(@RequestBody AmuseRequest<User> request) {
         List<User> users = Stream.of(this.userService.create(request.getData().get(0))).collect(Collectors.toList());
-        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), 0, OK, users);
+        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), users);
         logger.info("/users/create {}", response);
         return response;
     }
@@ -124,7 +124,7 @@ public class UserController {
     @ResponseBody
     public AmuseResponse<User> save(@PathVariable @NotNull int id, @RequestBody AmuseRequest<User> request) {
         List<User> users = Stream.of(this.userService.save(request.getData().get(0))).collect(Collectors.toList());
-        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), 0, OK, users);
+        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), users);
         logger.info("/users/update {}", response);
         return response;
     }
@@ -134,7 +134,7 @@ public class UserController {
     @ResponseBody
     public AmuseResponse<User> delete(@PathVariable Integer id, @RequestBody AmuseRequest<User> request) throws EntityNotFoundException {
         this.userService.delete(id);
-        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), 0, OK, request.getData());
+        AmuseResponse<User> response = new AmuseResponse<>(request.getRequestKey(), request.getData());
         logger.info("/users/delete {}", response);
         return response;
     }

@@ -3,6 +3,7 @@ package it.mollik.amuse.amusers.model.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.AmuseModel;
 import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.RequestKey;
@@ -25,16 +26,27 @@ public class AmuseResponse<T extends IAmuseEntity>  extends AmuseModel<T> {
         this(new RequestKey(userName), 0, "OK");
     }
 
+    public AmuseResponse(RequestKey requestKey, List<T> data) {
+        super(requestKey, data);
+        this.statusCode = Constants.Status.Code.STATUS_CODE_OK;
+        this.statusMessage = Constants.Status.Message.STATUS_MESSAGE_OK;
+    }
+
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage) {
         super(requestKey, new ArrayList<T>());
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
     }
-
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, List<T> data) {
         super(requestKey, data);
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
+    }
+
+    public AmuseResponse(RequestKey requestKey, SearchParams page, List<T> data) {
+        super(requestKey, page, data);
+        this.statusCode = Constants.Status.Code.STATUS_CODE_OK;
+        this.statusMessage = Constants.Status.Message.STATUS_MESSAGE_OK;
     }
 
     public AmuseResponse(RequestKey requestKey, Integer statusCode, String statusMessage, SearchParams page, List<T> data) {
