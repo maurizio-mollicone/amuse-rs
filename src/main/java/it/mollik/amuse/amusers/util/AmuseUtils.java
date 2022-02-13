@@ -14,11 +14,12 @@ public class AmuseUtils {
     private static Map<String, String[]> uaMap = new HashMap<>();
 	private static Map<String, Double> freqMap = new HashMap<>();
 
+    private static final String CHROME_BROWSER = "Chrome";
 	static {
 
 		freqMap.put("Internet Explorer", 11.8);
 		freqMap.put("Firefox", 28.2);
-		freqMap.put("Chrome", 52.9);
+		freqMap.put(CHROME_BROWSER, 52.9);
 		freqMap.put("Safari", 3.9);
 		freqMap.put("Opera", 1.8);
 
@@ -692,7 +693,7 @@ public class AmuseUtils {
 				"Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; rv:1.8.1.16) Gecko/20080702 Firefox",
 				"Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.13) Gecko/20080313 Firefox",
 		});
-		uaMap.put("Chrome", new String[] {
+		uaMap.put(CHROME_BROWSER, new String[] {
 				"Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
 				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36",
 				"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36",
@@ -1666,15 +1667,13 @@ public class AmuseUtils {
 		}
 
 		if(browser == null) {
-			browser = "Chrome";
+			browser = CHROME_BROWSER;
 		}
 		
 		String userAgents[] = uaMap.get(browser);
 		return userAgents[(int) Math.floor(Math.random() * userAgents.length)];
 	}
 	
-	
-
     public SearchParams fromSpringPage(Page page) {
 
         SearchParams searchParams = new SearchParams(page.getNumber(), page.getSize());

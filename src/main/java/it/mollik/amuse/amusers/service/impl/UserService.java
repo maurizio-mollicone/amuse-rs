@@ -79,7 +79,6 @@ public class UserService implements IUserService {
     public Page<User> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
         Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
         Page<User> usersPage = this.userRepository.findAll(page);
-        //.forEach(users::add);
         logger.info("retrieved {}/{} users of {}, page {}/{}, pageSize ", usersPage.getNumberOfElements(), usersPage.getSize(), usersPage.getTotalElements(), usersPage.getNumber(), usersPage.getTotalPages());
         return usersPage; 
     }
