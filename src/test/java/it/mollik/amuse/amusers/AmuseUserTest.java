@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
@@ -31,7 +32,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .queryParam("pageSize", 10)
                 .build())
             .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01()))
+            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
             .exchange()
             .expectStatus()
             .isOk()
@@ -48,7 +49,7 @@ public class AmuseUserTest extends AmuseGenericTest {
             .get()
             .uri("/amuse/v1/users/detail/6")
             .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01()))
+            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
             .exchange()
             .expectStatus()
             .isOk()

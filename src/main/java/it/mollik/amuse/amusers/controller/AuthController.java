@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.model.AmuseUserDetails;
@@ -42,8 +44,8 @@ import it.mollik.amuse.amusers.model.response.SigninResponse;
 import it.mollik.amuse.amusers.model.response.SignoutResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
+import it.mollik.amuse.amusers.service.impl.HelperService;
 import it.mollik.amuse.amusers.service.impl.JwtTokenService;
-import it.mollik.amuse.amusers.util.HttpUtils;
 import it.mollik.amuse.amusers.util.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -65,21 +67,28 @@ public class AuthController {
 	@Autowired
 	PasswordEncoder encoder;
 
+	// @Autowired
+	// JwtUtils jwtUtils;
+
 	@Autowired
-	JwtUtils jwtUtils;
+	private HelperService helperService;
+
 
 	@Autowired
 	JwtTokenService jwtTokenService;
 
 	@PostMapping("/signin")
-	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest) {
+	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest, 
+			WebRequest webRequest) {
 		logger.info("/amuse/v1/auth/signin {}", loginRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/authUser/signin request : {}", loginRequest);
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtTokenService.generateToken(authentication);
-		
+		//String jwt = jwtTokenService.generateToken(authentication);
+		String clientIp = helperService.getClientIp(webRequest);
+		String userAgent = helperService.getUserAgent(webRequest);
+		String jwt = jwtTokenService.generateTokenV2(authentication, clientIp, userAgent);
 		AmuseUserDetails userDetails = (AmuseUserDetails) authentication.getPrincipal();		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
@@ -102,7 +111,7 @@ public class AuthController {
 	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
 		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/authUser/signout request : {}", signoutRequest);
-		String token = httpUtils.parseJwt(request);
+		String token = helperService.parseJwt(request);
 		if (token != null) {
 			if (!jwtTokenService.isInvalid(token).booleanValue()) {
 				jwtTokenService.invalidateToken(token);
@@ -119,7 +128,6 @@ public class AuthController {
 		return null;
 	}
 
-	private HttpUtils httpUtils;
 
 	@PostMapping("/signup")
 	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {

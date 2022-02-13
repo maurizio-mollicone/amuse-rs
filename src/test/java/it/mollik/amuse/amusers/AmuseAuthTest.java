@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.net.InetAddress;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,10 +16,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.AmuseEntity;
+import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
+import it.mollik.amuse.amusers.model.request.SignoutRequest;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.model.response.SigninResponse;
@@ -136,7 +139,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
 
 
 	@Test
-	public void loginOk() throws Exception {
+	public void signinSuccess() throws Exception {
 
 		LoginRequest loginRequest = new LoginRequest();
 		loginRequest.setUserName("user01");
@@ -145,26 +148,38 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>();
 		request.setKey(new Key("user01"));
 		request.setData(Stream.of(loginRequest).collect(Collectors.toList()));
-        AmuseResponse<SigninResponse> jwtResponse = getWebTestClient()
+        // AmuseResponse<SigninResponse> jwtResponse = getWebTestClient()
+            // .post()
+            // .uri("/amuse/v1/auth/signin")
+            // .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
+            // .bodyValue(request)
+            // .accept(MediaType.APPLICATION_JSON)
+            // .exchange()
+            // .expectStatus()
+            // .isOk()
+            // .expectBody(new ParameterizedTypeReference<AmuseResponse<SigninResponse>>(){})
+            // .returnResult().getResponseBody();
+        
+        getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signin")
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
+            .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
+            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<SigninResponse>>(){})
-            .returnResult().getResponseBody();
-        
-        assertThat(jwtResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+            .expectBody()
+            .jsonPath("$.statusCode", 0);
+        // assertThat(jwtResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
 
 	// @Autowired
     // private RestTemplate restTemplate;
 
 	@Test
-	public void loginKo() throws Exception {
+	public void signinError() throws Exception {
 
 		LoginRequest loginRequest = new LoginRequest();
 
@@ -175,7 +190,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
         getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signin")
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
+            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -183,4 +198,24 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .isUnauthorized();
 
 	}
+
+    // @Test
+	// public void signout() throws Exception {
+
+	// 	SignoutRequest signoutRequest = new SignoutRequest();
+
+	// 	signoutRequest.setUserName("user01");
+	// 	AmuseRequest<LoginRequest> request = new AmuseRequest<>(new Key("user01"), Stream.of(signoutRequest).collect(Collectors.toList()));
+
+    //     getWebTestClient()
+    //         .post()
+    //         .uri("/amuse/v1/auth/signin")
+    //         .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
+    //         .bodyValue(request)
+    //         .accept(MediaType.APPLICATION_JSON)
+    //         .exchange()
+    //         .expectStatus()
+    //         .isUnauthorized();
+
+	// }
 }

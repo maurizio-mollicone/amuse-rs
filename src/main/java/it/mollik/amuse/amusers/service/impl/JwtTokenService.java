@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import it.mollik.amuse.amusers.service.IJwtTokenService;
 @Service
 public class JwtTokenService implements IJwtTokenService {
 
+    
+
     private Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
     @Autowired
@@ -39,8 +42,6 @@ public class JwtTokenService implements IJwtTokenService {
 
     @Value("${amuse.security.jwtExpirationMs:86400000}")
     private String validity;
-
-    public static final String ROLES = "ROLES";
 
     @Override
     public String getUsernameFromToken(String token) {
@@ -54,7 +55,7 @@ public class JwtTokenService implements IJwtTokenService {
 
     @Override
     public List<String> getRoles(String token) {
-        return getClaimFromToken(token, claims -> (List) claims.get(ROLES));
+        return getClaimFromToken(token, claims -> (List) claims.get(Constants.Jwt.ROLES_CLAIM_KEY));
     }
 
     @Override
@@ -84,10 +85,42 @@ public class JwtTokenService implements IJwtTokenService {
                                                  .map(GrantedAuthority::getAuthority)
                                                  .collect(Collectors.toList());
 
-        claims.put(ROLES, roles);
+        claims.put(Constants.Jwt.ROLES_CLAIM_KEY, roles);
         return generateToken(claims, user.getUsername());
     }
 
+    @Override
+    public String generateTokenV2(Authentication authentication, String ipAddress, String userAgent) {
+        final Map<String, Object> claims = new HashMap<>();
+        final UserDetails user = (UserDetails) authentication.getPrincipal();
+
+        final List<String> roles = authentication.getAuthorities()
+                                                 .stream()
+                                                 .map(GrantedAuthority::getAuthority)
+                                                 .collect(Collectors.toList());
+
+        claims.put(Constants.Jwt.ROLES_CLAIM_KEY, roles);
+        claims.put(Constants.Jwt.CLIENT_IP_CLAIM_KEY, ipAddress);
+        claims.put(Constants.Jwt.USER_AGENT_CLAIM_KEY, userAgent);
+        return generateToken(claims, user.getUsername());
+    }
+
+    @Override
+    public String generateTokenV2(String userName, String role, String ipAddress, String userAgent) {
+        
+        return createJwtToken(userName, Stream.of(role).collect(Collectors.toList()), ipAddress, userAgent);
+
+    }
+
+    private  String createJwtToken(String userName, List<String> roles, String ipAddress, String userAgent) {
+        final Map<String, Object> claims = new HashMap<>();
+        
+
+        claims.put(Constants.Jwt.ROLES_CLAIM_KEY, roles);
+        claims.put(Constants.Jwt.CLIENT_IP_CLAIM_KEY, ipAddress);
+        claims.put(Constants.Jwt.USER_AGENT_CLAIM_KEY, userAgent);
+        return generateToken(claims, userName);
+    }
     //while creating the token -
     //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
     //2. Sign the JWT using the HS512 algorithm and secret key.
@@ -102,7 +135,7 @@ public class JwtTokenService implements IJwtTokenService {
                 .setExpiration(new Date(now + Long.parseLong(validity) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
-    
+
     @Override
     public Boolean validateToken(String token) {
         final String username = getUsernameFromToken(token);

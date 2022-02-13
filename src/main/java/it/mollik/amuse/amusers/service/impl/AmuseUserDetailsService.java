@@ -18,10 +18,13 @@ import it.mollik.amuse.amusers.repository.UserRepository;
 
 @Service
 public class AmuseUserDetailsService implements UserDetailsService {
+
     @Autowired
 	UserRepository userRepository;
+	
 	@Autowired
 	RoleRepository roleRepository;
+	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

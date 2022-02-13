@@ -14,8 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
+import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.util.HttpUtils;
+import it.mollik.amuse.amusers.service.impl.HelperService;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,7 +40,7 @@ public class AmuseGenericTest {
 	private WebTestClient webTestClient;
 
     @Autowired
-	private HttpUtils httpUtils;
+	private HelperService httpUtils;
 
     @Test
 	public void amuseYourself() throws Exception {
@@ -61,7 +62,7 @@ public class AmuseGenericTest {
     public void jwtAuthorization() throws Exception {
         AmuseResponse<AmuseEntity>  response = webTestClient
             .get()
-            .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue("user01"))
+            .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue(user01, ERole.USER.getValue()))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -131,14 +132,14 @@ public class AmuseGenericTest {
     /**
      * @return HttpUtils return the jwtUtils
      */
-    public HttpUtils getHttpUtils() {
+    public HelperService getHttpUtils() {
         return httpUtils;
     }
 
     /**
      * @param httpUtils the httpUtils to set
      */
-    public void setHttpUtils(HttpUtils httpUtils) {
+    public void setHttpUtils(HelperService httpUtils) {
         this.httpUtils = httpUtils;
     }
 
