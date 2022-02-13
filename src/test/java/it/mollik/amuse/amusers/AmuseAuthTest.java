@@ -4,7 +4,11 @@ import java.net.InetAddress;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
@@ -19,6 +23,8 @@ import it.mollik.amuse.amusers.model.request.SignupRequest;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
+@TestMethodOrder(OrderAnnotation.class)
+@DisplayName("aMuse base tests")
 public class AmuseAuthTest extends AmuseGenericTest{
     
     /**
@@ -27,6 +33,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
     private static final String DEFAULT_PASSWORD = "1234";
 
     @Test
+    @Order(1)
+    @DisplayName("Anonymous access")
 	public void anonymousAccess() throws Exception {
         getWebTestClient()
             .get()
@@ -40,6 +48,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	}
 
 	@Test
+    @Order(2)
+    @DisplayName("Access denied")
 	public void accessDenied() throws Exception {
         getWebTestClient()
             .get()
@@ -52,7 +62,9 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	}
 
 	@Test
-	public void signUp() throws Exception {
+    @Order(3)
+    @DisplayName("Signup")
+	public void signup() throws Exception {
 
 		SignupRequest signupRequest = new SignupRequest();
 		signupRequest.setEmail("testuser@localhost");
@@ -79,6 +91,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
 	}
 
 	@Test
+    @Order(4)
+    @DisplayName("Signup error - email already used")
 	public void emailAlreadyUsed() throws Exception {
 
 		SignupRequest signupRequest = new SignupRequest();
@@ -101,6 +115,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
     }
 
 	@Test
+    @Order(5)
+    @DisplayName("Signup error - username already used")
 	public void usernameAlreadyTaken() throws Exception {
 
 		SignupRequest signupRequest = new SignupRequest();
@@ -123,6 +139,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
 
 
 	@Test
+    @Order(6)
+    @DisplayName("Signin")
 	public void signinSuccess() throws Exception {
 
 		LoginRequest loginRequest = new LoginRequest();

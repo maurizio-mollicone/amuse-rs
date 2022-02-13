@@ -2,9 +2,6 @@ package it.mollik.amuse.amusers.config;
 
 import java.time.Duration;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,13 +55,4 @@ public class RedisConfiguration {
         return template;
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        redisServer.start();
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        redisServer.stop();
-    }
 }

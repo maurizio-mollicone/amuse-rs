@@ -1,7 +1,13 @@
 package it.mollik.amuse.amusers;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -11,16 +17,21 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestRedisConfiguration.class)
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
+@DisplayName("aMuse user tests")
 public class AmuseUserTest extends AmuseGenericTest {
     
     @Value("${amuse.security.user03:user03}")
     private String user03;
 
-    @Test
-	public void listUsers() throws Exception {
+    @Order(1)
+    @DisplayName("Users list")
+    @ParameterizedTest
+    @ValueSource(ints = {7, 8})
+	public void listUsers(int results) throws Exception {
         getWebTestClient()
             .get()
             .uri(uriBuilder -> uriBuilder.path("/amuse/v1/users/list")
@@ -32,12 +43,13 @@ public class AmuseUserTest extends AmuseGenericTest {
             .exchange()
             .expectStatus().isOk()
             .expectBody()
-                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK)
-                .jsonPath("$.searchParams.totalItems").isEqualTo(8);
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);
 	}
 
     
     @Test
+    @Order(2)
+    @DisplayName("User03 details")
 	public void viewUser03() throws Exception {
         getWebTestClient()
             .get()

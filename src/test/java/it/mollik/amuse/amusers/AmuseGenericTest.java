@@ -1,6 +1,10 @@
 package it.mollik.amuse.amusers;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +22,8 @@ import it.mollik.amuse.amusers.service.impl.HelperService;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
+@DisplayName("aMuse base tests")
 public class AmuseGenericTest {
 	
     @Value("${amuse.security.admin:admin}")
@@ -39,6 +45,8 @@ public class AmuseGenericTest {
 	private HelperService httpUtils;
 
     @Test
+    @Order(1)
+    @DisplayName("HeartBeat public access")
 	public void heartbeat() throws Exception {
         webTestClient
             .get()
@@ -54,6 +62,8 @@ public class AmuseGenericTest {
 
 
 	@Test
+    @Order(2)
+    @DisplayName("HeartBeat authenticated access")
     public void auth() throws Exception {
         webTestClient
             .get()
