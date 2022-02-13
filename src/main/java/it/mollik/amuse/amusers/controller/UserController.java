@@ -70,7 +70,7 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> view(Authentication authentication, @PathVariable int id) throws ResponseStatusException {
+    public AmuseResponse<User> view(Authentication authentication, @PathVariable long id) throws ResponseStatusException {
         logger.info("/users/detail/{}", id);
         User user;
         try {
@@ -128,7 +128,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AmuseResponse<User> delete(@PathVariable Integer id, @RequestBody AmuseRequest<User> request) throws EntityNotFoundException {
+    public AmuseResponse<User> delete(@PathVariable long id, @RequestBody AmuseRequest<User> request) throws EntityNotFoundException {
         this.userService.delete(id);
         AmuseResponse<User> response = new AmuseResponse<>(request.getKey(), request.getData());
         logger.info("/users/delete {}", response);

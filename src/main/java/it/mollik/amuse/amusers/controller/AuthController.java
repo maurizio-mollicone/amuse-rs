@@ -79,7 +79,7 @@ public class AuthController {
 		String clientIp = helperService.getClientIp(webRequest);
 		String userAgent = helperService.getUserAgent(webRequest);
 		String jwt = jwtTokenService.generateTokenV2(authentication, clientIp, userAgent);
-		AmuseUserDetails userDetails = (AmuseUserDetails) authentication.getPrincipal();		
+		User userDetails = (User) authentication.getPrincipal();		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class AuthController {
 		AmuseResponse<SignoutResponse> response = new AmuseResponse<>(signoutRequest.getKey(), Stream.of(new SignoutResponse(token, signoutRequest.getData().get(0).getUserName())).collect(Collectors.toList()));
 		logger.info("User {} signed out", signoutRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/auth/signout response {}", response);
-		return null;
+		return response;
 	}
 
 
@@ -137,18 +137,18 @@ public class AuthController {
 		List<String> strRoles = signUpRequest.getData().get(0).getRole();
 		List<Role> roles = new ArrayList<>();
 		if (strRoles == null) {
-            roles.add(new Role(user.getUserName(), ERole.USER, user));
+            roles.add(new Role(user.getUsername(), ERole.USER, user));
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
-                        roles.add(new Role(user.getUserName(), ERole.ADMIN, user));
+                        roles.add(new Role(user.getUsername(), ERole.ADMIN, user));
 					break;
 				case "manager":
-                    roles.add(new Role(user.getUserName(), ERole.MANAGER, user));
+                    roles.add(new Role(user.getUsername(), ERole.MANAGER, user));
 					break;
 				default:
-                    roles.add(new Role(user.getUserName(), ERole.USER, user));
+                    roles.add(new Role(user.getUsername(), ERole.USER, user));
 					break;
 				}
 			});

@@ -15,9 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.mollik.amuse.amusers.config.Constants;
+import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
 import it.mollik.amuse.amusers.model.ERole;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestRedisConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = EmbeddedRedisTestConfiguration.class)
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
@@ -39,7 +40,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .queryParam("pageSize", 10)
                 .build())
             .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
+            .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -55,7 +56,7 @@ public class AmuseUserTest extends AmuseGenericTest {
             .get()
             .uri("/amuse/v1/users/detail/6")
             .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue(getUser01(), ERole.USER.getValue()))
+            .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
             .exchange()
             .expectStatus()
             .isOk()

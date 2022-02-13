@@ -11,7 +11,7 @@ import it.mollik.amuse.amusers.model.orm.User;
 @Service
 public interface IUserService {
 
-    public User findById(Integer id) throws EntityNotFoundException;
+    public User findById(Long id) throws EntityNotFoundException;
 
     public List<User> findByName(String name) throws EntityNotFoundException;
     
@@ -29,5 +29,5 @@ public interface IUserService {
 
     public User save(User user);
     
-    public void delete(Integer authorId) throws EntityNotFoundException;
+    public void delete(Long userId) throws EntityNotFoundException;
 }

@@ -40,7 +40,7 @@ public class AmuseUserDetails implements UserDetails {
                 .collect(Collectors.toList());
         return new AmuseUserDetails(
                 Long.valueOf(user.getId().longValue()),
-                user.getUserName(),
+                user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);

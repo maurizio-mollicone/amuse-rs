@@ -7,9 +7,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import it.mollik.amuse.amusers.model.orm.User;
 
-public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    public Optional<User>  findByUserName(String userName);
+    public Optional<User>  findByUserName(String username);
 
     public Optional<User> findByEmail(String email);
 

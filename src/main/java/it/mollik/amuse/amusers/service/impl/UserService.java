@@ -28,7 +28,7 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
 
     @Override
-    public User findById(Integer id) throws EntityNotFoundException {
+    public User findById(Long id) throws EntityNotFoundException {
         return this.userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
     }
 
@@ -104,8 +104,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void delete(Integer authorId) throws EntityNotFoundException {
-        User user = this.userRepository.findById(authorId).orElseThrow(() -> new EntityNotFoundException(authorId.toString()));
+    public void delete(Long id) throws EntityNotFoundException {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
         this.userRepository.delete(user);
         logger.info("delete {}", user);
     }

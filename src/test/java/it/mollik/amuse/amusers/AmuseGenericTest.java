@@ -67,7 +67,7 @@ public class AmuseGenericTest {
     public void auth() throws Exception {
         webTestClient
             .get()
-            .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue(user01, ERole.USER.getValue()))
+            .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.buildAuthHeaderValue(user01, ERole.USER.getValue()))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()

@@ -39,7 +39,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				String username = jwtTokenService.getUsernameFromToken(jwt);
 				UserDetails userDetails = amuseUserDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				userDetails.getAuthorities().stream().forEach(u -> logger.info("role {}", u.getAuthority()));
+				userDetails.getAuthorities().stream().forEach(u -> logger.debug("role {}", u));
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			} else if (jwt != null && !jwtTokenService.validateToken(jwt)) {

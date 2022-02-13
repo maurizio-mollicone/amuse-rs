@@ -35,7 +35,7 @@ public class HelperService {
 	@Autowired
 	private IJwtTokenService jwtTokenService;
 
-	public String getAuthorizazionHeaderValue(String userName, String role) throws Exception {
+	public String buildAuthHeaderValue(String userName, String role) throws Exception {
 		if (userName != null && !userName.isEmpty()) {
 			return "Bearer " + jwtTokenService.generateTokenV2(userName, role, InetAddress.getLocalHost().getHostAddress(), AmuseUtils.getRandomUserAgent());
 		} else {

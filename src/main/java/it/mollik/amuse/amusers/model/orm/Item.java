@@ -27,7 +27,7 @@ public class Item extends AmuseEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
    
     @Column(name = "title", nullable = false, length = 500)
     private String title;

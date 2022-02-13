@@ -13,6 +13,9 @@ import javax.persistence.MappedSuperclass;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import org.springframework.data.annotation.AccessType;
+import org.springframework.data.annotation.AccessType.Type;
+
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
 import lombok.AllArgsConstructor;
@@ -31,8 +34,10 @@ import lombok.ToString;
 public class Person extends AmuseEntity {
     
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @AccessType(Type.PROPERTY)
+    private Long id;
 
     @Column(name = "name", length = 500, nullable = false)
     private String name;
