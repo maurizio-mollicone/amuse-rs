@@ -11,8 +11,8 @@ import it.mollik.amuse.amusers.model.SearchParams;
 
 @Component
 public class AmuseUtils {
-    private static Map<String, String[]> uaMap = new HashMap<String, String[]>();
-	private static Map<String, Double> freqMap = new HashMap<String, Double>();
+    private static Map<String, String[]> uaMap = new HashMap<>();
+	private static Map<String, Double> freqMap = new HashMap<>();
 
 	static {
 

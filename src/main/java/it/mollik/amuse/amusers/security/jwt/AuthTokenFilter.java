@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import it.mollik.amuse.amusers.service.impl.AmuseUserDetailsService;
 import it.mollik.amuse.amusers.service.impl.JwtTokenService;
-import it.mollik.amuse.amusers.util.JwtUtils;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 

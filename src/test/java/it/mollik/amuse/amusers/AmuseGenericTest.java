@@ -1,21 +1,17 @@
 package it.mollik.amuse.amusers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import it.mollik.amuse.amusers.model.AmuseEntity;
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
-import it.mollik.amuse.amusers.model.response.AmuseResponse;
 import it.mollik.amuse.amusers.service.impl.HelperService;
 
 
@@ -43,33 +39,31 @@ public class AmuseGenericTest {
 	private HelperService httpUtils;
 
     @Test
-	public void amuseYourself() throws Exception {
-        AmuseResponse<AmuseEntity> response = webTestClient
+	public void heartbeat() throws Exception {
+        webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<AmuseEntity>>(){})
-            .returnResult().getResponseBody();
+            .expectBody()
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);
         
-        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
 	}
 
 
 	@Test
-    public void jwtAuthorization() throws Exception {
-        AmuseResponse<AmuseEntity>  response = webTestClient
+    public void auth() throws Exception {
+        webTestClient
             .get()
             .uri("/amuse/v1/test/heartbeat").header("Authorization", httpUtils.getAuthorizazionHeaderValue(user01, ERole.USER.getValue()))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<AmuseEntity>>(){})
-            .returnResult().getResponseBody();
-        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
+            .expectBody()
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);
     }
 
     /**

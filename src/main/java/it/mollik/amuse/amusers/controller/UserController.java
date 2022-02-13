@@ -41,10 +41,6 @@ import it.mollik.amuse.amusers.util.AmuseUtils;
 @RequestMapping("/amuse/v1/users")
 public class UserController {
 
-    /**
-     *
-     */
-    private static final String OK = "OK";
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired

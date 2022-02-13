@@ -1,9 +1,6 @@
 package it.mollik.amuse.amusers.service.impl;
 
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +11,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import it.mollik.amuse.amusers.service.IJwtTokenService;
 import it.mollik.amuse.amusers.util.AmuseUtils;
-import it.mollik.amuse.amusers.util.JwtUtils;
 
 @Service
 public class HelperService {
@@ -35,8 +31,6 @@ public class HelperService {
         // you can add more matching headers here ...
     };
 
-	@Autowired
-	private JwtUtils jwtUtils;
 	
 	@Autowired
 	private IJwtTokenService jwtTokenService;

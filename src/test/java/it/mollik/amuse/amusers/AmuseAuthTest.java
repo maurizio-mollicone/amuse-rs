@@ -1,7 +1,5 @@
 package it.mollik.amuse.amusers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.net.InetAddress;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,41 +7,36 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import it.mollik.amuse.amusers.model.SearchParams;
-import it.mollik.amuse.amusers.model.AmuseEntity;
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
-import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.request.LoginRequest;
-import it.mollik.amuse.amusers.model.request.SignoutRequest;
 import it.mollik.amuse.amusers.model.request.SignupRequest;
-import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.model.response.SigninResponse;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
 public class AmuseAuthTest extends AmuseGenericTest{
     
+    /**
+     *
+     */
+    private static final String DEFAULT_PASSWORD = "1234";
+
     @Test
 	public void anonymousAccess() throws Exception {
-		AmuseResponse<AmuseEntity> genericResponse = getWebTestClient()
+        getWebTestClient()
             .get()
             .uri("/amuse/v1/test/heartbeat")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<AmuseEntity>>(){})
-            .returnResult().getResponseBody();
-        
-        assertThat(genericResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
-        
+            .expectBody()
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);    
 	}
 
 	@Test
@@ -65,24 +58,23 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setEmail("testuser@localhost");
 		signupRequest.setUserName("testuser");
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
-		signupRequest.setPassword("1234");
+		signupRequest.setPassword(DEFAULT_PASSWORD);
 
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>();
 		request.setKey(new Key("testuser"));
 		request.setData(Stream.of(signupRequest).collect(Collectors.toList()));
-        AmuseResponse<User> response = getWebTestClient()
+        getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
-            //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isOk()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){})
-            .returnResult().getResponseBody();
-        assertThat(response.getStatusCode()).isEqualTo(Integer.valueOf(0));
-		assertThat(response.getData().get(0).getName()).isEqualTo("testuser");
+            .expectBody()
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK)
+                .jsonPath("$.data[0].userName").isEqualTo("testuser");
+            
 
 	}
 
@@ -93,73 +85,54 @@ public class AmuseAuthTest extends AmuseGenericTest{
 		signupRequest.setEmail("user01@localhost");
 		signupRequest.setUserName("user05");
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
-		signupRequest.setPassword("1234");
+		signupRequest.setPassword(DEFAULT_PASSWORD);
 
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>();
 		request.setKey(new Key("testuser"));
 		request.setData(Stream.of(signupRequest).collect(Collectors.toList()));
-		HttpStatus status = getWebTestClient()
+		getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
-            //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest()
-            .expectBody(AmuseResponse.class)
-            .returnResult().getStatus();
-        assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
-	}
+            .isBadRequest();
+    }
 
 	@Test
 	public void usernameAlreadyTaken() throws Exception {
 
 		SignupRequest signupRequest = new SignupRequest();
 		signupRequest.setEmail("user05@localhost");
-		signupRequest.setUserName("user01");
+		signupRequest.setUserName(getUser01());
 		signupRequest.setRole(Stream.of("user").collect(Collectors.toList()));
-		signupRequest.setPassword("1234");
+		signupRequest.setPassword(DEFAULT_PASSWORD);
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>();
 		request.setKey(new Key("testuser"));
 		request.setData(Stream.of(signupRequest).collect(Collectors.toList()));
-        HttpStatus status = getWebTestClient()
+        getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signup")
-            //.header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest()
-            .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){})
-            .returnResult().getStatus();
-        assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
-	}
+            .isBadRequest();
+    }
 
 
 	@Test
 	public void signinSuccess() throws Exception {
 
 		LoginRequest loginRequest = new LoginRequest();
-		loginRequest.setUserName("user01");
-		loginRequest.setPassword("1234");
+		loginRequest.setUserName(getUser01());
+		loginRequest.setPassword(DEFAULT_PASSWORD);
 
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>();
-		request.setKey(new Key("user01"));
+		request.setKey(new Key(getUser01()));
 		request.setData(Stream.of(loginRequest).collect(Collectors.toList()));
-        // AmuseResponse<SigninResponse> jwtResponse = getWebTestClient()
-            // .post()
-            // .uri("/amuse/v1/auth/signin")
-            // .header("Authorization", getHttpUtils().getAuthorizazionHeaderValue("user01"))
-            // .bodyValue(request)
-            // .accept(MediaType.APPLICATION_JSON)
-            // .exchange()
-            // .expectStatus()
-            // .isOk()
-            // .expectBody(new ParameterizedTypeReference<AmuseResponse<SigninResponse>>(){})
-            // .returnResult().getResponseBody();
-        
+       
         getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signin")
@@ -171,19 +144,15 @@ public class AmuseAuthTest extends AmuseGenericTest{
             .expectStatus()
             .isOk()
             .expectBody()
-            .jsonPath("$.statusCode", 0);
-        // assertThat(jwtResponse.getStatusCode()).isEqualTo(Integer.valueOf(0));
+                .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);
 	}
-
-	// @Autowired
-    // private RestTemplate restTemplate;
 
 	@Test
 	public void signinError() throws Exception {
 
 		LoginRequest loginRequest = new LoginRequest();
 
-		loginRequest.setUserName("user01");
+		loginRequest.setUserName(getUser01());
 		loginRequest.setPassword("1235");
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new Key("user01"), Stream.of(loginRequest).collect(Collectors.toList()));
 

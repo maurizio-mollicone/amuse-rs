@@ -3,20 +3,16 @@ package it.mollik.amuse.amusers.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,7 +42,6 @@ import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
 import it.mollik.amuse.amusers.service.impl.HelperService;
 import it.mollik.amuse.amusers.service.impl.JwtTokenService;
-import it.mollik.amuse.amusers.util.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -67,12 +62,8 @@ public class AuthController {
 	@Autowired
 	PasswordEncoder encoder;
 
-	// @Autowired
-	// JwtUtils jwtUtils;
-
 	@Autowired
-	private HelperService helperService;
-
+	HelperService helperService;
 
 	@Autowired
 	JwtTokenService jwtTokenService;
@@ -85,7 +76,6 @@ public class AuthController {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		//String jwt = jwtTokenService.generateToken(authentication);
 		String clientIp = helperService.getClientIp(webRequest);
 		String userAgent = helperService.getUserAgent(webRequest);
 		String jwt = jwtTokenService.generateTokenV2(authentication, clientIp, userAgent);

@@ -7,7 +7,6 @@ public final class Constants {
     public static final String JWT_BLACKLIST_CACHE_KEY = "jwtBlacklist";
     public static final String USERS_CACHE_KEY = "users";
 
-
     private Constants() {
     }
 
