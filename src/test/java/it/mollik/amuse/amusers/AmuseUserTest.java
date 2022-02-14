@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,6 +23,8 @@ import it.mollik.amuse.amusers.model.ERole;
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
+@Import(EmbeddedRedisTestConfiguration.class)
+
 @DisplayName("aMuse user tests")
 public class AmuseUserTest extends AmuseGenericTest {
     

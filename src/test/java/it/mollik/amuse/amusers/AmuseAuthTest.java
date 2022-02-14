@@ -214,23 +214,18 @@ public class AmuseAuthTest extends AmuseGenericTest{
     @ValueSource(strings = {"user01"})
     @Order(7)
 	public void signinAndSignout(String username) throws Exception {
-        logger.info("START test {}", this.getClass().getEnclosingMethod().getName());
+        logger.info("START test signinAndSignout");
         
         logger.info("signin {}", username);
 
-		LoginRequest loginRequest = new LoginRequest();
-		loginRequest.setUserName(getUser01());
-		loginRequest.setPassword(DEFAULT_PASSWORD);
-
-		AmuseRequest<LoginRequest> request = new AmuseRequest<>();
-		request.setKey(new Key(getUser01()));
-		request.setData(Stream.of(loginRequest).collect(Collectors.toList()));
-       
-        AmuseResponse<SigninResponse> res = getWebTestClient()
+		LoginRequest loginRequest = new LoginRequest(username, DEFAULT_PASSWORD);
+		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new Key(username), Stream.of(loginRequest).collect(Collectors.toList()));
+		
+        AmuseResponse<SigninResponse> signinResponse = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signin")
             .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
-            .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
+            .header("Authorization", getHttpUtils().buildAuthHeaderValue(username, ERole.USER.getValue()))
             .bodyValue(request)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -240,17 +235,15 @@ public class AmuseAuthTest extends AmuseGenericTest{
             // .expectBody()
             //     .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK);
 
-        String token = res.getData().get(0).getToken();
-        logger.info("signin response {}", res.toJSONString());
+        String token = signinResponse.getData().get(0).getToken();
+        logger.info("signin response {}", signinResponse.toJSONString());
 
         logger.info("signout {}", username);
 
-		SignoutRequest signoutRequest = new SignoutRequest();
+		SignoutRequest signoutRequest = new SignoutRequest(username);
+		AmuseRequest<SignoutRequest> request2 = new AmuseRequest<>(new Key(username), Stream.of(signoutRequest).collect(Collectors.toList()));
 
-		signoutRequest.setUserName(username);
-		AmuseRequest<SignoutRequest> request2 = new AmuseRequest<>(new Key("user01"), Stream.of(signoutRequest).collect(Collectors.toList()));
-
-        AmuseResponse<SignoutResponse> res2 = getWebTestClient()
+        AmuseResponse<SignoutResponse> signoutResponse = getWebTestClient()
             .post()
             .uri("/amuse/v1/auth/signout")
             //.header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
@@ -264,7 +257,7 @@ public class AmuseAuthTest extends AmuseGenericTest{
             // .expectBody()
             //    .jsonPath("$.statusCode").isEqualTo(Constan\ts.Status.Code.STATUS_CODE_OK);
         
-        logger.info("signout response {}", res2.toJSONString());
+        logger.info("signout response {}", signoutResponse);
 
 
 	}
