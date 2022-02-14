@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.security.core.GrantedAuthority;
@@ -99,6 +100,7 @@ public class User extends Person implements UserDetails {
     }
 
     @Override
+    @JsonProperty("userName")
     public String getUsername() {
         return this.userName;
     }
