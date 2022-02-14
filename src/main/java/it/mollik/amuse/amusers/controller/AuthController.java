@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import it.mollik.amuse.amusers.model.AmuseUserDetails;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.Role;
