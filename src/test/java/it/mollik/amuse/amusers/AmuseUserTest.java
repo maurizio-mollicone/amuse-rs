@@ -24,7 +24,6 @@ import it.mollik.amuse.amusers.model.ERole;
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
 @Import(EmbeddedRedisTestConfiguration.class)
-
 @DisplayName("aMuse user tests")
 public class AmuseUserTest extends AmuseGenericTest {
     

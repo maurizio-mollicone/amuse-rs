@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import it.mollik.amuse.amusers.config.Constants;
+import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.service.impl.HelperService;
 
@@ -23,6 +25,7 @@ import it.mollik.amuse.amusers.service.impl.HelperService;
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
+@Import(EmbeddedRedisTestConfiguration.class)
 @DisplayName("aMuse base tests")
 public class AmuseGenericTest {
 	
