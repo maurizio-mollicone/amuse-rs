@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import it.mollik.amuse.amusers.config.Constants;
-import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.service.impl.HelperService;
 
@@ -25,7 +24,6 @@ import it.mollik.amuse.amusers.service.impl.HelperService;
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
-@Import(EmbeddedRedisTestConfiguration.class)
 @DisplayName("aMuse base tests")
 public class AmuseGenericTest {
 	

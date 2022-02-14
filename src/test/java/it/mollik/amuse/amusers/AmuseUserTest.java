@@ -16,14 +16,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.mollik.amuse.amusers.config.Constants;
-import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
 import it.mollik.amuse.amusers.model.ERole;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = EmbeddedRedisTestConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
-@Import(EmbeddedRedisTestConfiguration.class)
 @DisplayName("aMuse user tests")
 public class AmuseUserTest extends AmuseGenericTest {
     

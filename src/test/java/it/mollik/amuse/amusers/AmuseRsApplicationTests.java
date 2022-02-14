@@ -8,11 +8,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
-
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-@Import(EmbeddedRedisTestConfiguration.class)
 @ActiveProfiles(value = "test")
 class AmuseRsApplicationTests {
 

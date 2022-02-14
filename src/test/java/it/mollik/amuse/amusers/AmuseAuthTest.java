@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
 import it.mollik.amuse.amusers.config.Constants;
-import it.mollik.amuse.amusers.config.EmbeddedRedisTestConfiguration;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.User;
@@ -35,7 +34,6 @@ import it.mollik.amuse.amusers.model.response.SignoutResponse;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
-@Import(EmbeddedRedisTestConfiguration.class)
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("aMuse base tests")
 public class AmuseAuthTest extends AmuseGenericTest{
