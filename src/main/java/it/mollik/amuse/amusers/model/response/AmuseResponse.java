@@ -14,6 +14,9 @@ public class AmuseResponse<T extends IAmuseEntity>  extends AmuseModel<T> {
 
     private String statusMessage;
 
+    public AmuseResponse() {
+    }
+
     public AmuseResponse(Key key, int statusCode, String statusMessage, List<T> data) {
         super(key, new SearchParams(), data);
         this.statusCode = statusCode;
