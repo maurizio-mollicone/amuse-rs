@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.EEntityStatus;
+import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
+import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
 import it.mollik.amuse.amusers.service.IUserService;
 
@@ -27,6 +31,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public User findById(Long id) throws EntityNotFoundException {
@@ -101,8 +108,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) throws EntityNotFoundException {
         User user = this.userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
+        List<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            Role r = this.roleRepository.getReferenceById(role.getId());
+            this.roleRepository.delete(r);
+        }
         this.userRepository.delete(user);
         logger.info("delete {}", user);
     }

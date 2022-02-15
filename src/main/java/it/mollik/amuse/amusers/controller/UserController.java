@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
+import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.orm.User;
@@ -128,9 +129,9 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AmuseResponse<User> delete(@PathVariable long id, @RequestBody AmuseRequest<User> request) throws EntityNotFoundException {
+    public AmuseResponse<IAmuseEntity> delete(@PathVariable long id) throws EntityNotFoundException {
         this.userService.delete(id);
-        AmuseResponse<User> response = new AmuseResponse<>(request.getKey(), request.getData());
+        AmuseResponse<IAmuseEntity> response = new AmuseResponse<>(new Key("system"), null);
         logger.info("/users/delete {}", response);
         return response;
     }

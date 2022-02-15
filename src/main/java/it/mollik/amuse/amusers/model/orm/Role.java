@@ -21,7 +21,7 @@ public class Role extends AmuseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "user_name", length = 500, nullable = false)
     private String userName;
@@ -48,16 +48,16 @@ public class Role extends AmuseEntity {
     }
 
     /**
-     * @return Integer return the id
+     * @return Long return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
