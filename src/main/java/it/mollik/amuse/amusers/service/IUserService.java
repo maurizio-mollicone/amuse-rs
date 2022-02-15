@@ -1,12 +1,12 @@
 package it.mollik.amuse.amusers.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
+import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 
 @Service
@@ -30,5 +30,9 @@ public interface IUserService {
 
     public User save(User user);
     
+    public User addRole(Role role) throws EntityNotFoundException;
+
+    public User deleteRole(Role role) throws EntityNotFoundException;
+
     public void delete(Long userId) throws EntityNotFoundException;
 }

@@ -2,11 +2,6 @@ package it.mollik.amuse.amusers.model;
 
 import java.util.List;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 public class AmuseModel<T extends IAmuseEntity> extends AmuseObject {
     
     private Key key;

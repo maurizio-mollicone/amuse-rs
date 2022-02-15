@@ -2,7 +2,6 @@ package it.mollik.amuse.amusers.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -102,8 +101,41 @@ public class UserService implements IUserService {
         user.setStatus(EEntityStatus.UPDATE);
         Date now = new Date();
         user.setUpdateTs(now);
+        // List<Role> roles = user.getRoles();
+        // for (Role role : roles) {
+        //     Role r = this.roleRepository.getReferenceById(role.getId());
+        //     this.roleRepository.save(r);
+        // }
         User result = this.userRepository.save(user);
         logger.info("save {}", result);
+        return result;
+    }
+
+
+    @Override
+    public User addRole(Role role) throws EntityNotFoundException {
+        
+        User user = this.userRepository.findByUsername(role.getUserName()).orElseThrow(() -> new EntityNotFoundException(role.getUserName()));
+        Date now = new Date();
+        role.setCreateTs(now);
+        role.setUser(user);
+        user.addRole(role);
+        user.setUpdateTs(now);
+        User result = this.userRepository.save(user);
+        logger.info("addRole {}", result);
+
+        return result;
+    }
+    @Override
+    public User deleteRole(Role role) throws EntityNotFoundException {
+        
+        User user = this.userRepository.findByUsername(role.getUserName()).orElseThrow(() -> new EntityNotFoundException(role.getUserName()));
+        Date now = new Date();
+        user.setUpdateTs(now);
+        user.removeRole(role);
+        // this.roleRepository.delete(role);
+        User result = this.userRepository.save(user);
+        logger.info("deleteRole {}", result);
         return result;
     }
 

@@ -30,7 +30,7 @@ public class Role extends AmuseEntity {
     @Column(name = "user_role")
     private ERole userRole;    
 
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
     

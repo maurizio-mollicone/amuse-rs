@@ -122,13 +122,38 @@ public class AmuseUserTest extends AmuseGenericTest {
             logger.info("updated user {}", res);
         }
         @Test
-        @Order(2)
+        @Order(3)
         @DisplayName("User03 update")
         public void deleteUser03() throws Exception {            
             AmuseResponse<User> res = 
             getWebTestClient()
                 .delete()
                 .uri("/amuse/v1/users/delete/6")
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.USER.getValue()))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){
+                }).returnResult().getResponseBody();
+    
+    
+                // .expectBody()
+                //     .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK)
+                //     .jsonPath("$.data[0].userName").isEqualTo(user03)
+                //     .jsonPath("$.data[0].email").isEqualTo("user03updated@localhost");
+                logger.info("updated user {}", res);
+        }
+
+
+        @Test
+        @Order(3)
+        @DisplayName("User03 update")
+        public void addManagerUSer03() throws Exception {            
+            AmuseResponse<User> res = 
+            getWebTestClient()
+                .delete()
+                .uri("/amuse/v1/users/6/role")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.USER.getValue()))
                 .exchange()

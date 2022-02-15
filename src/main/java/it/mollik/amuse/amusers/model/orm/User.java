@@ -1,9 +1,11 @@
 package it.mollik.amuse.amusers.model.orm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -16,11 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.EUserStatus;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-@ToString
-@EqualsAndHashCode(callSuper = false)
 @Entity(name = "user")
 public class User extends Person implements UserDetails {
     
@@ -34,7 +32,7 @@ public class User extends Person implements UserDetails {
     @Column(name = "password", length = 500, nullable = false)
     private String password;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Role> roles;
     
     @Column(name = "user_status")
@@ -126,5 +124,16 @@ public class User extends Person implements UserDetails {
         return this.username;
     }
 
+    public void addRole(Role role) {
+        if (this.roles == null) {
+            this.roles = new ArrayList<>();
+        }
+        this.roles.add(role);
+    }
 
+    public void removeRole(Role role) {
+        if (this.roles != null && !this.roles.isEmpty()) {
+            this.roles.remove(role);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package it.mollik.amuse.amusers.controller;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,6 +32,7 @@ import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.SearchParams;
+import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
@@ -133,6 +135,34 @@ public class UserController {
         this.userService.delete(id);
         AmuseResponse<IAmuseEntity> response = new AmuseResponse<>(new Key("system"), null);
         logger.info("/users/delete {}", response);
+        return response;
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(path = "/{id}/role", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public AmuseResponse<User> addRole(@PathVariable long id, @RequestBody AmuseRequest<Role> request) throws EntityNotFoundException {
+        User user = this.userService.findById(id);
+        Role role = request.getData().get(0);
+        Date now = new Date();
+        role.setCreateTs(now);
+        role.setUser(user);
+        user.addRole(role);
+        user.setUpdateTs(now);
+        User updatedUser = this.userService.save(user);
+        AmuseResponse<User> response = new AmuseResponse<>(new Key("system"), Stream.of(updatedUser).collect(Collectors.toList()));
+        logger.info("/users/{}/role {}", id, response);
+        return response;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping(path = "/{id}/role", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public AmuseResponse<User> removeRole(@PathVariable long id, @RequestBody AmuseRequest<Role> request) throws EntityNotFoundException {
+        User user = this.userService.deleteRole(request.getData().get(0));
+        AmuseResponse<User> response = new AmuseResponse<>(new Key("system"), Stream.of(user).collect(Collectors.toList()));
+        logger.info("/users/{}/role {}", id, response);
         return response;
     }
 }

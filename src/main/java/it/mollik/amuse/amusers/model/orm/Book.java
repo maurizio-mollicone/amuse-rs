@@ -13,11 +13,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.EGenre;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity(name = "book")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

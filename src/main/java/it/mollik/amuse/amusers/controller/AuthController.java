@@ -87,7 +87,6 @@ public class AuthController {
 			Stream.of(
 				new SigninResponse(
 					jwt, 
-					"Bearer",
 					userDetails.getId(), 
 					userDetails.getUsername(), 
 					userDetails.getEmail(), 
