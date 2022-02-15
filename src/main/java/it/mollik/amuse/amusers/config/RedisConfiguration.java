@@ -21,13 +21,13 @@ public class RedisConfiguration {
 
     private RedisServer redisServer;
     
-    @Value("{spring.redis.port}") 
+    @Value("${spring.redis.port}") 
     private int redisPort;
     
-    @Value("{spring.redis.host}") 
+    @Value("{$spring.redis.host}") 
     private String redisHost;
 
-	public RedisConfiguration(@Value("{spring.redis.port}") int redisPort) {
+	public RedisConfiguration(@Value("${spring.redis.port}") int redisPort) {
         this.redisServer = new RedisServer(redisPort);
     }
 
