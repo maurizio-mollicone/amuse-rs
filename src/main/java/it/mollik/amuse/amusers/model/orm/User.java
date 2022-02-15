@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,21 +16,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.EUserStatus;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
-@Data
-@Getter
-@ToString(callSuper = false)
+@ToString
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = "user")
 public class User extends Person implements UserDetails {
     
     
 	@Column(name = "user_name", length = 500, nullable = false, unique = true)
-    private String userName;
+    private String username;
     
     @Column(name = "email", length = 500, nullable = false, unique = true)
     private String email;
@@ -47,13 +42,14 @@ public class User extends Person implements UserDetails {
 
 
     public User() {}
-    public User(String userName, String email, String password) {
+
+    public User(String username, String email, String password) {
         super();
-        this.userName = userName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.userStatus = EUserStatus.ENABLED;
-        this.setName(userName);
+        this.setName(username);
         this.setStatus(EEntityStatus.INSERT);
     }
 
@@ -61,7 +57,7 @@ public class User extends Person implements UserDetails {
 			EUserStatus userStatus) {
 
         super();
-        this.userName = username;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.userStatus = userStatus;
@@ -69,6 +65,33 @@ public class User extends Person implements UserDetails {
         this.setStatus(EEntityStatus.INSERT);
 	}
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public List<Role> getRoles() {
+        return roles;
+    }
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+    public EUserStatus getUserStatus() {
+        return userStatus;
+    }
+    public void setUserStatus(EUserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -99,9 +122,9 @@ public class User extends Person implements UserDetails {
     }
 
     @Override
-    @JsonProperty("userName")
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
+
 
 }

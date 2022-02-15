@@ -12,16 +12,7 @@ import javax.persistence.MappedSuperclass;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.EEntityStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-@Data
-@ToString(callSuper = false)
-@EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
-@NoArgsConstructor
+
 @MappedSuperclass
 public class Item extends AmuseEntity {
     
@@ -48,5 +39,116 @@ public class Item extends AmuseEntity {
     @Column(name = "status", nullable = false)
     private EEntityStatus status;
 
+
+
+    public Item() {
+    }
+
+    public Item(String title, String description, Date year, Date createTs, Date updateTs, EEntityStatus status) {
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.createTs = createTs;
+        this.updateTs = updateTs;
+        this.status = status;
+    }
+
+    /**
+     * @return Long return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return String return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return String return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return Date return the year
+     */
+    public Date getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(Date year) {
+        this.year = year;
+    }
+
+    /**
+     * @return Date return the createTs
+     */
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    /**
+     * @param createTs the createTs to set
+     */
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
+
+    /**
+     * @return Date return the updateTs
+     */
+    public Date getUpdateTs() {
+        return updateTs;
+    }
+
+    /**
+     * @param updateTs the updateTs to set
+     */
+    public void setUpdateTs(Date updateTs) {
+        this.updateTs = updateTs;
+    }
+
+    /**
+     * @return EEntityStatus return the status
+     */
+    public EEntityStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(EEntityStatus status) {
+        this.status = status;
+    }
 
 }

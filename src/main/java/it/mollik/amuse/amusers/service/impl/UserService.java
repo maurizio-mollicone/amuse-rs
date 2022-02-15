@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,13 +45,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> findByUserName(String userName) throws EntityNotFoundException {
-        List<User> users = this.userRepository.findByName(userName);
-
-        if (users == null || users.isEmpty()) {
-            throw new EntityNotFoundException(userName);
-        }
-        return users;    
+    public User findByUserName(String userName) throws EntityNotFoundException {
+        return this.userRepository.findByUsername(userName).orElseThrow(() -> new EntityNotFoundException(userName));
+  
     }
 
     @Override
@@ -64,7 +61,7 @@ public class UserService implements IUserService {
     }
 
     public Boolean existsByUserName(String username) {
-        Boolean userExists = this.userRepository.existsByUserName(username);
+        Boolean userExists = this.userRepository.existsByUsername(username);
         logger.info("user {} exists {}", username, userExists.booleanValue());
         return userExists;
     }

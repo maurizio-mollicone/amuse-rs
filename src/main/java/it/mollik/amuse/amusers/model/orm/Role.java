@@ -14,26 +14,10 @@ import javax.persistence.ManyToOne;
 
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.ERole;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Data
-@ToString(callSuper = false)
-@EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity(name="role")
 public class Role extends AmuseEntity {
 
-    public Role(String userName, ERole role, User user) {
-        super();
-        this.userName = userName;
-        this.userRole = role;
-        this.user = user;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,5 +37,84 @@ public class Role extends AmuseEntity {
     @Column(name="create_ts", nullable = false)
     private Date createTs = new Date();
 
+    public Role() {
+    }
+
+    public Role(String userName, ERole role, User user) {
+        super();
+        this.userName = userName;
+        this.userRole = role;
+        this.user = user;
+    }
+
+    /**
+     * @return Integer return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return String return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return ERole return the userRole
+     */
+    public ERole getUserRole() {
+        return userRole;
+    }
+
+    /**
+     * @param userRole the userRole to set
+     */
+    public void setUserRole(ERole userRole) {
+        this.userRole = userRole;
+    }
+
+    /**
+     * @return User return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @return Date return the createTs
+     */
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    /**
+     * @param createTs the createTs to set
+     */
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
 
 }

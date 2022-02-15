@@ -32,7 +32,7 @@ public class AmuseUserDetailsService implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		List<Role> roles = roleRepository.findByUserName(username);
 		if (roles == null || roles.isEmpty()) {
 			throw new UsernameNotFoundException("User Not Found with username: " + username);

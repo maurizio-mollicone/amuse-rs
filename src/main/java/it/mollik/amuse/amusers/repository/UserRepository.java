@@ -9,13 +9,13 @@ import it.mollik.amuse.amusers.model.orm.User;
 
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    public Optional<User>  findByUserName(String username);
+    public Optional<User> findByUsername(String username);
 
     public Optional<User> findByEmail(String email);
 
     public List<User> findByName(String name);
     
-    public Boolean existsByUserName(String username);
+    public Boolean existsByUsername(String username);
 
 	public Boolean existsByEmail(String email);
 }

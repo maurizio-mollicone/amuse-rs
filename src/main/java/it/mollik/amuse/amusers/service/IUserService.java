@@ -1,6 +1,7 @@
 package it.mollik.amuse.amusers.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public interface IUserService {
 
     public List<User> findByName(String name) throws EntityNotFoundException;
     
-    public List<User> findByUserName(String userName) throws EntityNotFoundException;
+    public User findByUserName(String userName) throws EntityNotFoundException;
 
     public List<User> findByEmail(String email) throws EntityNotFoundException;
 

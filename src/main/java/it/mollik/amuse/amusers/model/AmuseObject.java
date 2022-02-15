@@ -7,19 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data
-@ToString(callSuper = false)
-@EqualsAndHashCode(callSuper = false)
 public class AmuseObject implements IAmuseObject {
     
     private static final Logger logger = LoggerFactory.getLogger(AmuseObject.class);
 
-    
-    public String toJSONString() {
+    @Override
+    public String toString(){
+        
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = StringUtils.EMPTY;
         try {
@@ -28,5 +22,10 @@ public class AmuseObject implements IAmuseObject {
             logger.debug("toJSONString error", e);
         }
         return jsonString;
+    }
+    
+    public String toJSONString() {
+        return toString();
     } 
+    
 }

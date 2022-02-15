@@ -123,7 +123,7 @@ public class AuthController {
 		
 		logger.info("/amuse/v1/auth/signup");
 		logger.debug("POST /amuse/v1/auth/signup request : {}", signUpRequest);
-		if (userRepository.existsByUserName(signUpRequest.getData().get(0).getUserName()).booleanValue()) {
+		if (userRepository.existsByUsername(signUpRequest.getData().get(0).getUserName()).booleanValue()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getData().get(0).getUserName() + "already taken");
 		}
 		if (userRepository.existsByEmail(signUpRequest.getData().get(0).getEmail()).booleanValue()) {
