@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
@@ -67,7 +69,8 @@ public class AuthController {
 	@Autowired
 	JwtTokenService jwtTokenService;
 
-	@PostMapping("/signin")
+	@PostMapping(path = "/signin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest, 
 			WebRequest webRequest) {
 		logger.info("/amuse/v1/auth/signin {}", loginRequest.getData().get(0).getUserName());
@@ -95,7 +98,7 @@ public class AuthController {
 		logger.debug("POST /amuse/v1/auth/signin response {}", response);
 		return response;
 	}
-	@PostMapping("/signout")
+	@PostMapping(path = "/signout", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
 		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/authUser/signout request : {}", signoutRequest);
@@ -117,7 +120,8 @@ public class AuthController {
 	}
 
 
-	@PostMapping("/signup")
+	@PostMapping(path = "/signup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {
 		
 		logger.info("/amuse/v1/auth/signup");

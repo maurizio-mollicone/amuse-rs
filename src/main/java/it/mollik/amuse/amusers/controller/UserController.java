@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,13 +58,13 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> list(Authentication authentication, @RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
+    public AmuseResponse<User> list(@RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
         logger.info("/users/list");
 
         Page<User> usersPage = this.userService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(usersPage);
 
-        AmuseResponse<User> response = new AmuseResponse<>(new Key(authentication.getName()), searchParams, usersPage.stream().collect(Collectors.toList()));
+        AmuseResponse<User> response = new AmuseResponse<>(new Key("system"), searchParams, usersPage.stream().collect(Collectors.toList()));
         logger.info("/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
     }
@@ -73,7 +72,7 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> view(Authentication authentication, @PathVariable long id) throws ResponseStatusException {
+    public AmuseResponse<User> view(@PathVariable long id) throws ResponseStatusException {
         logger.info("/users/detail/{}", id);
         User user;
         try {
@@ -90,9 +89,9 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/name/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> find(Authentication authentication, @RequestParam @NotNull String name) throws EntityNotFoundException {
+    public AmuseResponse<User> find(@RequestParam @NotNull String name) throws EntityNotFoundException {
         logger.info("/users/name/search name: {}" , name);
-        AmuseResponse<User> response = new AmuseResponse<>(new Key(authentication.getName()), this.userService.findByName(name));
+        AmuseResponse<User> response = new AmuseResponse<>(new Key("system"), this.userService.findByName(name));
         logger.info("/users/find OK {}" , response);
         return response;
     }
@@ -100,9 +99,9 @@ public class UserController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/email/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<User> findByEmail(Authentication authentication, @RequestParam @NotNull String email) throws EntityNotFoundException {
+    public AmuseResponse<User> findByEmail(@RequestParam @NotNull String email) throws EntityNotFoundException {
         logger.info("/users/email/search email: {}" , email);
-        AmuseResponse<User> response = new AmuseResponse<>(new Key(authentication.getName()), this.userService.findByEmail(email));
+        AmuseResponse<User> response = new AmuseResponse<>(new Key("system"), this.userService.findByEmail(email));
         logger.info("/users/email/search {} elements" , response.getData().size());
         return response;
     }
