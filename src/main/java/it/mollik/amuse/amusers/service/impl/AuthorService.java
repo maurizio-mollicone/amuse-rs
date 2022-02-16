@@ -1,13 +1,11 @@
 package it.mollik.amuse.amusers.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,35 +26,28 @@ public class AuthorService implements IAuthorService {
     private AuthorRepository authorRepository;
 
     @Override
-    public List<Author> findByName(String authorName) throws EntityNotFoundException {
-        List<Author> authors = new ArrayList<>();
-        this.authorRepository.findByName(authorName).forEach(authors::add);
-        if (authors.isEmpty()) {
-            logger.error("EntityNotFoundException {}", authorName);
-            throw new EntityNotFoundException(String.format("EntityNotFoundException %s", authorName));
-        }
-        logger.info("findByName {}, {} results", authorName, authors.size());
-        return authors;
-    }
-
-    @Override
-    public List<Author> list() throws EntityNotFoundException {
+    public Page<Author> findByName(String authorName, int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
         
-        List<Author> authors = new ArrayList<>();
-        Pageable sortedByName = PageRequest.of(0, 3, Sort.by("name"));
-        this.authorRepository.findAll(sortedByName).forEach(authors::add);
-        if (authors.isEmpty()) {
-            logger.error("EntityNotFoundException");
-            throw new EntityNotFoundException(StringUtils.EMPTY);
-        }
-        logger.info("list {} results", authors.size());
-
-        return authors;
+        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
+        Page<Author> authorsPage = this.authorRepository.findByName(authorName, page);
+        logger.info("findByName {}/{} authors of {}, page {}/{}, pageSize ", authorsPage.getNumberOfElements(), authorsPage.getSize(), authorsPage.getTotalElements(), authorsPage.getNumber(), authorsPage.getTotalPages());
+        return authorsPage;
     }
 
     @Override
-    public Author findById(Integer artistId) throws EntityNotFoundException {
-        return this.authorRepository.findById(artistId).orElseThrow(() -> new EntityNotFoundException(artistId.toString()));
+    public Page<Author> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
+        
+
+        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
+        Page<Author> authorsPage = this.authorRepository.findAll(page);
+        logger.info("list {}/{} authors of {}, page {}/{}, pageSize ", authorsPage.getNumberOfElements(), authorsPage.getSize(), authorsPage.getTotalElements(), authorsPage.getNumber(), authorsPage.getTotalPages());
+        return authorsPage; 
+
+    }
+
+    @Override
+    public Author findById(Long id) throws EntityNotFoundException {
+        return this.authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
     }
 
     @Override
@@ -80,8 +71,8 @@ public class AuthorService implements IAuthorService {
         return result;
     }
     
-    public void delete(Integer authorId) throws EntityNotFoundException {
-        Author author = this.authorRepository.findById(authorId).orElseThrow(() -> new EntityNotFoundException(authorId.toString()));
+    public void delete(Long id) throws EntityNotFoundException {
+        Author author = this.authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
         this.authorRepository.delete(author);
         logger.info("delete {}", author);
 

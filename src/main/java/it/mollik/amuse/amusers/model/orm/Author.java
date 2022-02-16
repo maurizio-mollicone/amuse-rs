@@ -16,21 +16,17 @@ public class Author extends Person {
         inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<Book> books;
 
-
-
-    public Author() {
-    }
-
+    public Author() {}
 
     public Author(String authorName) {
         super();
         this.setName(authorName);
     }
+
     public Author(String authorName, List<Book> books) {
         this(authorName);
         this.books = books;
     }
-
 
     /**
      * @return List<Book> return the books

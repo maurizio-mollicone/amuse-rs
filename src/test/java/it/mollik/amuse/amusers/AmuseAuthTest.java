@@ -43,7 +43,7 @@ import it.mollik.amuse.amusers.model.response.SigninResponse;
 @ActiveProfiles(value = "test")
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("aMuse base tests")
-public class AmuseAuthTest extends AmuseGenericTest{
+public class AmuseAuthTest extends AmuseRsApplicationTests{
     
     private Logger logger = LoggerFactory.getLogger(AmuseAuthTest.class);
 

@@ -42,44 +42,13 @@ import it.mollik.amuse.amusers.service.impl.HelperService;
 @DisplayName("aMuse base tests")
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
-// @AutoConfigureMockWebServiceClient
-public class AmuseGenericTest {
+public class AmuseGenericTest extends AmuseRsApplicationTests {
 	
-    @Value("${amuse.security.admin:admin}")
-	private String admin;
-
-	@Value("${amuse.security.manager01:manager01}")
-	private String manager01;
-
-	@Value("${amuse.security.user01:user01}")
-	private String user01;
-	
-	@Value("${amuse.security.defaultpassword:1234}")
-	private String defaultPassword;
-    
-    @Autowired
-	private MockMvc mockMvc;
-
-    @Autowired
-	private HelperService httpUtils;
-
-	@Autowired
-    ObjectMapper objectMapper;
-    
-    @BeforeEach
-	public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
-            this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-            .apply(SecurityMockMvcConfigurers.springSecurity())
-			.apply(documentationConfiguration(restDocumentation)) 
-			.build();
-            
-	}
-    
     @Test
     @Order(1)
     @DisplayName("HeartBeat public access")
 	public void heartbeat() throws Exception {
-        this.mockMvc
+        this.getMockMvc()
             .perform(get("/amuse/v1/test/heartbeat")
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -94,7 +63,7 @@ public class AmuseGenericTest {
     @Order(2)
     @DisplayName("HeartBeat authenticated access")
     public void auth() throws Exception {
-        this.mockMvc
+        this.getMockMvc()
             .perform(get("/amuse/v1/test/heartbeat")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue("user01", ERole.USER.getValue())))
@@ -103,94 +72,5 @@ public class AmuseGenericTest {
                 .andExpect(jsonPath("$.statusCode", is(0)));
         
     }
-
-    /**
-     * @return String return the admin
-     */
-    public String getAdmin() {
-        return admin;
-    }
-
-    /**
-     * @param admin the admin to set
-     */
-    public void setAdmin(String admin) {
-        this.admin = admin;
-    }
-
-    /**
-     * @return String return the manager01
-     */
-    public String getManager01() {
-        return manager01;
-    }
-
-    /**
-     * @param manager01 the manager01 to set
-     */
-    public void setManager01(String manager01) {
-        this.manager01 = manager01;
-    }
-
-    /**
-     * @return String return the user01
-     */
-    public String getUser01() {
-        return user01;
-    }
-
-    /**
-     * @param user01 the user01 to set
-     */
-    public void setUser01(String user01) {
-        this.user01 = user01;
-    }
-
-    /**
-     * @return String return the defaultPassword
-     */
-    public String getDefaultPassword() {
-        return defaultPassword;
-    }
-
-    /**
-     * @param defaultPassword the defaultPassword to set
-     */
-    public void setDefaultPassword(String defaultPassword) {
-        this.defaultPassword = defaultPassword;
-    }
-
-
-    /**
-     * @return HttpUtils return the jwtUtils
-     */
-    public HelperService getHttpUtils() {
-        return httpUtils;
-    }
-
-    /**
-     * @param httpUtils the httpUtils to set
-     */
-    public void setHttpUtils(HelperService httpUtils) {
-        this.httpUtils = httpUtils;
-    }
-
-    
-    public MockMvc getMockMvc() {
-        return mockMvc;
-    }
-
-    public void setMockMvc(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
-    }
-
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
 
 }

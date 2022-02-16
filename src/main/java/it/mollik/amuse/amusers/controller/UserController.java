@@ -44,10 +44,10 @@ import it.mollik.amuse.amusers.util.AmuseUtils;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
+    
     @Autowired
     private AmuseUtils amuseUtils;
-
+    
     @GetMapping("/principal")
     public Principal retrievePrincipal(Principal principal) {
         return principal;

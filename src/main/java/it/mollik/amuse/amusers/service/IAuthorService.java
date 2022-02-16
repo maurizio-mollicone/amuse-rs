@@ -1,7 +1,6 @@
 package it.mollik.amuse.amusers.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
@@ -10,15 +9,15 @@ import it.mollik.amuse.amusers.model.orm.Author;
 @Service
 public interface IAuthorService {
     
-    public List<Author> findByName(String authorName) throws EntityNotFoundException;
+    public Page<Author> findByName(String authorName, int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException;
 
-    public List<Author> list() throws EntityNotFoundException;
+    public Page<Author> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException;
 
-    public Author findById(Integer artistId) throws EntityNotFoundException;
+    public Author findById(Long id) throws EntityNotFoundException;
 
     public Author create(String authorName);
 
     public Author save(Author author);
     
-    public void delete(Integer authorId) throws EntityNotFoundException;
+    public void delete(Long id) throws EntityNotFoundException;
 }

@@ -48,7 +48,7 @@ import it.mollik.amuse.amusers.model.response.AmuseResponse;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("aMuse user tests")
 @AutoConfigureRestDocs
-public class AmuseUserTest extends AmuseGenericTest {
+public class AmuseUserTest extends AmuseRsApplicationTests {
     
     private Logger logger = LoggerFactory.getLogger(AmuseUserTest.class);
 
