@@ -11,7 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +27,8 @@ import it.mollik.amuse.amusers.model.EUserStatus;
 @Entity(name = "user")
 public class User extends Person implements UserDetails {
     
-    
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
+
 	@Column(name = "user_name", length = 500, nullable = false, unique = true)
     private String username;
     
@@ -136,4 +142,22 @@ public class User extends Person implements UserDetails {
             this.roles.remove(role);
         }
     }
+
+    @Override
+    public String toString(){
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = StringUtils.EMPTY;
+        try {
+            jsonString = objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            logger.debug("toJSONString error", e);
+        }
+        return jsonString;
+    }
+    
+    @Override
+    public String toJSONString() {
+        return toString();
+    } 
 }

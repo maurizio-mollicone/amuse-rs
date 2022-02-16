@@ -90,7 +90,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .andExpect(jsonPath("$.data[0].username", equalTo(user03)));
 
 	}
-
+    
     @Test
     @Order(3)
     @DisplayName("User03 update")
@@ -132,9 +132,10 @@ public class AmuseUserTest extends AmuseGenericTest {
         
        
     }
+    
     @ParameterizedTest
     @ValueSource(strings = {"6"})
-    @Order(3)
+    @Order(4)
     @DisplayName("User03 delete")
     public void deleteUser03(String userId) throws Exception {         
         
@@ -150,28 +151,4 @@ public class AmuseUserTest extends AmuseGenericTest {
 
     }
 
-
-        // @Test
-        // @Order(3)
-        // @DisplayName("User03 to manager")
-        // public void addManagerUser03() throws Exception {            
-        //     AmuseResponse<User> res = 
-        //     getWebTestClient()
-        //         .delete()
-        //         .uri("/amuse/v1/users/6/role")
-        //         .accept(MediaType.APPLICATION_JSON)
-        //         .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
-        //         .exchange()
-        //         .expectStatus()
-        //         .isOk()
-        //         .expectBody(new ParameterizedTypeReference<AmuseResponse<User>>(){
-        //         }).returnResult().getResponseBody();
-    
-    
-        //         // .expectBody()
-        //         //     .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK)
-        //         //     .jsonPath("$.data[0].userName").isEqualTo(user03)
-        //         //     .jsonPath("$.data[0].email").isEqualTo("user03updated@localhost");
-        //         logger.info("updated user {}", res);
-        // }
 }
