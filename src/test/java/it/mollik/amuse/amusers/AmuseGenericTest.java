@@ -1,6 +1,7 @@
 package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -79,20 +80,13 @@ public class AmuseGenericTest {
     @DisplayName("HeartBeat public access")
 	public void heartbeat() throws Exception {
         this.mockMvc
-            .perform(get("/amuse/v1/test/heartbeat").accept(MediaType.APPLICATION_JSON))
+            .perform(get("/amuse/v1/test/heartbeat")
+                .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode", is(0)));
-        // webTestClient
-        //     .get()
-        //     .uri("/amuse/v1/test/heartbeat")
-        //     .accept(MediaType.APPLICATION_JSON)
-        //     .exchange()
-        //     .expectStatus()
-        //     .isOk()
-        //     .expectBody()
-        //         .jsonPath("$.statusCode").isEqualTo(Constants.Status.Code.STATUS_CODE_OK).consumeWith(document("heartbeat"));
-        
+            .andDo(document("heartbeat"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", is(0)));
+       
 	}
 
 
@@ -101,13 +95,12 @@ public class AmuseGenericTest {
     @DisplayName("HeartBeat authenticated access")
     public void auth() throws Exception {
         this.mockMvc
-            .perform(
-                get("/amuse/v1/test/heartbeat")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header("Authorization", getHttpUtils().buildAuthHeaderValue("user01", ERole.USER.getValue())))
+            .perform(get("/amuse/v1/test/heartbeat")
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue("user01", ERole.USER.getValue())))
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", is(0)));
         
     }
 

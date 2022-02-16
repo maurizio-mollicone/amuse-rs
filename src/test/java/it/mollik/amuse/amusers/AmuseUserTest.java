@@ -2,6 +2,7 @@ package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -67,6 +68,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .param("pageSize", Integer.toString(10))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
+            .andDo(document("users-list"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)));
        
@@ -82,9 +84,10 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-            .andExpect(jsonPath("$.data[0].username", equalTo(user03)));
+            .andDo(document("user-detail"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].username", equalTo(user03)));
 
 	}
 
@@ -98,9 +101,9 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-            .andExpect(jsonPath("$.data[0].username", is(user03)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].username", is(user03)))
         .andReturn();
         AmuseResponse<User> amuseDetailResponse = getObjectMapper().readValue(detail.getResponse().getContentAsString(), new TypeReference<AmuseResponse<User>>() {});
 
@@ -117,6 +120,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
+                .andDo(document("user-update"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                     .andExpect(jsonPath("$.data[0].username", is(user03)))
@@ -139,6 +143,7 @@ public class AmuseUserTest extends AmuseGenericTest {
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
+                .andDo(document("user-delete"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
         .andReturn();

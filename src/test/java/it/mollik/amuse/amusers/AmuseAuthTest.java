@@ -1,6 +1,7 @@
 package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -90,8 +91,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
-                
             .andDo(print())
+            .andDo(document("signup"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", is(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].username", is("testuser")));
@@ -170,7 +171,8 @@ public class AmuseAuthTest extends AmuseGenericTest{
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isOk())
+            .andDo(document("signin"))
+                .andExpect(status().isOk())
             .andReturn();
         AmuseResponse<SigninResponse> signinResponse = getObjectMapper().readValue(loginResult.getResponse().getContentAsString(), new TypeReference<AmuseResponse<SigninResponse>>() {});
 
@@ -192,22 +194,6 @@ public class AmuseAuthTest extends AmuseGenericTest{
         .andExpect(status().isOk())
         .andReturn();
 
-        // AmuseResponse<SignoutResponse> signoutResponse = getObjectMapper().readValue(signoutResult.getResponse().getContentAsString(), new TypeReference<AmuseResponse<SignoutResponse>>() {});
-
-        // AmuseResponse<SignoutResponse> signoutResponse = getWebTestClient()
-        //     .post()
-        //     .uri("/amuse/v1/auth/signout")
-        //     //.header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
-        //     .header("Authorization", "Bearer " + token)
-        //     .bodyValue(request2)
-        //     .accept(MediaType.APPLICATION_JSON)
-        //     .exchange()
-        //     .expectStatus()
-        //     .isOk()
-        //     .expectBody(new ParameterizedTypeReference<AmuseResponse<SignoutResponse>>() {}).returnResult().getResponseBody();
-        //     // .expectBody()
-        //     //    .jsonPath("$.statusCode").isEqualTo(Constan\ts.Status.Code.STATUS_CODE_OK);
-        
         logger.info("signout response {}", signoutResult.getResponse().getContentAsString());
 
 

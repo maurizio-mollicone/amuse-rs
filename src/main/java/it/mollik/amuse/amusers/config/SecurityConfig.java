@@ -8,6 +8,7 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,6 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/swagger-ui/**",
 			// other public endpoints of your API may be appended to this array
 			"/amuse/v1/test/**",
+			"/docs",
+			"/docs/**",
+			"/resources",
+			"/resources/**",
+			"**.html"
 	};
 	
 	@Autowired
@@ -68,12 +74,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+	       .ignoring()
+	       .antMatchers("/docs/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**");
+    }
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				
 				.authorizeRequests().antMatchers("/amuse/v1/auth/**").permitAll()
 				.antMatchers(AUTH_WHITELIST).permitAll()
 				// .antMatchers("/api/test/**").permitAll()

@@ -139,8 +139,33 @@
 							<attributes>
 								<snippets>${snippetsDirectory}</snippets>
 							</attributes>
-							<sourceDirectory>src/docs/asciidocs</sourceDirectory>
+							<sourceDirectory>src/main/asciidoc</sourceDirectory>
 							<outputDirectory>target/generated-docs</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+					${project.build.outputDirectory}/static/docs
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+							${project.build.directory}/generated-docs
+									</directory>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

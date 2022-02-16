@@ -1,6 +1,6 @@
-= aMuse.rs API 
+= aMuse.rs API v1.0 
 
-Base documentation of aMuse.rs API at http://localhost:8080:
+Auth API documentation of aMuse.rs API at http://localhost:8080:
 
 *request*
 include::../../../target/generated-snippets/heartbeat/http-request.adoc[]
