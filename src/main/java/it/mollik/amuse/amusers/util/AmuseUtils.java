@@ -1,12 +1,17 @@
 package it.mollik.amuse.amusers.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
+import antlr.StringUtils;
 import it.mollik.amuse.amusers.model.SearchParams;
 
 @Component
@@ -1681,5 +1686,15 @@ public class AmuseUtils {
         searchParams.setTotalPages(page.getTotalPages());
         searchParams.setCurrentPageSize(page.getNumberOfElements());
         return searchParams;
+    }
+
+	public String decodeString(String name) {
+        String decodedName = null;
+        try {
+            decodedName = URLDecoder.decode(name, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please encode your search");
+        }
+        return decodedName;
     }
 }

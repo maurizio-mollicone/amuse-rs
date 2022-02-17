@@ -3,6 +3,7 @@ package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,7 +75,25 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
-                
-       
+	}
+
+    @Order(2)
+    @DisplayName("Find By Name")
+    @Test
+	public void findByName() throws Exception {
+
+        this.getMockMvc()
+            .perform(get("/amuse/v1/authors/find")
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
+                .param("name", "Italo%20Calvino")
+                .param("pageIndex", Integer.toString(0))
+                .param("pageSize", Integer.toString(10))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andDo(restDoc("authors/find"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
 	}
 }
