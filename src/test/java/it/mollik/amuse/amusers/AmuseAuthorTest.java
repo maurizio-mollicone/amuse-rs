@@ -3,7 +3,6 @@ package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +36,7 @@ import it.mollik.amuse.amusers.model.ERole;
 @AutoConfigureRestDocs
 public class AmuseAuthorTest extends AmuseGenericTest {
 
-    private Logger logger = LoggerFactory.getLogger(AmuseUserTest.class);
+    private Logger logger = LoggerFactory.getLogger(AmuseAuthorTest.class);
 
     @Value("${amuse.security.user03:user03}")
     private String user03;
@@ -47,7 +46,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
 	public void listAuthors(int results) throws Exception {
-
+        logger.info("Author list");
         this.getMockMvc()
             .perform(get("/amuse/v1/authors/list")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
