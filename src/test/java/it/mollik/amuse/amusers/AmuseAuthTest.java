@@ -52,21 +52,8 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
      */
     private static final String DEFAULT_PASSWORD = "1234";
 
-    @Test
-    @Order(1)
-    @DisplayName("Anonymous access")
-	public void anonymousAccess() throws Exception {
-        logger.info("Start anonymousAccess");
-        this.getMockMvc()
-            .perform(get("/amuse/v1/test/heartbeat").accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode", is(Constants.Status.Code.STATUS_CODE_OK)));
-        
-	}
-
 	@Test
-    @Order(2)
+    @Order(1)
     @DisplayName("Access denied")
 	public void accessDenied() throws Exception {
         logger.info("Start accessDenied");
@@ -78,7 +65,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 	}
 
 	@Test
-    @Order(3)
+    @Order(2)
     @DisplayName("Signup")
 	public void signup() throws Exception {
         logger.info("Start signup");
@@ -92,14 +79,14 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(document("signup"))
+            .andDo(restDoc("auth/signup"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", is(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].username", is("testuser")));
 	}
 
 	@Test
-    @Order(4)
+    @Order(3)
     @DisplayName("Signup error - email already used")
 	public void emailAlreadyUsed() throws Exception {
         logger.info("Start emailAlreadyUsed");
@@ -117,7 +104,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
     }
 
 	@Test
-    @Order(5)
+    @Order(4)
     @DisplayName("Signup error - username already used")
 	public void usernameAlreadyTaken() throws Exception {
         logger.info("Start usernameAlreadyTaken");
@@ -136,7 +123,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
     }
 
     @Test
-    @Order(6)
+    @Order(5)
 	public void signinError() throws Exception {
         logger.info("Start signinError");
 
@@ -155,7 +142,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 
     @ParameterizedTest
     @ValueSource(strings = {"user01"})
-    @Order(7)
+    @Order(6)
 	public void signinAndSignout(String username) throws Exception {
         logger.info("START test signinAndSignout");
         
@@ -171,7 +158,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(document("signin"))
+            .andDo(restDoc("auth/signin"))
                 .andExpect(status().isOk())
             .andReturn();
         AmuseResponse<SigninResponse> signinResponse = getObjectMapper().readValue(loginResult.getResponse().getContentAsString(), new TypeReference<AmuseResponse<SigninResponse>>() {});
@@ -184,18 +171,18 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		SignoutRequest signoutRequest = new SignoutRequest(username);
 		AmuseRequest<SignoutRequest> request2 = new AmuseRequest<>(new Key(username), Stream.of(signoutRequest).collect(Collectors.toList()));
         MvcResult signoutResult = this.getMockMvc()
-        .perform(post("/amuse/v1/auth/signout")
-            .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
-            .header("Authorization", "Bearer " + token)
-            .content(request2.toJSONString())
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andReturn();
+            .perform(post("/amuse/v1/auth/signout")
+                .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
+                .header("Authorization", "Bearer " + token)
+                .content(request2.toJSONString())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andDo(restDoc("auth/signout"))
+                .andExpect(status().isOk())
+            .andReturn();
 
         logger.info("signout response {}", signoutResult.getResponse().getContentAsString());
-
 
 	}
 }

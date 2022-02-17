@@ -5,46 +5,46 @@ User API documentation of aMuse.rs API at http://localhost:8080:
 == User List 
 
 *request*
-include::../../../target/generated-snippets/users-list/http-request.adoc[]
+include::../../../target/generated-snippets/users/list/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/users-list/http-response.adoc[]
+include::../../../target/generated-snippets/users/list/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/users-list/curl-request.adoc[]
+include::../../../target/generated-snippets/users/list/curl-request.adoc[]
 
 == User Detail 
 
 *request*
-include::../../../target/generated-snippets/user-detail/http-request.adoc[]
+include::../../../target/generated-snippets/users/detail/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/user-detail/http-response.adoc[]
+include::../../../target/generated-snippets/users/detail/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/user-detail/curl-request.adoc[]
+include::../../../target/generated-snippets/users/detail/curl-request.adoc[]
 
 == User Update
 
 *request*
-include::../../../target/generated-snippets/user-update/http-request.adoc[]
+include::../../../target/generated-snippets/users/update/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/user-update/http-response.adoc[]
+include::../../../target/generated-snippets/users/update/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/user-update/curl-request.adoc[]
+include::../../../target/generated-snippets/users/update/curl-request.adoc[]
 
 == User Delete
 
 *request*
-include::../../../target/generated-snippets/user-delete/http-request.adoc[]
+include::../../../target/generated-snippets/users/delete/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/user-delete/http-response.adoc[]
+include::../../../target/generated-snippets/users/delete/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/user-delete/curl-request.adoc[]
+include::../../../target/generated-snippets/users/delete/curl-request.adoc[]
 
 
 Easy peasy. Lemon squeezy.

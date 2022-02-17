@@ -157,12 +157,12 @@
 						</goals>
 						<configuration>
 							<outputDirectory>
-					${project.build.outputDirectory}/static/docs
+								target/amuse/v1/docs
 							</outputDirectory>
 							<resources>
 								<resource>
 									<directory>
-							${project.build.directory}/generated-docs
+										target/generated-docs
 									</directory>
 								</resource>
 							</resources>

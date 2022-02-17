@@ -39,11 +39,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/swagger-ui/**",
 			// other public endpoints of your API may be appended to this array
 			"/amuse/v1/test/**",
-			"/docs",
-			"/docs/**",
-			"/resources",
-			"/resources/**",
-			"**.html"
+			"/amuse/v1/docs/**"
+			// ,
+			// "/docs",
+			// "/docs/**",
+			// "/resources",
+			// "/resources/**",
+			// "**.html"
 	};
 	
 	@Autowired

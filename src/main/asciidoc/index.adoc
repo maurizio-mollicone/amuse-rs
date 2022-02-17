@@ -3,12 +3,12 @@
 Base documentation of aMuse.rs API at http://localhost:8080:
 
 *request*
-include::../../../target/generated-snippets/heartbeat/http-request.adoc[]
+include::../../../target/generated-snippets/test/heartbeat/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/heartbeat/http-response.adoc[]
+include::../../../target/generated-snippets/test/heartbeat/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/heartbeat/curl-request.adoc[]
+include::../../../target/generated-snippets/test/heartbeat/curl-request.adoc[]
 
 Easy peasy. Lemon squeezy.

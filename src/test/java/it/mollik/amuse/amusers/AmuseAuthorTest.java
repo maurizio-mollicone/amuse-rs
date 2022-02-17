@@ -57,7 +57,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .param("pageSize", Integer.toString(10))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(document("authors/list"))
+            .andDo(restDoc("authors/list"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)));
        

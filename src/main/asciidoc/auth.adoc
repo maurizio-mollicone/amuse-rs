@@ -1,14 +1,40 @@
-= aMuse.rs API v1.0 
+= aMuse.rs Auth API v1.0 
 
 Auth API documentation of aMuse.rs API at http://localhost:8080:
 
+== Signup
+
 *request*
-include::../../../target/generated-snippets/heartbeat/http-request.adoc[]
+include::../../../target/generated-snippets/auth/signup/http-request.adoc[]
 
 *response*
-include::../../../target/generated-snippets/heartbeat/http-response.adoc[]
+include::../../../target/generated-snippets/auth/signup/http-response.adoc[]
 
 *Sample invocation*
-include::../../../target/generated-snippets/heartbeat/curl-request.adoc[]
+include::../../../target/generated-snippets/auth/signup/curl-request.adoc[]
+
+
+== Signin
+
+*request*
+include::../../../target/generated-snippets/auth/signin/http-request.adoc[]
+
+*response*
+include::../../../target/generated-snippets/auth/signin/http-response.adoc[]
+
+*Sample invocation*
+include::../../../target/generated-snippets/auth/signin/curl-request.adoc[]
+
+
+== Signout
+
+*request*
+include::../../../target/generated-snippets/auth/signout/http-request.adoc[]
+
+*response*
+include::../../../target/generated-snippets/auth/signout/http-response.adoc[]
+
+*Sample invocation*
+include::../../../target/generated-snippets/auth/signout/curl-request.adoc[]
 
 Easy peasy. Lemon squeezy.
