@@ -48,8 +48,6 @@ jobs:
         mysql password: '12345678' # Required if "mysql user" exists. The password for the "mysql user"
     - name: Verify MariaDB connection from container 
       run: |
-        apt-get update
-        apt-get install -y mysql-client
         mysql --host 127.0.0.1 -uroot -p12345678 -e "SHOW DATABASES;"
         mysql --host 127.0.0.1 -uroot -p12345678 -e "CREATE SCHEMA amuse-test"
         mysql --host 127.0.0.1 -uroot -p12345678 -e "GRANT ALL PRIVILEGES ON amuse-test.* TO 'amuse'@'%'""
