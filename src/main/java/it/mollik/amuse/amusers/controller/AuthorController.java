@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
@@ -60,6 +62,24 @@ public class AuthorController {
         
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    @GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public AmuseResponse<Author> view(@PathVariable long id) throws ResponseStatusException {
+        logger.info("/amuse/v1/authors/detail/{}", id);
+        Author author;
+        try {
+            author = this.authorService.findById(id);
+        } catch (EntityNotFoundException e) {
+            logger.error("Author not found. Cause: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + "not found");
+        }
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(author.getName()), Stream.of(author).collect(Collectors.toList()));
+        logger.info("/amuse/v1/authors/detail/{} {}" , id, response);
+        return response;
+    }
+
+
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @PutMapping(path = "/author/find", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<Author> findByName(@RequestParam @NotNull String name, @RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
         logger.info("/amuse/v1/authors/find {}" , name);
@@ -72,6 +92,7 @@ public class AuthorController {
         return response;
     }
 
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @PostMapping(path = "/amuse/v1/authors/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AmuseResponse<Author> create(@RequestBody @NotNull String name) {
@@ -81,6 +102,7 @@ public class AuthorController {
         return response;
     }
 
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @PostMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AmuseResponse<Author> save(@RequestBody AmuseRequest<Author> request, @PathVariable long id) {
@@ -90,6 +112,7 @@ public class AuthorController {
         return response;
     }
 
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AmuseResponse<Author> delete(@PathVariable long id) throws EntityNotFoundException {

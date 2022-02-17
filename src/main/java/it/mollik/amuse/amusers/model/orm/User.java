@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,6 +44,7 @@ public class User extends Person implements UserDetails {
     private List<Role> roles;
     
     @Column(name = "user_status")
+    @Enumerated(EnumType.STRING)
     private EUserStatus userStatus;    
 
 

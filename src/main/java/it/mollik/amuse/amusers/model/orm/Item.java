@@ -20,14 +20,12 @@ public class Item extends AmuseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
    
-    @Column(name = "title", nullable = false, length = 500)
-    private String title;
+    @Column(name = "name", nullable = false, length = 500)
+    private String name;
 
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "year")
-    private Date year;
 
     @Column(name="create_ts", nullable = false)
     private Date createTs;
@@ -44,10 +42,9 @@ public class Item extends AmuseEntity {
     public Item() {
     }
 
-    public Item(String title, String description, Date year, Date createTs, Date updateTs, EEntityStatus status) {
-        this.title = title;
+    public Item(String title, String description, Date createTs, Date updateTs, EEntityStatus status) {
+        this.name = title;
         this.description = description;
-        this.year = year;
         this.createTs = createTs;
         this.updateTs = updateTs;
         this.status = status;
@@ -68,17 +65,17 @@ public class Item extends AmuseEntity {
     }
 
     /**
-     * @return String return the title
+     * @return String return the name
      */
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param title the title to set
+     * @param name the name to set
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -93,20 +90,6 @@ public class Item extends AmuseEntity {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return Date return the year
-     */
-    public Date getYear() {
-        return year;
-    }
-
-    /**
-     * @param year the year to set
-     */
-    public void setYear(Date year) {
-        this.year = year;
     }
 
     /**

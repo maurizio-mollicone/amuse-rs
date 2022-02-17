@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,4 +60,21 @@ public class AmuseAuthorTest extends AmuseGenericTest {
        
 	}
     
+    @Order(2)
+    @DisplayName("Author detail")
+    @Test
+	public void authorDetail() throws Exception {
+
+        this.getMockMvc()
+            .perform(get("/amuse/v1/authors/detail/1")
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andDo(restDoc("authors/detail"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
+                
+       
+	}
 }

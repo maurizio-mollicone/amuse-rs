@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
@@ -21,18 +23,25 @@ public class Book  extends Item {
     @Column(name="isbn_code")
     private String isbnCode;
 
+    @Column(name = "pub_year")
+    private Long pubYear;
+
     @Column(name="genre", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EGenre bookGenre;
 
     @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER)
     private List<Author> authors;
 
-    public Book(String title, String description, Date year, Date createTs, Date updateTs, EEntityStatus status,
+    public Book() {}
+
+    public Book(String title, String description, Long pubYear, Date createTs, Date updateTs, EEntityStatus status,
             String isbnCode, EGenre bookGenre, List<Author> authors) {
-        super(title, description, year, createTs, updateTs, status);
+        super(title, description, createTs, updateTs, status);
         this.isbnCode = isbnCode;
         this.bookGenre = bookGenre;
         this.authors = authors;
+        this.pubYear = pubYear;
     }
 
     public Book(String isbnCode, EGenre bookGenre, List<Author> authors) {
@@ -84,6 +93,21 @@ public class Book  extends Item {
      */
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+
+    /**
+     * @return Long return the pubYear
+     */
+    public Long getPubYear() {
+        return pubYear;
+    }
+
+    /**
+     * @param pubYear the pubYear to set
+     */
+    public void setPubYear(Long pubYear) {
+        this.pubYear = pubYear;
     }
 
 }
