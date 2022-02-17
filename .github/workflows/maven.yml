@@ -30,7 +30,7 @@ jobs:
           --health-retries 5
         ports:
           # Maps port 6379 on service container to the host
-          - 6379:6379
+          - 6379:6379     
     steps:
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
@@ -46,6 +46,13 @@ jobs:
         mysql root password: '12345678' # Required if "mysql user" is empty, default is empty. The root superuser password
         mysql user: 'amuse' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
         mysql password: '12345678' # Required if "mysql user" exists. The password for the "mysql user"
+    - name: Verify MariaDB connection from container 
+      run: |
+        apt-get update
+        apt-get install -y mysql-client
+        mysql --host 127.0.0.1 -uroot -p12345678 -e "SHOW DATABASES;"
+        mysql --host 127.0.0.1 -uroot -p12345678 -e "CREATE SCHEMA amuse-test"
+        mysql --host 127.0.0.1 -uroot -p12345678 -e "GRANT ALL PRIVILEGES ON amuse-test.* TO 'amuse'@'%'""
     - uses: actions/checkout@v2
     - name: Set up JDK 11
       uses: actions/setup-java@v2
