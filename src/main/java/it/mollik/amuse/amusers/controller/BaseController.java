@@ -35,8 +35,7 @@ public class BaseController {
 	@GetMapping("/heartbeat")
 	public @ResponseBody AmuseResponse<AmuseEntity> heartbeat() {
 		logger.info("aMuse yourself!");
-		return new AmuseResponse<>(new Key("testuser"), 0, "aMuse yourself!", null);
-		
+		return new AmuseResponse<>(new Key("testuser"), 0, "aMuse yourself!", null);	
 	}
 
 	private AmuseResponse<AmuseEntity> checkPath(Authentication authentication) {
@@ -65,9 +64,9 @@ public class BaseController {
 
 	private List<String> getUserRoles(Authentication authentication) {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		List<String> role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+		return userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 			.collect(Collectors.toList());
-		return role;
+		 
 	}
 	
     public AuthenticationManager getAuthenticationManager() {
