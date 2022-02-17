@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.SearchParams;
@@ -53,7 +54,7 @@ public class AuthorController {
         Page<Author> authorsPage = this.authorService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(authorsPage);
 
-        AmuseResponse<Author> response = new AmuseResponse<>(new Key("system"), searchParams, authorsPage.stream().collect(Collectors.toList()));
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), searchParams, authorsPage.stream().collect(Collectors.toList()));
         logger.info("/amuse/v1/authors/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
         
@@ -65,7 +66,7 @@ public class AuthorController {
         Page<Author> authorsPage = this.authorService.findByName(name, pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(authorsPage);
 
-        AmuseResponse<Author> response = new AmuseResponse<>(new Key("system"),  authorsPage.stream().collect(Collectors.toList()));
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER),  authorsPage.stream().collect(Collectors.toList()));
         logger.info("/amuse/v1/authors/find {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
 
         return response;
@@ -75,7 +76,7 @@ public class AuthorController {
     @ResponseBody
     public AmuseResponse<Author> create(@RequestBody @NotNull String name) {
         logger.info("/amuse/v1/authors/create {}", name);
-        AmuseResponse<Author> response = new AmuseResponse<Author>(new Key("system"), Stream.of(this.authorService.create(name)).collect(Collectors.toList()));
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(this.authorService.create(name)).collect(Collectors.toList()));
         logger.info("/amuse/v1/authors/create {}", response.getData().get(0));
         return response;
     }
@@ -93,7 +94,7 @@ public class AuthorController {
     @ResponseBody
     public AmuseResponse<Author> delete(@PathVariable long id) throws EntityNotFoundException {
         this.authorService.delete(id);
-        AmuseResponse<Author> response = new AmuseResponse<Author>(new Key("system"), null);
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), null);
         logger.info("/amuse/v1/authors/delete/{}", id);
         return response;
     }

@@ -69,12 +69,10 @@ public class BaseController {
 			.collect(Collectors.toList());
 		return role;
 	}
-
 	
     public AuthenticationManager getAuthenticationManager() {
 		return authenticationManager;
 	}
-
 
 	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;

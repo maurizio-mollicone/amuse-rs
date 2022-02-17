@@ -22,7 +22,7 @@ git clone https://github.com/maurizio-mollicone/amuse-rs.git
 
 
 ```
-docker run --detach -p13306:3306 --name mariadb --env MARIADB_USER=amuse --env MARIADB_PASSWORD=12345678 --env MARIADB_ROOT_PASSWORD=12345678 mariadb:latest
+docker run --detach -p3306:3306 --name mariadb --env MARIADB_USER=amuse --env MARIADB_PASSWORD=12345678 --env MARIADB_ROOT_PASSWORD=12345678 mariadb:latest
 ```
 ## Run
 
