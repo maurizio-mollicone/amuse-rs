@@ -41,8 +41,8 @@ public class Author extends Person {
 
     public Author(String firstName, String lastName) {
         super();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
         this.setName(firstName + " " + lastName);
         this.setStatus(EEntityStatus.INSERT);
     }

@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -31,12 +33,14 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MvcResult;
 
 import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
+import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
@@ -86,7 +90,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
 	}
 
-    @Order(2)
+    @Order(3)
     @DisplayName("Find By Name")
     @Test
 	public void findByName() throws Exception {
@@ -107,7 +111,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	}
 
 
-    @Order(3)
+    @Order(4)
     @DisplayName("Create Author")
     @Test
 	public void createAuthor() throws Exception {
@@ -136,5 +140,43 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
     }
 
+    @Order(5)
+    @DisplayName("Update Author")
+    @Test
+	public void updateAuthor() throws Exception {
 
+
+        MvcResult detailResult = this.getMockMvc()
+            .perform(get("/amuse/v1/authors/detail/1")
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andDo(restDoc("authors/detail"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino"))).andReturn();
+
+        AmuseResponse<Author> detailResponse = getObjectMapper().readValue(detailResult.getResponse().getContentAsString(), new TypeReference<AmuseResponse<Author>>() {});
+
+                
+        Author author = detailResponse.getData().get(0);
+        String bio = "Intellettuale di grande impegno politico, civile e culturale, è stato uno dei narratori italiani più importanti del secondo Novecento. Ha seguito molte delle principali tendenze letterarie a lui coeve, dal Neorealismo al Postmoderno, ma tenendo sempre una certa distanza da esse e svolgendo un percorso di ricerca personale e coerente.";
+        author.setBiography(bio.getBytes());
+
+        AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
+        this.getMockMvc()
+            .perform(post("/amuse/v1/authors/update/1")
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
+                .content(authorRequest.toJSONString())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andDo(restDoc("authors/create"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")))
+                .andExpect(jsonPath("$.data[0].firstName", equalTo("Italo")))
+                .andExpect(jsonPath("$.data[0].lastName", equalTo("Calvino")));
+
+    }
 }
