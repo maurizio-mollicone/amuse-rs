@@ -15,7 +15,7 @@ public interface IAuthorService {
 
     public Author findById(Long id) throws EntityNotFoundException;
 
-    public Author create(String authorName);
+    public Author create(Author author);
 
     public Author save(Author author);
     

@@ -28,9 +28,9 @@ INSERT INTO role (create_ts,user_name,user_role,user_id) VALUES
 INSERT INTO role (create_ts,user_name,user_role,user_id) VALUES
 	 ('2022-02-10 09:08:32.581','user04','USER',(SELECT id from user u WHERE u.user_name='user04'));
 
-INSERT INTO author (create_ts,name,status,update_ts) VALUES
-	 ('2022-02-17 18:00:00.0','Italo Calvino','INSERT','2022-02-17 18:00:00.0'),
-	 ('2022-02-17 18:00:00.0','Alessandro Baricco','INSERT','2022-02-17 18:00:00.0');
+INSERT INTO author (create_ts,name, first_name, last_name, status,update_ts) VALUES
+	 ('2022-02-17 18:00:00.0','Italo Calvino','Italo',' Calvino','INSERT','2022-02-17 18:00:00.0'),
+	 ('2022-02-17 18:00:00.0','Alessandro Baricco','Alessandro','Baricco','INSERT','2022-02-17 18:00:00.0');
 
 INSERT INTO book (create_ts,description,name,status,update_ts,genre,isbn_code,pub_year) VALUES
 	 ('2022-02-17 18:00:00.0','Seta','Seta','INSERT','2022-02-17 18:00:00.0','ROMANCE','9788433976598',1996),

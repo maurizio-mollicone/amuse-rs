@@ -129,7 +129,6 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 
         logger.info("updated user {}", updateResponse.toJSONString());
         
-       
     }
     
     @ParameterizedTest

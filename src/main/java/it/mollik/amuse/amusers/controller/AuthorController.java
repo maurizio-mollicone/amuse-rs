@@ -95,11 +95,11 @@ public class AuthorController {
     
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    @PostMapping(path = "/amuse/v1/authors/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AmuseResponse<Author> create(@RequestBody @NotNull String name) {
-        logger.info("/amuse/v1/authors/create {}", name);
-        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(this.authorService.create(name)).collect(Collectors.toList()));
+    public AmuseResponse<Author> create(@RequestBody @NotNull AmuseRequest<Author> request) {
+        logger.info("/amuse/v1/authors/create {}", request.getData().get(0).getName());
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(this.authorService.create(request.getData().get(0))).collect(Collectors.toList()));
         logger.info("/amuse/v1/authors/create {}", response.getData().get(0));
         return response;
     }

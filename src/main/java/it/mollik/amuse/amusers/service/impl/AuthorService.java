@@ -51,8 +51,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author create(String authorName) {
-        Author author = new Author(authorName);
+    public Author create(Author author) {
         Date now = new Date();
         author.setCreateTs(now);
         author.setUpdateTs(now);

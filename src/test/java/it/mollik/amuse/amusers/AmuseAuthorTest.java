@@ -3,9 +3,16 @@ package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -27,6 +34,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
+import it.mollik.amuse.amusers.model.Key;
+import it.mollik.amuse.amusers.model.orm.Author;
+import it.mollik.amuse.amusers.model.request.AmuseRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
@@ -95,4 +105,36 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
 	}
+
+
+    @Order(3)
+    @DisplayName("Create Author")
+    @Test
+	public void createAuthor() throws Exception {
+
+        Author author = new Author("Michail", "Bulgakov");
+        author.setBirthDate(new Date(java.sql.Date.valueOf(LocalDate.of(1891, 5, 15)).getTime()));
+        author.setDeathDate(new Date(java.sql.Date.valueOf(LocalDate.of(1940, 3, 10)).getTime()));
+        String bio = "Bulgakov nacque a Kiev, al secolo capoluogo dell'allora omonimo governatorato russo (oggi capitale dell'Ucraina), il 15 maggio (il 3 maggio secondo l'allora vigente calendario giuliano) del 1891 da un'agiata famiglia russa foziana[1], primogenito dei sette figli (quattro femmine e due maschi, che poi si sarebbero stabiliti tutti in Francia, a Parigi) di Afanasij Ivanovič Bulgakov, docente universitario di storia e critica delle religioni occidentali presso l'Accademia Teologica di Kiev, oltreché traduttore di testi religiosi, deceduto nel 1906, e di Varvara Michajlovna Pokrovskaja, entrambi originari dell'allora governatorato di Orël (la madre era infatti nata, per l'esattezza, nella città di Karačev), ovvero l'odierno oblast' di Brjansk[2][3]. Cresciuto con un'educazione strettamente religiosa, si legge nei diari della sorella Nadežda di come Miša, diminuitivo con cui era spesso chiamato in famiglia l'autore, abbia da giovane abbandonato la pratica religiosa: giunse infatti egli stesso a dichiararsi agnostico nel 1910, dopo essersi iscritto alla facoltà di medicina a Kiev.";
+
+        author.setBiography(bio.getBytes());
+
+        AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
+        this.getMockMvc()
+            .perform(post("/amuse/v1/authors/create")
+                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
+                .content(authorRequest.toJSONString())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andDo(restDoc("authors/create"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("Michail Bulgakov")))
+                .andExpect(jsonPath("$.data[0].firstName", equalTo("Michail")))
+                .andExpect(jsonPath("$.data[0].lastName", equalTo("Bulgakov")));
+
+    }
+
+
 }
