@@ -26,3 +26,5 @@
 
 ### VS Code ###
 .vscode/
+.metals/metals.log
+.metals/metals.mv.db

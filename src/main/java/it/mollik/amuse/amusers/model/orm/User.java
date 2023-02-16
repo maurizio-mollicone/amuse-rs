@@ -102,6 +102,7 @@ public class User extends Person implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getUserRole().getValue()))
                 .collect(Collectors.toList());

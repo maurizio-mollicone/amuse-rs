@@ -3,6 +3,7 @@ package it.mollik.amuse.amusers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -179,4 +180,24 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .andExpect(jsonPath("$.data[0].lastName", equalTo("Calvino")));
 
     }
+
+
+    // @Order(6)
+    // @DisplayName("Delete Author")
+    // @Test
+	// public void deleteAuthor() throws Exception {
+
+
+    //     this.getMockMvc()
+    //         .perform(delete("/amuse/v1/authors/delete/1")
+    //             .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
+    //             .accept(MediaType.APPLICATION_JSON)
+    //             .contentType(MediaType.APPLICATION_JSON_VALUE))
+    //         .andDo(print())
+    //         .andDo(restDoc("authors/create"))
+    //             .andExpect(status().isOk())
+    //             .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+                
+
+    // }
 }

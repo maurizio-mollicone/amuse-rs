@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +40,7 @@ public class AmuseUserDetails implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getUserRole().getValue()))
                 .collect(Collectors.toList());
         return new AmuseUserDetails(
-                Long.valueOf(user.getId().longValue()),
+                user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
@@ -97,5 +98,14 @@ public class AmuseUserDetails implements UserDetails {
             return false;
         AmuseUserDetails user = (AmuseUserDetails) o;
         return Objects.equals(id, user.id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).
+        append(id).
+        append(username).
+        append(email).
+        toHashCode();
     }
 }

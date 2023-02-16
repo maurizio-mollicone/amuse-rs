@@ -38,7 +38,6 @@ public class Item extends AmuseEntity {
     private EEntityStatus status;
 
 
-
     public Item() {
     }
 
