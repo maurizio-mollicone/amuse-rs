@@ -49,7 +49,7 @@ import it.mollik.amuse.amusers.service.impl.JwtTokenService;
 @RequestMapping("/amuse/v1/auth")
 public class AuthController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -98,6 +98,7 @@ public class AuthController {
 		logger.debug("POST /amuse/v1/auth/signin response {}", response);
 		return response;
 	}
+
 	@PostMapping(path = "/signout", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
 		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
