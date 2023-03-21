@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.service.impl;
+package it.mollik.amuse.amusers.service;
 
 import java.util.Date;
 
@@ -15,18 +15,16 @@ import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.EEntityStatus;
 import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.repository.AuthorRepository;
-import it.mollik.amuse.amusers.service.IAuthorService;
 
 @Service
-public class AuthorService implements IAuthorService {
+public class AuthorService {
 
     private Logger logger = LoggerFactory.getLogger(AuthorService.class);
 
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Override
-    public Page<Author> findByName(String authorName, int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
+    public Page<Author> findByName(String authorName, int pageIndex, int pageSize, String sortBy) {
         
         Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
         Page<Author> authorsPage = this.authorRepository.findByName(authorName, page);
@@ -34,10 +32,8 @@ public class AuthorService implements IAuthorService {
         return authorsPage;
     }
 
-    @Override
-    public Page<Author> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
+    public Page<Author> list(int pageIndex, int pageSize, String sortBy) {
         
-
         Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
         Page<Author> authorsPage = this.authorRepository.findAll(page);
         logger.info("list {}/{} authors of {}, page {}/{}, pageSize ", authorsPage.getNumberOfElements(), authorsPage.getSize(), authorsPage.getTotalElements(), authorsPage.getNumber(), authorsPage.getTotalPages());
@@ -45,12 +41,10 @@ public class AuthorService implements IAuthorService {
 
     }
 
-    @Override
     public Author findById(Long id) throws EntityNotFoundException {
         return this.authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
     }
 
-    @Override
     public Author create(Author author) {
         Date now = new Date();
         author.setCreateTs(now);
@@ -60,7 +54,6 @@ public class AuthorService implements IAuthorService {
         return result;
     }
 
-    @Override
     public Author save(Author author) {
         author.setStatus(EEntityStatus.UPDATE);
         Date now = new Date();

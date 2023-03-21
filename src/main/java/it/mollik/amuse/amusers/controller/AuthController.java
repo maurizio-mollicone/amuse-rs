@@ -41,8 +41,8 @@ import it.mollik.amuse.amusers.model.response.SigninResponse;
 import it.mollik.amuse.amusers.model.response.SignoutResponse;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
-import it.mollik.amuse.amusers.service.impl.HelperService;
-import it.mollik.amuse.amusers.service.impl.JwtTokenService;
+import it.mollik.amuse.amusers.service.HelperService;
+import it.mollik.amuse.amusers.service.JwtTokenService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

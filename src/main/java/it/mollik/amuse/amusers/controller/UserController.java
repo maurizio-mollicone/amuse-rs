@@ -36,7 +36,7 @@ import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.service.IUserService;
+import it.mollik.amuse.amusers.service.UserService;
 import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

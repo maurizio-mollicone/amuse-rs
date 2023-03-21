@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import it.mollik.amuse.amusers.security.jwt.AuthEntryPointJwt;
 import it.mollik.amuse.amusers.security.jwt.AuthTokenFilter;
-import it.mollik.amuse.amusers.service.impl.AmuseUserDetailsService;
+import it.mollik.amuse.amusers.service.AmuseUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

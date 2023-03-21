@@ -18,7 +18,6 @@ import it.mollik.amuse.amusers.model.ERole;
 @Entity(name="role")
 public class Role extends AmuseEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

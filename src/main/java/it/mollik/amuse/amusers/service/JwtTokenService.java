@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.service.impl;
+package it.mollik.amuse.amusers.service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -25,10 +25,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import it.mollik.amuse.amusers.config.Constants;
-import it.mollik.amuse.amusers.service.IJwtTokenService;
 
 @Service
-public class JwtTokenService implements IJwtTokenService {
+public class JwtTokenService  {
 
     
 
@@ -43,22 +42,18 @@ public class JwtTokenService implements IJwtTokenService {
     @Value("${amuse.security.jwtExpirationMs:86400000}")
     private String validity;
 
-    @Override
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    @Override
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    @Override
     public List<String> getRoles(String token) {
         return getClaimFromToken(token, claims -> (List) claims.get(Constants.Jwt.ROLES_CLAIM_KEY));
     }
 
-    @Override
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -75,7 +70,6 @@ public class JwtTokenService implements IJwtTokenService {
         return expiration.before(new Date());
     }
 
-    @Override
     public String generateToken(Authentication authentication) {
         final Map<String, Object> claims = new HashMap<>();
         final UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -89,7 +83,6 @@ public class JwtTokenService implements IJwtTokenService {
         return generateToken(claims, user.getUsername());
     }
 
-    @Override
     public String generateTokenV2(Authentication authentication, String ipAddress, String userAgent) {
         final Map<String, Object> claims = new HashMap<>();
         final UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -105,7 +98,6 @@ public class JwtTokenService implements IJwtTokenService {
         return generateToken(claims, user.getUsername());
     }
 
-    @Override
     public String generateTokenV2(String userName, String role, String ipAddress, String userAgent) {
         
         return createJwtToken(userName, Stream.of(role).collect(Collectors.toList()), ipAddress, userAgent);
@@ -136,13 +128,11 @@ public class JwtTokenService implements IJwtTokenService {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    @Override
     public Boolean validateToken(String token) {
         final String username = getUsernameFromToken(token);
         return username != null && !isTokenExpired(token) && !isInvalid(token);
     }
 
-    @Override
     public Boolean isInvalid(String token) {
         Cache jwtBlacklist = cacheManager.getCache(Constants.JWT_BLACKLIST_CACHE_KEY);
         if (jwtBlacklist != null) {
@@ -161,7 +151,6 @@ public class JwtTokenService implements IJwtTokenService {
         
     }
 
-    @Override
     @Cacheable(value = Constants.JWT_BLACKLIST_CACHE_KEY)
     public String invalidateToken(String token){
         return token;

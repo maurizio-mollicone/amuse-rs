@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.service.impl;
+package it.mollik.amuse.amusers.service;
 
 import java.net.InetAddress;
 
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
-import it.mollik.amuse.amusers.service.IJwtTokenService;
 import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @Service
@@ -33,7 +32,7 @@ public class HelperService {
 
 	
 	@Autowired
-	private IJwtTokenService jwtTokenService;
+	private JwtTokenService jwtTokenService;
 
 	public String buildAuthHeaderValue(String userName, String role) throws Exception {
 		if (userName != null && !userName.isEmpty()) {

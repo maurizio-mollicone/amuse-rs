@@ -31,7 +31,7 @@ import it.mollik.amuse.amusers.model.SearchParams;
 import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.model.request.AmuseRequest;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
-import it.mollik.amuse.amusers.service.IAuthorService;
+import it.mollik.amuse.amusers.service.AuthorService;
 import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -42,7 +42,7 @@ public class AuthorController {
     private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
 
     @Autowired
-    private IAuthorService authorService;
+    private AuthorService authorService;
 
     @Autowired
     private AmuseUtils amuseUtils;
@@ -91,8 +91,6 @@ public class AuthorController {
 
         return response;
     }
-
-    
 
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

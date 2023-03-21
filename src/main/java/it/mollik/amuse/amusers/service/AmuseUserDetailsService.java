@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.service.impl;
+package it.mollik.amuse.amusers.service;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import it.mollik.amuse.amusers.repository.UserRepository;
 @Service
 public class AmuseUserDetailsService implements UserDetailsService {
 
-	private Logger logger = LoggerFactory.getLogger(AuthorService.class);
+	private Logger logger = LoggerFactory.getLogger(AmuseUserDetailsService.class);
 
     @Autowired
 	UserRepository userRepository;
@@ -35,11 +35,10 @@ public class AmuseUserDetailsService implements UserDetailsService {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		List<Role> roles = roleRepository.findByUserName(username);
 		if (roles == null || roles.isEmpty()) {
+			logger.error("User Not Found with username: {}", username);
 			throw new UsernameNotFoundException("User Not Found with username: " + username);
 		}
 		user.setRoles(roles);
 		return user;
-
-
 	}
 }
