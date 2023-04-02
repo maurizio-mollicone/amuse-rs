@@ -38,9 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/v3/api-docs/**",
 			"/swagger-ui/**",
 			// other public endpoints of your API may be appended to this array
-			"/v1/test/**",
+			Constants.Api.TEST_API + "/**",
 			"/v1/docs/**",
-			"/v1/auth/signin"
+			Constants.Api.AUTH_API + "/**"
 			// ,
 			// "/docs",
 			// "/docs/**",

@@ -1,5 +1,6 @@
 package it.mollik.amuse.amusers.controller;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,13 +50,14 @@ public class AuthorController {
     
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AmuseResponse<Author> list(@RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
+    public AmuseResponse<Author> list(@RequestParam(defaultValue = "0") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
         logger.info("{}/list", Constants.Api.AUTHORS_API);
 
         Page<Author> authorsPage = authorService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(authorsPage);
 
-        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), searchParams, authorsPage.stream().collect(Collectors.toList()));
+        AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), searchParams, authorsPage.toList());
+        response.setData(authorsPage.toList());
         logger.info("{}/list {}/{} of {} items, page {}/{}", Constants.Api.AUTHORS_API, searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
         

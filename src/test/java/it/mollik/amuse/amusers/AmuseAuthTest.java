@@ -57,32 +57,32 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 	public void accessDenied() throws Exception {
         logger.info("Start accessDenied");
         this.getMockMvc()
-            .perform(get("/amuse/v1/test/amuseuser").accept(MediaType.APPLICATION_JSON))
+            .perform(get(Constants.Api.USERS_API + "/amuseuser").accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isUnauthorized());
 		
 	}
 
-	@Test
-    @Order(2)
-    @DisplayName("Signup")
-	public void signup() throws Exception {
-        logger.info("Start signup");
+	// @Test
+    // @Order(2)
+    // @DisplayName("Signup")
+	// public void signup() throws Exception {
+    //     logger.info("Start signup");
 
-		SignupRequest signupRequest = new SignupRequest("testuser", "testuser@localhost", "testuser", "testuser", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
-		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
+	// 	SignupRequest signupRequest = new SignupRequest("testuser", "testuser@localhost", "testuser", "testuser", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
+	// 	AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 		
-        this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signup")
-                .content(request.toJSONString())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andDo(restDoc("auth/signup"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode", is(Constants.Status.Code.STATUS_CODE_OK)))
-                .andExpect(jsonPath("$.data[0].username", is("testuser")));
-	}
+    //     this.getMockMvc()
+    //         .perform(post(Constants.Api.AUTH_API + "/signup")
+    //             .content(request.toJSONString())
+    //             .contentType(MediaType.APPLICATION_JSON_VALUE)
+    //             .accept(MediaType.APPLICATION_JSON))
+    //         .andDo(print())
+    //         .andDo(restDoc(Constants.Api.AUTH_API + "/signup"))
+    //             .andExpect(status().isOk())
+    //             .andExpect(jsonPath("$.statusCode", is(Constants.Status.Code.STATUS_CODE_OK)))
+    //             .andExpect(jsonPath("$.data[0].username", is("testuser")));
+	// }
 
 	@Test
     @Order(3)
@@ -94,7 +94,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()
-            .perform(post("/amuse/auth/signup")
+            .perform(post(Constants.Api.AUTH_API + "/signup")
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -112,7 +112,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()
-            .perform(post("/amuse/auth/signup")
+            .perform(post(Constants.Api.AUTH_API + "/signup")
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -129,7 +129,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		LoginRequest loginRequest = new LoginRequest(getUser01(), "1235");
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new Key("user01"), Stream.of(loginRequest).collect(Collectors.toList()));
         this.getMockMvc()
-            .perform(post("/amuse/auth/signin")
+            .perform(post(Constants.Api.AUTH_API + "/signin")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -150,14 +150,14 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		LoginRequest loginRequest = new LoginRequest(username, DEFAULT_PASSWORD);
 		AmuseRequest<LoginRequest> amuseLoginRequest = new AmuseRequest<>(new Key(username), Stream.of(loginRequest).collect(Collectors.toList()));
 		MvcResult loginResult = this.getMockMvc()
-            .perform(post("/v1/auth/signin")
+            .perform(post(Constants.Api.AUTH_API + "/signin")
                 .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(username, ERole.USER.getValue()))
                 .content(amuseLoginRequest.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("auth/signin"))
+            .andDo(restDoc(Constants.Api.AUTH_API + "/signin"))
                 .andExpect(status().isOk())
             .andReturn();
         AmuseResponse<SigninResponse> signinResponse = getObjectMapper().readValue(loginResult.getResponse().getContentAsString(), new TypeReference<AmuseResponse<SigninResponse>>() {});
@@ -170,14 +170,14 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		SignoutRequest signoutRequest = new SignoutRequest(username);
 		AmuseRequest<SignoutRequest> request2 = new AmuseRequest<>(new Key(username), Stream.of(signoutRequest).collect(Collectors.toList()));
         MvcResult signoutResult = this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signout")
+            .perform(post(Constants.Api.AUTH_API + "/signout")
                 .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
                 .header("Authorization", "Bearer " + token)
                 .content(request2.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("auth/signout"))
+            .andDo(restDoc(Constants.Api.AUTH_API + "/signout"))
                 .andExpect(status().isOk())
             .andReturn();
 

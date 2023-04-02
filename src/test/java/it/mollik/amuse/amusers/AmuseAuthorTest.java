@@ -37,6 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
 import it.mollik.amuse.amusers.config.Constants;
+import it.mollik.amuse.amusers.config.Constants.Api;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.Author;
@@ -63,13 +64,13 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void listAuthors(int results) throws Exception {
         logger.info("Author list");
         this.getMockMvc()
-            .perform(get("/amuse/authors/list")
+            .perform(get(Constants.Api.AUTHORS_API + "/list")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("pageIndex", Integer.toString(0))
                 .param("pageSize", Integer.toString(10))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("authors/list"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/list"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)));
        
@@ -81,11 +82,11 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void authorDetail() throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/authors/detail/1")
+            .perform(get(Constants.Api.AUTHORS_API + "/detail/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("authors/detail"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/detail"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
@@ -97,7 +98,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void findByName() throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/authors/find")
+            .perform(get(Constants.Api.AUTHORS_API + "/find")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("name", "Italo%20Calvino")
                 .param("pageIndex", Integer.toString(0))
@@ -105,7 +106,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-            .andDo(restDoc("authors/find"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/find"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")));
@@ -126,13 +127,13 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
         AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
         this.getMockMvc()
-            .perform(post("/amuse/authors/create")
+            .perform(post(Constants.Api.AUTHORS_API + "/create")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(authorRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-            .andDo(restDoc("authors/create"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/create"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("MichailBulgakov")))
@@ -148,11 +149,11 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
 
         MvcResult detailResult = this.getMockMvc()
-            .perform(get("/amuse/authors/detail/1")
+            .perform(get(Constants.Api.AUTHORS_API + "/detail/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("authors/detail"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/detail"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino"))).andReturn();
@@ -166,13 +167,13 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
         AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
         this.getMockMvc()
-            .perform(post("/amuse/authors/update/1")
+            .perform(post(Constants.Api.AUTHORS_API + "/update/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(authorRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-            .andDo(restDoc("authors/create"))
+            .andDo(restDoc(Constants.Api.AUTHORS_API + "/create"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("Italo Calvino")))

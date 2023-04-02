@@ -9,9 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
@@ -22,8 +19,7 @@ import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
 
 @Service
-public class UserService {
-
+public class UserService extends PageableService {
     
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -73,8 +69,7 @@ public class UserService {
     }
 
     public Page<User> list(int pageIndex, int pageSize, String sortBy) {
-        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
-        Page<User> usersPage = this.userRepository.findAll(page);
+        Page<User> usersPage = this.userRepository.findAll(getPageable(pageIndex, pageSize, sortBy));
         logger.info("retrieved {}/{} users of {}, page {}/{}, pageSize ", usersPage.getNumberOfElements(), usersPage.getSize(), usersPage.getTotalElements(), usersPage.getNumber(), usersPage.getTotalPages());
         return usersPage; 
     }

@@ -20,6 +20,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,10 +37,10 @@ public class AmuseGenericTest extends AmuseRsApplicationTests {
     @DisplayName("HeartBeat public access")
 	public void heartbeat() throws Exception {
         this.getMockMvc()
-            .perform(get("/amuse/test/heartbeat")
+            .perform(get(Constants.Api.TEST_API + "/heartbeat")
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("test/heartbeat"))
+            .andDo(restDoc(Constants.Api.TEST_API + "/heartbeat"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", is(0)));
        
@@ -51,7 +52,7 @@ public class AmuseGenericTest extends AmuseRsApplicationTests {
     @DisplayName("HeartBeat authenticated access")
     public void auth() throws Exception {
         this.getMockMvc()
-            .perform(get("/amuse/test/heartbeat")
+            .perform(get(Constants.Api.TEST_API + "/heartbeat")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue("user01", ERole.USER.getValue())))
             .andDo(print())

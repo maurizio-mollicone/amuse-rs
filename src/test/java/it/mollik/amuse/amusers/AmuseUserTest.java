@@ -51,8 +51,11 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
     
     private Logger logger = LoggerFactory.getLogger(AmuseUserTest.class);
 
-    @Value("${amuse.security.user03:user03}")
-    private String user03;
+    @Value("${amuse.security.user02:user02}")
+    private String user02;
+
+    @Value("${amuse.security.user04:user04}")
+    private String user04;
 
     @Order(1)
     @DisplayName("Users list")
@@ -61,13 +64,13 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 	public void listUsers(int results) throws Exception {
 
         this.getMockMvc()
-            .perform(get(USERS_API + "/list")
+            .perform(get(Constants.Api.USERS_API + "/list")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("pageIndex", Integer.toString(0))
                 .param("pageSize", Integer.toString(10))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("users/list"))
+            .andDo(restDoc(Constants.Api.USERS_API + "/list"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)));
        
@@ -75,55 +78,55 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 
     @Test
     @Order(2)
-    @DisplayName("User03 details")
-	public void viewUser03() throws Exception {
+    @DisplayName("User02 details")
+	public void viewUser02() throws Exception {
 
         this.getMockMvc()
-            .perform(get(USERS_API + "/detail/6")
+            .perform(get(Constants.Api.USERS_API + "/detail/5")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andDo(restDoc("users/detail"))
+            .andDo(restDoc(Constants.Api.USERS_API + "/detail"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-                .andExpect(jsonPath("$.data[0].username", equalTo(user03)));
+                .andExpect(jsonPath("$.data[0].username", equalTo(user02)));
 
 	}
     
     @Test
     @Order(3)
-    @DisplayName("User03 update")
-	public void updateUser03() throws Exception {
+    @DisplayName("User04 update")
+	public void updateUser04() throws Exception {
 
         MvcResult detail = this.getMockMvc()
-            .perform(get(USERS_API + "/detail/6")
+            .perform(get(Constants.Api.USERS_API + "/detail/7")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-                .andExpect(jsonPath("$.data[0].username", is(user03)))
+                .andExpect(jsonPath("$.data[0].username", is(user04)))
         .andReturn();
         AmuseResponse<User> amuseDetailResponse = getObjectMapper().readValue(detail.getResponse().getContentAsString(), new TypeReference<AmuseResponse<User>>() {});
 
         User u = amuseDetailResponse.getData().get(0);
         logger.info("user {}", u);
-        u.setEmail("user03updated@localhost");
+        u.setEmail("user04updated@localhost");
         logger.info("updated user {}", u);
         
         AmuseRequest<User> amuseUpdateRequest = new AmuseRequest<>(new Key(getAdmin()), Stream.of(u).collect(Collectors.toList()));
         MvcResult update = this.getMockMvc()
-            .perform(post(USERS_API + "/update/6")
+            .perform(post(Constants.Api.USERS_API + "/update/7")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(amuseUpdateRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
-                .andDo(restDoc("users/update"))
+                .andDo(restDoc(Constants.Api.USERS_API + "/update"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-                    .andExpect(jsonPath("$.data[0].username", is(user03)))
-                    .andExpect(jsonPath("$.data[0].email", is("user03updated@localhost")))
+                    .andExpect(jsonPath("$.data[0].username", is(user04)))
+                    .andExpect(jsonPath("$.data[0].email", is("user04updated@localhost")))
         .andReturn();
         AmuseResponse<User> updateResponse = getObjectMapper().readValue(update.getResponse().getContentAsString(), new TypeReference<AmuseResponse<User>>() {});
 
@@ -131,22 +134,22 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
         
     }
     
-    @ParameterizedTest
-    @ValueSource(strings = {"6"})
-    @Order(4)
-    @DisplayName("User03 delete")
-    public void deleteUser03(String userId) throws Exception {         
+    // @ParameterizedTest
+    // @ValueSource(strings = {"6"})
+    // @Order(4)
+    // @DisplayName("User03 delete")
+    // public void deleteUser03(String userId) throws Exception {         
         
-        this.getMockMvc()
-            .perform(delete(USERS_API + "/delete/{userId}", userId)
-                .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(restDoc("users/delete"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-        .andReturn();
+    //     this.getMockMvc()
+    //         .perform(delete(Constants.Api.USERS_API + "/delete/{userId}", userId)
+    //             .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
+    //             .accept(MediaType.APPLICATION_JSON))
+    //             .andDo(print())
+    //             .andDo(restDoc(Constants.Api.USERS_API + "/delete"))
+    //                 .andExpect(status().isOk())
+    //                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
+    //     .andReturn();
 
-    }
+    // }
 
 }

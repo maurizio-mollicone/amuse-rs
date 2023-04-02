@@ -1,5 +1,7 @@
 package it.mollik.amuse.amusers.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public final class Constants {
 
     public static final String DEFAULT_IP_ADDRESS = "0.0.0.0";
@@ -10,6 +12,9 @@ public final class Constants {
 
 	public static final String INCLUE_ALL = "/**";
 
+    @Value("${server.servlet.context-path}")
+    public static final String CTX = "/amuse";
+
     private Constants() {
     }
 
@@ -17,6 +22,7 @@ public final class Constants {
         
         private Api() {
         }
+        
         
         public static final String TEST_API = "/test";
         public static final String USERS_API = "/users";

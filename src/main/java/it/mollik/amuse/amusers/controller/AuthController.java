@@ -79,7 +79,7 @@ public class AuthController {
 	@ResponseBody
 	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest, 
 			WebRequest webRequest) {
-		logger.info("{}/signin {}", Constants.Api.AUTH_API, loginRequest.getData().get(0).getUserName());
+			logger.info("{}/signin {}", Constants.Api.AUTH_API, loginRequest.getData().get(0).getUserName());
 		logger.debug("POST {}/signin request : {}", Constants.Api.AUTH_API, loginRequest);
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
