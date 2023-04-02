@@ -27,5 +27,5 @@ docker run --detach -p3306:3306 --name mariadb --env MARIADB_USER=amuse --env MA
 ## Run
 
 ```
-gg
+TBD
 ```
