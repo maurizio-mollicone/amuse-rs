@@ -36,7 +36,7 @@ public class AmuseGenericTest extends AmuseRsApplicationTests {
     @DisplayName("HeartBeat public access")
 	public void heartbeat() throws Exception {
         this.getMockMvc()
-            .perform(get("/amuse/v1/test/heartbeat")
+            .perform(get("/amuse/test/heartbeat")
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andDo(restDoc("test/heartbeat"))
@@ -51,7 +51,7 @@ public class AmuseGenericTest extends AmuseRsApplicationTests {
     @DisplayName("HeartBeat authenticated access")
     public void auth() throws Exception {
         this.getMockMvc()
-            .perform(get("/amuse/v1/test/heartbeat")
+            .perform(get("/amuse/test/heartbeat")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue("user01", ERole.USER.getValue())))
             .andDo(print())

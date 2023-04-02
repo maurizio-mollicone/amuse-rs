@@ -8,9 +8,24 @@ public final class Constants {
     public static final String JWT_BLACKLIST_CACHE_KEY = "jwtBlacklist";
     public static final String USERS_CACHE_KEY = "users";
 
+	public static final String INCLUE_ALL = "/**";
+
     private Constants() {
     }
 
+    public class Api {
+        
+        private Api() {
+        }
+        
+        public static final String TEST_API = "/test";
+        public static final String USERS_API = "/users";
+        public static final String AUTH_API = "/auth";
+        public static final String BOOKS_API = "/books";
+        public static final String AUTHORS_API = "/authors";
+
+
+    }
     public class Jwt {
         
         private Jwt() {

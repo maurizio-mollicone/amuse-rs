@@ -36,7 +36,7 @@ import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/amuse/v1/authors")
+@RequestMapping(Constants.Api.AUTHORS_API)
 public class AuthorController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
@@ -50,13 +50,13 @@ public class AuthorController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<Author> list(@RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
-        logger.info("/amuse/v1/authors/list");
+        logger.info("{}/list", Constants.Api.AUTHORS_API);
 
         Page<Author> authorsPage = authorService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(authorsPage);
 
         AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), searchParams, authorsPage.stream().collect(Collectors.toList()));
-        logger.info("/amuse/v1/authors/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
+        logger.info("{}/list {}/{} of {} items, page {}/{}", Constants.Api.AUTHORS_API, searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
         
     }
@@ -64,7 +64,7 @@ public class AuthorController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<Author> view(@PathVariable long id) throws ResponseStatusException {
-        logger.info("/amuse/v1/authors/detail/{}", id);
+        logger.info("{}/detail/{}", Constants.Api.AUTHORS_API, id);
         Author author;
         try {
             author = authorService.findById(id);
@@ -73,7 +73,7 @@ public class AuthorController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + "not found");
         }
         AmuseResponse<Author> response = new AmuseResponse<>(new Key(author.getName()), Stream.of(author).collect(Collectors.toList()));
-        logger.info("/amuse/v1/authors/detail/{} {}", id, response);
+        logger.info("{}/detail/{} {}",Constants.Api.AUTHORS_API, id, response);
         return response;
     }
 
@@ -82,12 +82,12 @@ public class AuthorController {
     @GetMapping(path = "/find", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<Author> findByName(@RequestParam @NotNull String name, @RequestParam(defaultValue = "0") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
         String decodedName = amuseUtils.decodeString(name);
-        logger.info("/amuse/v1/authors/find {}" , decodedName);
+        logger.info("{}/find {}", Constants.Api.AUTHORS_API, decodedName);
         Page<Author> authorsPage = authorService.findByName(decodedName, pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(authorsPage);
 
         AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER),  authorsPage.stream().collect(Collectors.toList()));
-        logger.info("/amuse/v1/authors/find {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
+        logger.info("{}/find {}/{} of {} items, page {}/{}", Constants.Api.AUTHORS_API, searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
 
         return response;
     }
@@ -96,9 +96,9 @@ public class AuthorController {
     @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AmuseResponse<Author> create(@RequestBody @NotNull AmuseRequest<Author> request) {
-        logger.info("/amuse/v1/authors/create {}", request.getData().get(0).getName());
+        logger.info("{}/create {}", Constants.Api.AUTHORS_API, request.getData().get(0).getName());
         AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(authorService.create(request.getData().get(0))).collect(Collectors.toList()));
-        logger.info("/amuse/v1/authors/create {}", response.getData().get(0));
+        logger.info("{}/create {}", Constants.Api.AUTHORS_API, response.getData().get(0));
         return response;
     }
 
@@ -106,7 +106,7 @@ public class AuthorController {
     @PostMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AmuseResponse<Author> save(@RequestBody AmuseRequest<Author> request, @PathVariable long id) {
-        logger.info("/amuse/v1/authors/update/{}", id);
+        logger.info("{}/update/{}", Constants.Api.AUTHORS_API, id);
         AmuseResponse<Author> response = new AmuseResponse<>(request.getKey(), Stream.of(authorService.save(request.getData().get(0))).collect(Collectors.toList()));
         logger.info("/amuse/v1/authors/update/{} {}", id, response);
         return response;
@@ -118,7 +118,7 @@ public class AuthorController {
     public AmuseResponse<Author> delete(@PathVariable long id) throws EntityNotFoundException {
         authorService.delete(id);
         AmuseResponse<Author> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), null);
-        logger.info("/amuse/v1/authors/delete/{}", id);
+        logger.info("{}/delete/{}", Constants.Api.AUTHORS_API, id);
         return response;
     }
 }

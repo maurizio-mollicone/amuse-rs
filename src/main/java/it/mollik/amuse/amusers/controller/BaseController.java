@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.AmuseEntity;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.response.AmuseResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/amuse/v1/test")
+@RequestMapping(Constants.Api.TEST_API)
 public class BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseController.class);

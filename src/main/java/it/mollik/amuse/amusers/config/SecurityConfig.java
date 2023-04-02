@@ -38,8 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/v3/api-docs/**",
 			"/swagger-ui/**",
 			// other public endpoints of your API may be appended to this array
-			"/amuse/v1/test/**",
-			"/amuse/v1/docs/**"
+			"/v1/test/**",
+			"/v1/docs/**",
+			"/v1/auth/signin"
 			// ,
 			// "/docs",
 			// "/docs/**",
@@ -82,13 +83,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	       .ignoring()
 	       .antMatchers("/docs/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**");
     }
+	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				
-				.authorizeRequests().antMatchers("/amuse/v1/auth/**").permitAll()
+				.authorizeRequests().antMatchers(Constants.Api.AUTH_API + Constants.INCLUE_ALL).permitAll()
 				.antMatchers(AUTH_WHITELIST).permitAll()
 				// .antMatchers("/api/test/**").permitAll()
 				.anyRequest().authenticated();

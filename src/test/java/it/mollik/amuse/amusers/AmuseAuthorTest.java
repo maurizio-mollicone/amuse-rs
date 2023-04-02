@@ -63,7 +63,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void listAuthors(int results) throws Exception {
         logger.info("Author list");
         this.getMockMvc()
-            .perform(get("/amuse/v1/authors/list")
+            .perform(get("/amuse/authors/list")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("pageIndex", Integer.toString(0))
                 .param("pageSize", Integer.toString(10))
@@ -81,7 +81,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void authorDetail() throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/v1/authors/detail/1")
+            .perform(get("/amuse/authors/detail/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -97,7 +97,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 	public void findByName() throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/v1/authors/find")
+            .perform(get("/amuse/authors/find")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("name", "Italo%20Calvino")
                 .param("pageIndex", Integer.toString(0))
@@ -126,7 +126,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
         AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
         this.getMockMvc()
-            .perform(post("/amuse/v1/authors/create")
+            .perform(post("/amuse/authors/create")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(authorRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
 
         MvcResult detailResult = this.getMockMvc()
-            .perform(get("/amuse/v1/authors/detail/1")
+            .perform(get("/amuse/authors/detail/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -166,7 +166,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
 
         AmuseRequest<Author> authorRequest = new AmuseRequest<>(new Key("admin"), Stream.of(author).collect(Collectors.toList())); 
         this.getMockMvc()
-            .perform(post("/amuse/v1/authors/update/1")
+            .perform(post("/amuse/authors/update/1")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(authorRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)

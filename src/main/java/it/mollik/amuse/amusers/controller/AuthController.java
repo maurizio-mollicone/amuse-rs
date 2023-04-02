@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
+import it.mollik.amuse.amusers.config.Constants;
 import it.mollik.amuse.amusers.model.ERole;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.orm.Role;
@@ -46,7 +47,7 @@ import it.mollik.amuse.amusers.service.JwtTokenService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/amuse/v1/auth")
+@RequestMapping(Constants.Api.AUTH_API)
 public class AuthController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -78,8 +79,8 @@ public class AuthController {
 	@ResponseBody
 	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest, 
 			WebRequest webRequest) {
-		logger.info("/amuse/v1/auth/signin {}", loginRequest.getData().get(0).getUserName());
-		logger.debug("POST /amuse/v1/authUser/signin request : {}", loginRequest);
+		logger.info("{}/signin {}", Constants.Api.AUTH_API, loginRequest.getData().get(0).getUserName());
+		logger.debug("POST {}/signin request : {}", Constants.Api.AUTH_API, loginRequest);
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getData().get(0).getUserName(), loginRequest.getData().get(0).getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -100,7 +101,7 @@ public class AuthController {
 					userDetails.getEmail(), 
 					roles)).collect(Collectors.toList()));
 		logger.info("User {} authenticated", loginRequest.getData().get(0).getUserName());
-		logger.debug("POST /amuse/v1/auth/signin response {}", response);
+		logger.debug("POST {}/signin response {}", Constants.Api.AUTH_API, response);
 		return response;
 	}
 
@@ -112,8 +113,10 @@ public class AuthController {
 	 * @param request
 	 */
 	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
-		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
-		logger.debug("POST /amuse/v1/authUser/signout request : {}", signoutRequest);
+
+		
+		logger.info("{}/signout {}", Constants.Api.AUTH_API, signoutRequest.getData().get(0).getUserName());
+		logger.debug("POST {}/signout request : {}", Constants.Api.AUTH_API, signoutRequest);
 		String token = helperService.parseJwt(request);
 		if (token != null) {
 			if (!jwtTokenService.isInvalid(token).booleanValue()) {
@@ -127,7 +130,7 @@ public class AuthController {
 		
 		AmuseResponse<SignoutResponse> response = new AmuseResponse<>(signoutRequest.getKey(), Stream.of(new SignoutResponse(token, signoutRequest.getData().get(0).getUserName())).collect(Collectors.toList()));
 		logger.info("User {} signed out", signoutRequest.getData().get(0).getUserName());
-		logger.debug("POST /amuse/v1/auth/signout response {}", response);
+		logger.debug("POST {}/signout response {}", Constants.Api.AUTH_API, response);
 		return response;
 	}
 
@@ -136,8 +139,8 @@ public class AuthController {
 	@ResponseBody
 	public AmuseResponse<User> signup(@Valid @RequestBody AmuseRequest<SignupRequest> signUpRequest) {
 		
-		logger.info("/amuse/v1/auth/signup");
-		logger.debug("POST /amuse/v1/auth/signup request : {}", signUpRequest);
+		logger.info(Constants.Api.AUTH_API + "/signup");
+		logger.debug("POST {}/signup request : {}", Constants.Api.AUTH_API, signUpRequest);
 		if (userRepository.existsByUsername(signUpRequest.getData().get(0).getUserName()).booleanValue()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username" + signUpRequest.getData().get(0).getUserName() + "already taken");
 		}
@@ -177,7 +180,7 @@ public class AuthController {
 
 		AmuseResponse<User> response = new AmuseResponse<>(signUpRequest.getKey(), 0, "User registered successfully!", Stream.of(user).collect(Collectors.toList()));
 		logger.info("User {} registered", signUpRequest.getData().get(0).getUserName());
-		logger.debug("POST /amuse/v1/auth/signup response {}", response);
+		logger.debug("POST {}/signup response {}", Constants.Api.AUTH_API, response);
 
 		return response;
 	}

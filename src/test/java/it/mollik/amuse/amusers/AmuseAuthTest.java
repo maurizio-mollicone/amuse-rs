@@ -94,7 +94,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signup")
+            .perform(post("/amuse/auth/signup")
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -112,7 +112,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signup")
+            .perform(post("/amuse/auth/signup")
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -129,7 +129,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		LoginRequest loginRequest = new LoginRequest(getUser01(), "1235");
 		AmuseRequest<LoginRequest> request = new AmuseRequest<>(new Key("user01"), Stream.of(loginRequest).collect(Collectors.toList()));
         this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signin")
+            .perform(post("/amuse/auth/signin")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .content(request.toJSONString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -150,7 +150,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 		LoginRequest loginRequest = new LoginRequest(username, DEFAULT_PASSWORD);
 		AmuseRequest<LoginRequest> amuseLoginRequest = new AmuseRequest<>(new Key(username), Stream.of(loginRequest).collect(Collectors.toList()));
 		MvcResult loginResult = this.getMockMvc()
-            .perform(post("/amuse/v1/auth/signin")
+            .perform(post("/v1/auth/signin")
                 .header("HTTP_CLIENT_IP", InetAddress.getLocalHost().getHostAddress())
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(username, ERole.USER.getValue()))
                 .content(amuseLoginRequest.toJSONString())

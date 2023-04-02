@@ -41,7 +41,7 @@ import it.mollik.amuse.amusers.util.AmuseUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/amuse/v1/users")
+@RequestMapping(Constants.Api.USERS_API)
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -60,13 +60,13 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> list(@RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(required = false) String sortBy) throws EntityNotFoundException {
-        logger.info("/amuse/v1/users/list");
+        logger.info("{}/list", Constants.Api.USERS_API);
 
         Page<User> usersPage = userService.list(pageIndex, pageSize, sortBy);
         SearchParams searchParams = amuseUtils.fromSpringPage(usersPage);
 
         AmuseResponse<User> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), searchParams, usersPage.stream().collect(Collectors.toList()));
-        logger.info("/amuse/v1/users/list {}/{} of {} items, page {}/{}", searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
+        logger.info("{}/list {}/{} of {} items, page {}/{}", Constants.Api.USERS_API, searchParams.getCurrentPageSize(), searchParams.getPageSize(), searchParams.getTotalItems(), searchParams.getCurrentPageIndex(), searchParams.getTotalPages());
         return response;
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> view(@PathVariable long id) throws ResponseStatusException {
-        logger.info("/amuse/v1/users/detail/{}", id);
+        logger.info("{}/detail/{}", Constants.Api.USERS_API, id);
         User user;
         try {
             user = this.userService.findById(id);
@@ -83,7 +83,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + "not found");
         }
         AmuseResponse<User> response = new AmuseResponse<>(new Key(user.getName()), Stream.of(user).collect(Collectors.toList()));
-        logger.info("/amuse/v1/users/detail/{} {}" , id, response);
+        logger.info("{}/detail/{} {}", Constants.Api.USERS_API, id, response);
         return response;
     }
 
@@ -91,9 +91,9 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/name/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> find(@RequestParam @NotNull String name) throws EntityNotFoundException {
-        logger.info("/amuse/v1/users/name/search name: {}" , name);
+        logger.info("{}/name/search name: {}", Constants.Api.USERS_API, name);
         AmuseResponse<User> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), userService.findByName(name));
-        logger.info("/amuse/v1/users/find OK {}" , response);
+        logger.info("{}/find OK {}", Constants.Api.USERS_API, response);
         return response;
     }
 
@@ -101,9 +101,9 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     @GetMapping(path = "/email/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AmuseResponse<User> findByEmail(@RequestParam @NotNull String email) throws EntityNotFoundException {
-        logger.info("/amuse/v1/users/email/search email: {}" , email);
+        logger.info("{}/search email: {}", Constants.Api.USERS_API, email);
         AmuseResponse<User> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), userService.findByEmail(email));
-        logger.info("/amuse/v1/users/email/search {} elements" , response.getData().size());
+        logger.info("{}/email/search {} elements", Constants.Api.USERS_API, response.getData().size());
         return response;
     }
 
@@ -114,7 +114,7 @@ public class UserController {
     public AmuseResponse<User> create(@RequestBody AmuseRequest<User> request) {
         List<User> users = Stream.of(userService.create(request.getData().get(0))).collect(Collectors.toList());
         AmuseResponse<User> response = new AmuseResponse<>(request.getKey(), users);
-        logger.info("/amuse/v1/users/create {}", response);
+        logger.info("{}/create {}", Constants.Api.USERS_API, response);
         return response;
     }
 
@@ -124,7 +124,7 @@ public class UserController {
     public AmuseResponse<User> save(@PathVariable @NotNull int id, @RequestBody AmuseRequest<User> request) {
         List<User> users = Stream.of(userService.save(request.getData().get(0))).collect(Collectors.toList());
         AmuseResponse<User> response = new AmuseResponse<>(request.getKey(), users);
-        logger.info("/amuse/v1/users/update {}", response);
+        logger.info("{}/update {}", Constants.Api.USERS_API, response);
         return response;
     }
 
@@ -134,7 +134,7 @@ public class UserController {
     public AmuseResponse<IAmuseEntity> delete(@PathVariable long id) throws EntityNotFoundException {
         userService.delete(id);
         AmuseResponse<IAmuseEntity> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), null);
-        logger.info("/amuse/v1/users/delete {}", response);
+        logger.info("{}/delete {}", Constants.Api.USERS_API, response);
         return response;
     }
 
@@ -152,7 +152,7 @@ public class UserController {
         user.setUpdateTs(now);
         User updatedUser = this.userService.save(user);
         AmuseResponse<User> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(updatedUser).collect(Collectors.toList()));
-        logger.info("/amuse/v1/users/{}/role {}", id, response);
+        logger.info("{}/{}/role {}", Constants.Api.USERS_API, id, response);
         return response;
     }
 
@@ -162,7 +162,7 @@ public class UserController {
     public AmuseResponse<User> removeRole(@PathVariable long id, @RequestBody AmuseRequest<Role> request) throws EntityNotFoundException {
         User user = userService.deleteRole(request.getData().get(0));
         AmuseResponse<User> response = new AmuseResponse<>(new Key(Constants.SYSTEM_USER), Stream.of(user).collect(Collectors.toList()));
-        logger.info("/amuse/v1/users/{}/role {}", id, response);
+        logger.info("{}/{}/role {}", Constants.Api.USERS_API, id, response);
         return response;
     }
 }

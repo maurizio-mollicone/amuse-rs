@@ -61,7 +61,7 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 	public void listUsers(int results) throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/v1/users/list")
+            .perform(get(USERS_API + "/list")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .param("pageIndex", Integer.toString(0))
                 .param("pageSize", Integer.toString(10))
@@ -79,7 +79,7 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 	public void viewUser03() throws Exception {
 
         this.getMockMvc()
-            .perform(get("/amuse/v1/users/detail/6")
+            .perform(get(USERS_API + "/detail/6")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -96,7 +96,7 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
 	public void updateUser03() throws Exception {
 
         MvcResult detail = this.getMockMvc()
-            .perform(get("/amuse/v1/users/detail/6")
+            .perform(get(USERS_API + "/detail/6")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getUser01(), ERole.USER.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -113,7 +113,7 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
         
         AmuseRequest<User> amuseUpdateRequest = new AmuseRequest<>(new Key(getAdmin()), Stream.of(u).collect(Collectors.toList()));
         MvcResult update = this.getMockMvc()
-            .perform(post("/amuse/v1/users/update/6")
+            .perform(post(USERS_API + "/update/6")
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .content(amuseUpdateRequest.toJSONString())
                 .accept(MediaType.APPLICATION_JSON)
@@ -138,7 +138,7 @@ public class AmuseUserTest extends AmuseRsApplicationTests {
     public void deleteUser03(String userId) throws Exception {         
         
         this.getMockMvc()
-            .perform(delete("/amuse/v1/users/delete/{userId}", userId)
+            .perform(delete(USERS_API + "/delete/{userId}", userId)
                 .header("Authorization", getHttpUtils().buildAuthHeaderValue(getAdmin(), ERole.ADMIN.getValue()))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
