@@ -1,4 +1,4 @@
-package it.mollik.amuse.amusers.service.impl;
+package it.mollik.amuse.amusers.service;
 
 import java.util.Date;
 import java.util.List;
@@ -20,10 +20,9 @@ import it.mollik.amuse.amusers.model.orm.Role;
 import it.mollik.amuse.amusers.model.orm.User;
 import it.mollik.amuse.amusers.repository.RoleRepository;
 import it.mollik.amuse.amusers.repository.UserRepository;
-import it.mollik.amuse.amusers.service.IUserService;
 
 @Service
-public class UserService implements IUserService {
+public class UserService {
 
     
     private Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -34,12 +33,10 @@ public class UserService implements IUserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Override
     public User findById(Long id) throws EntityNotFoundException {
         return this.userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));
     }
 
-    @Override
     public List<User> findByName(String name) throws EntityNotFoundException {
         List<User> users = this.userRepository.findByName(name);
 
@@ -47,16 +44,13 @@ public class UserService implements IUserService {
             throw new EntityNotFoundException(name);
         }
         return users;
-
     }
 
-    @Override
     public User findByUserName(String userName) throws EntityNotFoundException {
         return this.userRepository.findByUsername(userName).orElseThrow(() -> new EntityNotFoundException(userName));
   
     }
 
-    @Override
     public List<User> findByEmail(String email) throws EntityNotFoundException {
         List<User> users = this.userRepository.findByName(email);
 
@@ -68,25 +62,23 @@ public class UserService implements IUserService {
 
     public Boolean existsByUserName(String username) {
         Boolean userExists = this.userRepository.existsByUsername(username);
-        logger.info("user {} exists {}", username, userExists.booleanValue());
+        logger.info("user {} exists {}", username, userExists);
         return userExists;
     }
 
 	public Boolean existsByEmail(String email) {
         Boolean emailExists = this.userRepository.existsByEmail(email);
-        logger.info("email {} exists {}", email, emailExists.booleanValue());
+        logger.info("email {} exists {}", email, emailExists);
         return emailExists;
     }
 
-    @Override
-    public Page<User> list(int pageIndex, int pageSize, String sortBy) throws EntityNotFoundException {
+    public Page<User> list(int pageIndex, int pageSize, String sortBy) {
         Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
         Page<User> usersPage = this.userRepository.findAll(page);
         logger.info("retrieved {}/{} users of {}, page {}/{}, pageSize ", usersPage.getNumberOfElements(), usersPage.getSize(), usersPage.getTotalElements(), usersPage.getNumber(), usersPage.getTotalPages());
         return usersPage; 
     }
 
-    @Override
     public User create(User user) {
         Date now = new Date();
         user.setCreateTs(now);
@@ -96,23 +88,15 @@ public class UserService implements IUserService {
         return result;
     }
 
-    @Override
     public User save(User user) {
         user.setStatus(EEntityStatus.UPDATE);
         Date now = new Date();
         user.setUpdateTs(now);
-        // List<Role> roles = user.getRoles();
-        // for (Role role : roles) {
-        //     Role r = this.roleRepository.getReferenceById(role.getId());
-        //     this.roleRepository.save(r);
-        // }
         User result = this.userRepository.save(user);
         logger.info("save {}", result);
         return result;
     }
 
-
-    @Override
     public User addRole(Role role) throws EntityNotFoundException {
         
         User user = this.userRepository.findByUsername(role.getUserName()).orElseThrow(() -> new EntityNotFoundException(role.getUserName()));
@@ -126,20 +110,18 @@ public class UserService implements IUserService {
 
         return result;
     }
-    @Override
+
     public User deleteRole(Role role) throws EntityNotFoundException {
         
         User user = this.userRepository.findByUsername(role.getUserName()).orElseThrow(() -> new EntityNotFoundException(role.getUserName()));
         Date now = new Date();
         user.setUpdateTs(now);
         user.removeRole(role);
-        // this.roleRepository.delete(role);
         User result = this.userRepository.save(user);
         logger.info("deleteRole {}", result);
         return result;
     }
 
-    @Override
     @Transactional
     public void delete(Long id) throws EntityNotFoundException {
         User user = this.userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id.toString()));

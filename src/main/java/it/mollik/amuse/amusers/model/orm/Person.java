@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -29,8 +30,24 @@ public class Person extends AmuseEntity {
     @AccessType(Type.PROPERTY)
     private Long id;
 
+    @Column(name = "first_name", length = 500, nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", length = 500, nullable = false)
+    private String lastName;
+
     @Column(name = "name", length = 500, nullable = false)
     private String name;
+    
+    @Lob
+    @Column(name = "biography", length=100000)
+    private byte[] biography;
+
+    @Column(name = "birth_dt", length = 500)
+    private Date birthDate;
+    
+    @Column(name = "death_dt", length = 500)
+    private Date deathDate;
 
     @Column(name="create_ts", nullable = false)
     private Date createTs;
@@ -46,6 +63,24 @@ public class Person extends AmuseEntity {
     public Person() {
     }
 
+    public Person(String firstName, String lastName, String name, Date createTs, Date updateTs, EEntityStatus status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = name;
+        this.createTs = createTs;
+        this.updateTs = updateTs;
+        this.status = status;
+    }
+
+    public Person(String firstName, String lastName, Date createTs, Date updateTs, EEntityStatus status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = firstName + lastName;
+        this.createTs = createTs;
+        this.updateTs = updateTs;
+        this.status = status;
+    }
+
     public Person(String name, Date createTs, Date updateTs, EEntityStatus status) {
         this.name = name;
         this.createTs = createTs;
@@ -54,7 +89,7 @@ public class Person extends AmuseEntity {
     }
 
     /**
-     * @return Long return the id
+     * @return Long the id
      */
     public Long getId() {
         return id;
@@ -66,9 +101,37 @@ public class Person extends AmuseEntity {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    /**
+     * @return String the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
 
     /**
-     * @return String return the name
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return String the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return String the name
      */
     public String getName() {
         return name;
@@ -82,7 +145,49 @@ public class Person extends AmuseEntity {
     }
 
     /**
-     * @return Date return the createTs
+     * @return byte[] the biography
+     */
+    public byte[] getBiography() {
+        return biography;
+    }
+
+    /**
+     * @param biography the biography to set
+     */
+    public void setBiography(byte[] biography) {
+        this.biography = biography;
+    }
+
+    /**
+     * @return Date the birthDate
+     */
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    /**
+     * @param birthDate the birthDate to set
+     */
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    /**
+     * @return Date the deathDate
+     */
+    public Date getDeathDate() {
+        return deathDate;
+    }
+
+    /**
+     * @param deathDate the deathDate to set
+     */
+    public void setDeathDate(Date deathDate) {
+        this.deathDate = deathDate;
+    }
+
+    /**
+     * @return Date the createTs
      */
     public Date getCreateTs() {
         return createTs;
@@ -96,7 +201,7 @@ public class Person extends AmuseEntity {
     }
 
     /**
-     * @return Date return the updateTs
+     * @return Date the updateTs
      */
     public Date getUpdateTs() {
         return updateTs;
@@ -110,7 +215,7 @@ public class Person extends AmuseEntity {
     }
 
     /**
-     * @return EEntityStatus return the status
+     * @return EEntityStatus the status
      */
     public EEntityStatus getStatus() {
         return status;

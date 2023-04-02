@@ -8,7 +8,7 @@ import it.mollik.amuse.amusers.model.IAmuseEntity;
 import it.mollik.amuse.amusers.model.Key;
 import it.mollik.amuse.amusers.model.SearchParams;
 
-public class AmuseResponse<T extends IAmuseEntity>  extends AmuseModel<T> {
+public class AmuseResponse<T extends IAmuseEntity> extends AmuseModel<T> {
     
     private int statusCode;
 

@@ -9,6 +9,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.mollik.amuse.amusers.service.HelperService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -29,8 +31,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import it.mollik.amuse.amusers.service.impl.HelperService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")

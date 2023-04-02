@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import it.mollik.amuse.amusers.service.impl.AmuseUserDetailsService;
-import it.mollik.amuse.amusers.service.impl.JwtTokenService;
+import it.mollik.amuse.amusers.service.AmuseUserDetailsService;
+import it.mollik.amuse.amusers.service.JwtTokenService;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 

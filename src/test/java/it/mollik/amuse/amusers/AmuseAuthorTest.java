@@ -135,7 +135,7 @@ public class AmuseAuthorTest extends AmuseGenericTest {
             .andDo(restDoc("authors/create"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode", equalTo(Constants.Status.Code.STATUS_CODE_OK)))
-                .andExpect(jsonPath("$.data[0].name", equalTo("Michail Bulgakov")))
+                .andExpect(jsonPath("$.data[0].name", equalTo("MichailBulgakov")))
                 .andExpect(jsonPath("$.data[0].firstName", equalTo("Michail")))
                 .andExpect(jsonPath("$.data[0].lastName", equalTo("Bulgakov")));
 

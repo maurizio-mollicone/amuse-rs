@@ -26,7 +26,6 @@ public class Item extends AmuseEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
-
     @Column(name="create_ts", nullable = false)
     private Date createTs;
 
