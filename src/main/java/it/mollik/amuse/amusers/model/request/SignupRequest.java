@@ -12,6 +12,12 @@ public class SignupRequest extends AmuseEntity {
     @NotEmpty(message = "Please provide a userName")
     private String userName;
 
+    @NotEmpty(message = "Please provide a fist name")
+    private String firstName;
+
+    @NotEmpty(message = "Please provide a last name")
+    private String lastName;
+
     @NotEmpty(message = "Please provide an email")
     private String email;
 
@@ -26,9 +32,13 @@ public class SignupRequest extends AmuseEntity {
 
     public SignupRequest(@NotEmpty(message = "Please provide a userName") String userName,
             @NotEmpty(message = "Please provide an email") String email,
+            @NotEmpty(message = "Please provide a first name") String firstName,
+            @NotEmpty(message = "Please provide a last name") String lastName,
             @NotEmpty(message = "Please provide a role") List<String> role,
             @NotEmpty(message = "Please provide a password") String password) {
         this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.password = password;
@@ -89,6 +99,35 @@ public class SignupRequest extends AmuseEntity {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    /**
+     * @return String return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return String return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }

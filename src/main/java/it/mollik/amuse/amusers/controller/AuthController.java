@@ -69,6 +69,11 @@ public class AuthController {
 	@Autowired
 	JwtTokenService jwtTokenService;
 
+	/**
+	 * 
+	 * @param loginRequest
+	 * @param webRequest
+	 */
 	@PostMapping(path = "/signin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public AmuseResponse<SigninResponse> signin(@Valid @RequestBody AmuseRequest<LoginRequest> loginRequest, 
@@ -100,6 +105,12 @@ public class AuthController {
 	}
 
 	@PostMapping(path = "/signout", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	
+	/**
+	 *
+	 * @param signoutRequest
+	 * @param request
+	 */
 	public AmuseResponse<SignoutResponse> signout(@Valid @RequestBody AmuseRequest<SignoutRequest> signoutRequest, HttpServletRequest request) {
 		logger.info("/amuse/v1/auth/signout {}", signoutRequest.getData().get(0).getUserName());
 		logger.debug("POST /amuse/v1/authUser/signout request : {}", signoutRequest);
@@ -135,7 +146,9 @@ public class AuthController {
 		}
 		// Create new user's account
 		User user = new User(signUpRequest.getData().get(0).getUserName(), signUpRequest.getData().get(0).getEmail(), encoder.encode(signUpRequest.getData().get(0).getPassword()));
-        user.setCreateTs(new Date());
+        user.setFirstName(signUpRequest.getData().get(0).getFirstName());
+		user.setLastName(signUpRequest.getData().get(0).getLastName());
+		user.setCreateTs(new Date());
         user.setUpdateTs(new Date());
 		List<String> strRoles = signUpRequest.getData().get(0).getRole();
 		List<Role> roles = new ArrayList<>();

@@ -69,7 +69,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 	public void signup() throws Exception {
         logger.info("Start signup");
 
-		SignupRequest signupRequest = new SignupRequest("testuser", "testuser@localhost", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
+		SignupRequest signupRequest = new SignupRequest("testuser", "testuser@localhost", "testuser", "testuser", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 		
         this.getMockMvc()
@@ -90,7 +90,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 	public void emailAlreadyUsed() throws Exception {
         logger.info("Start emailAlreadyUsed");
 
-		SignupRequest signupRequest = new SignupRequest("user05", "user01@localhost", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
+		SignupRequest signupRequest = new SignupRequest("user05", "user01@localhost", "user05", "user05", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()
@@ -108,7 +108,7 @@ public class AmuseAuthTest extends AmuseRsApplicationTests{
 	public void usernameAlreadyTaken() throws Exception {
         logger.info("Start usernameAlreadyTaken");
 
-		SignupRequest signupRequest = new SignupRequest(getUser01(), "user05@localhost", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
+		SignupRequest signupRequest = new SignupRequest(getUser01(), "user05@localhost", "user05", "user05", Stream.of("user").collect(Collectors.toList()), DEFAULT_PASSWORD);
 		AmuseRequest<SignupRequest> request = new AmuseRequest<>(new Key("testuser"), Stream.of(signupRequest).collect(Collectors.toList()));
 
         this.getMockMvc()

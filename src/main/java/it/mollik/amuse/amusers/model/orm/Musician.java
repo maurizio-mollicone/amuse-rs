@@ -1,9 +1,12 @@
 package it.mollik.amuse.amusers.model.orm;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -15,34 +18,21 @@ import it.mollik.amuse.amusers.model.EMusicGenre;
 @Entity(name = "musician")
 public class Musician extends Person {
 
-    @Column(name="genre", nullable = false)
-    @Enumerated()
-    private List<EMusicGenre> musicGen;
-    
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "band_musician", joinColumns = @JoinColumn(name = "musician_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(name = "band_id", referencedColumnName = "id"))
     private List<Band> bands;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "instrument_musician", joinColumns = @JoinColumn(name = "instrument_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(name = "musician_id", referencedColumnName = "id"))
     private List<Instrument> instruments;
 
-    /**
-     * @return List<EMusicGenre> return the musicGen
-     */
-    public List<EMusicGenre> getMusicGen() {
-        return musicGen;
-    }
-
-    /**
-     * @param musicGen the musicGen to set
-     */
-    public void setMusicGen(List<EMusicGenre> musicGen) {
-        this.musicGen = musicGen;
-    }
-
+    @ElementCollection(targetClass = EMusicGenre.class)
+    @JoinTable(name = "musician_genres", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "genre", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Collection<EMusicGenre> genre;
 
     /**
      * @return List<Band> return the bands
@@ -71,6 +61,21 @@ public class Musician extends Person {
      */
     public void setInstruments(List<Instrument> instruments) {
         this.instruments = instruments;
+    }
+
+
+    /**
+     * @return Collection<EMusicGenre> return the genre
+     */
+    public Collection<EMusicGenre> getGenre() {
+        return genre;
+    }
+
+    /**
+     * @param genre the genre to set
+     */
+    public void setGenre(Collection<EMusicGenre> genre) {
+        this.genre = genre;
     }
 
 }

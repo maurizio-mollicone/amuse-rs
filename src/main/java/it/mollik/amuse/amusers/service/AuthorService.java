@@ -6,9 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
@@ -17,7 +14,7 @@ import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.repository.AuthorRepository;
 
 @Service
-public class AuthorService {
+public class AuthorService extends PageableService {
 
     private Logger logger = LoggerFactory.getLogger(AuthorService.class);
 
@@ -26,16 +23,14 @@ public class AuthorService {
 
     public Page<Author> findByName(String authorName, int pageIndex, int pageSize, String sortBy) {
         
-        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
-        Page<Author> authorsPage = this.authorRepository.findByName(authorName, page);
+        Page<Author> authorsPage = this.authorRepository.findByName(authorName, getPageable(pageIndex, pageSize, sortBy));
         logger.info("findByName {}/{} authors of {}, page {}/{}, pageSize ", authorsPage.getNumberOfElements(), authorsPage.getSize(), authorsPage.getTotalElements(), authorsPage.getNumber(), authorsPage.getTotalPages());
         return authorsPage;
     }
 
     public Page<Author> list(int pageIndex, int pageSize, String sortBy) {
         
-        Pageable page = (sortBy != null && !sortBy.isEmpty()) ? PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending()) : PageRequest.of(pageIndex, pageSize, Sort.by("id").ascending());
-        Page<Author> authorsPage = this.authorRepository.findAll(page);
+        Page<Author> authorsPage = this.authorRepository.findAll(getPageable(pageIndex, pageSize, sortBy));
         logger.info("list {}/{} authors of {}, page {}/{}, pageSize ", authorsPage.getNumberOfElements(), authorsPage.getSize(), authorsPage.getTotalElements(), authorsPage.getNumber(), authorsPage.getTotalPages());
         return authorsPage; 
 
