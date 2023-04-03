@@ -1,14 +1,14 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: Java CI with Maven Release
 
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ release/0.2.2 ]
   pull_request:
-    branches: [ main ]
+    branches: [ release/0.2.2 ]
 
 jobs:
  # Label of the runner job
