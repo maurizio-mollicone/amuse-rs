@@ -29,6 +29,7 @@ public final class Constants {
         public static final String AUTH_API = "/auth";
         public static final String BOOKS_API = "/books";
         public static final String AUTHORS_API = "/authors";
+        public static final String MUSICIANS_API = "/musicians";
 
 
     }
