@@ -27,3 +27,22 @@ INSERT INTO book (create_ts,description,name,status,update_ts,isbn_code,pub_year
 INSERT INTO book_authors (artist_id,item_id) VALUES
 	 (2,1),
 	 (1,2);
+
+INSERT INTO musician (biography, first_name, last_name, name, status, create_ts, update_ts) VALUES
+	('BIO', 'Jimi', 'Hendrix', 'Jimi Hendrix', 'Insert', '2022-02-17 18:00:00.0', '2022-02-17 18:00:00.0'),
+	('BIO', 'Jimi', 'Page', 'Jimi Page', 'Insert', '2022-02-17 18:00:00.0', '2022-02-17 18:00:00.0');
+
+INSERT INTO musician (biography, first_name, last_name, name, status, create_ts, update_ts) VALUES
+	('BIO', 'Jimi', 'Hendrix', 'Jimi Hendrix', 'Insert', '2022-02-17 18:00:00.0', '2022-02-17 18:00:00.0'),
+	('BIO', 'Jimi', 'Page', 'Jimi Page', 'Insert', '2022-02-17 18:00:00.0', '2022-02-17 18:00:00.0');
+
+INSERT INTO band (create_ts, description, name, status, update_ts) VALUES
+	('2022-02-17 18:00:00.0', 'Led Zeppelin', 'Led Zeppelin', 'INSERT', '2022-02-17 18:00:00.0');
+
+INSERT INTO band_musician (musician_id, band_id) VALUES
+	(2, 1);
+
+INSERT INTO musician_genres (id, genre) VALUES
+	(1, 'Rock'),
+	(2, 'Rock');
+

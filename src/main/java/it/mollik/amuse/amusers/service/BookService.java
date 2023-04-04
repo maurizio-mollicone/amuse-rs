@@ -1,7 +1,6 @@
 package it.mollik.amuse.amusers.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import it.mollik.amuse.amusers.exceptions.EntityNotFoundException;
 import it.mollik.amuse.amusers.model.EEntityStatus;
-import it.mollik.amuse.amusers.model.orm.Author;
 import it.mollik.amuse.amusers.model.orm.Book;
 import it.mollik.amuse.amusers.repository.BookRepository;
 
@@ -26,14 +24,14 @@ public class BookService extends PageableService {
     public Page<Book> findByName(String authorName, int pageIndex, int pageSize, String sortBy) {
         
         Page<Book> booksPage = this.bookRepository.findByName(authorName, getPageable(pageIndex, pageSize, sortBy));
-        logger.info("findByName {}/{} authors of {}, page {}/{}, pageSize ", booksPage.getNumberOfElements(), booksPage.getSize(), booksPage.getTotalElements(), booksPage.getNumber(), booksPage.getTotalPages());
+        logger.info("findByName {}/{} books of {}, page {}/{}", booksPage.getNumberOfElements(), booksPage.getSize(), booksPage.getTotalElements(), booksPage.getNumber(), booksPage.getTotalPages());
         return booksPage;
     }
 
     public Page<Book> list(int pageIndex, int pageSize, String sortBy) {
         
         Page<Book> booksPage = this.bookRepository.findAll(getPageable(pageIndex, pageSize, sortBy));
-        logger.info("list {}/{} books of {}, page {}/{}, pageSize ", booksPage.getNumberOfElements(), booksPage.getSize(), booksPage.getTotalElements(), booksPage.getNumber(), booksPage.getTotalPages());
+        logger.info("list {}/{} books of {}, page {}/{}", booksPage.getNumberOfElements(), booksPage.getSize(), booksPage.getTotalElements(), booksPage.getNumber(), booksPage.getTotalPages());
         return booksPage; 
 
     }
